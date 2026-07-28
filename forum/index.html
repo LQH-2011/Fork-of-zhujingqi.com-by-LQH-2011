@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -153,6 +154,35 @@
 				align-items: center;
 				width: 100%;
 				height: 100vh;
+				overflow-x: hidden;
+			}
+			#userItems {
+				width: 100%;
+				max-width: 500px;
+			}
+			.rankToggleWrap {
+				display: flex;
+				gap: 6px;
+				margin: 8px 0;
+				width: 100%;
+				max-width: 500px;
+			}
+			.rankToggleBtn {
+				flex: 1;
+				padding: 6px 12px;
+				border-radius: 20px;
+				border: 1px solid var(--bg);
+				background: var(--card);
+				color: var(--sub);
+				cursor: pointer;
+				font-size: 16px;
+				text-align: center;
+				transition: .2s;
+			}
+			.rankToggleBtn.active {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
 			}
 
 			#posts,
@@ -347,6 +377,7 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				box-sizing: border-box;
 			}
 
 			.userItem:last-child {
@@ -555,17 +586,22 @@
 			.comment {
 				font-size: 16px;
 				display: flex;
+				flex-wrap: wrap;
 				justify-content: flex-start;
 				align-items: flex-start;
-				margin-top: 5px;
-				gap: 6px;
+				column-gap: 6px;
+				row-gap: 0;
+			}
+
+			.comment + .comment {
+				margin-top: 3px;
 			}
 
 			.comment b {
 				color: var(--green);
 			}
 
-			.comment button {
+			.comment > button {
 				margin-left: auto;
 			}
 
@@ -1134,8 +1170,19 @@
 				max-height: 90vh;
 				overflow-y: auto;
 			}
+			@keyframes captchaPulse {
+				0%, 100% { opacity: 1; }
+				50% { opacity: .4; }
+			}
+			#captchaTarget {
+				animation: captchaPulse 1.2s ease-in-out infinite;
+			}
 
 			@media (max-width:480px) {
+				.rankToggleBtn {
+					padding: 4px 8px;
+					font-size: 14px;
+				}
 				#lotteryModal .lotteryBox {
 					padding: 16px;
 				}
@@ -1984,6 +2031,68 @@
 				flex: 1;
 				height: 42px;
 			}
+			.settingsCard {
+				background: var(--card);
+				border-radius: 14px;
+				padding: 16px;
+				margin-bottom: 10px;
+			}
+			.settingsLabel {
+				font-size: 13px;
+				color: var(--sub);
+				margin-bottom: 8px;
+			}
+			.settingsThemeBtn {
+				flex: 1;
+				padding: 8px;
+				border-radius: 20px;
+				border: 1px solid var(--bg);
+				background: var(--card);
+				color: var(--text);
+				cursor: pointer;
+				font-size: 13px;
+				transition: .2s;
+			}
+			.settingsThemeBtn.active {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+			.settingsLinkBtn {
+				display:block;width:100%;padding:10px;border:none;background:none;color:var(--green);font-size:14px;cursor:pointer;text-align:left;border-radius:8px;
+			}
+			.settingsLinkBtn:hover {
+				background: var(--bg);
+			}
+
+			.followStats {
+				display: flex;
+				gap: 16px;
+				justify-content: center;
+				margin: 8px 0;
+				flex-wrap: wrap;
+			}
+			.followStats a {
+				cursor: pointer;
+				color: var(--text);
+				text-decoration: none;
+			}
+			.followStats a:hover {
+				color: var(--green);
+			}
+			.followStats b {
+				font-weight: 700;
+			}
+			#followBtn.following {
+				background: var(--green) !important;
+				color: #fff !important;
+			}
+			.followPublicRow input[type="checkbox"] {
+				width: 14px;
+				height: 14px;
+				cursor: pointer;
+				accent-color: var(--green);
+			}
 
 			@keyframes postFadeIn {
 				from {
@@ -2348,6 +2457,19 @@
 				#layoutBtn {
 					display: none;
 				}
+				.replyInputWrap input {
+					height: 32px;
+					font-size: 14px;
+				}
+				.replyInputWrap button {
+					height: 32px;
+					font-size: 12px;
+					padding: 0 10px;
+				}
+				.replyInputWrap .emojiBtn {
+					width: 32px;
+					height: 32px;
+				}
 			}
 
 			.emojiBtn {
@@ -2411,8 +2533,8 @@
 			.emojiInPost {
 				display: inline;
 				vertical-align: middle;
-				width: 24px;
-				height: 24px;
+				width: 1.3em;
+				height: 1.3em;
 				margin: 0 2px;
 			}
 
@@ -2422,6 +2544,70 @@
 				font-size: 16px;
 				margin: 0 4px;
 				flex-shrink: 0;
+			}
+			.replyBtn {
+				font-size: 12px;
+				color: var(--sub);
+				cursor: pointer;
+				margin-left: 6px;
+				user-select: none;
+				transition: .2s;
+				vertical-align: middle;
+			}
+			.replyBtn:hover {
+				color: var(--green);
+			}
+			.replyToTag {
+				font-size: 12px;
+				color: var(--sub);
+				margin-right: 4px;
+				cursor: default;
+			}
+			.replyToTag b {
+				color: var(--green);
+				font-weight: 600;
+			}
+			.commentChildren {
+				width: 100%;
+			}
+			.commentChildren:empty {
+				display: none;
+			}
+			.replyInputWrap {
+				display: flex;
+				gap: 6px;
+				align-items: center;
+				width: 100%;
+			}
+			.replyInputWrap input {
+				flex: 1;
+				height: 34px;
+				font-size: 14px;
+				padding: 0 10px;
+				border-radius: 16px;
+				border: 1px solid #ccc;
+				background: var(--card);
+				color: var(--text);
+				box-sizing: border-box;
+				margin: 0;
+				outline: none;
+			}
+			.replyInputWrap input:focus {
+				border-color: var(--green);
+			}
+			.replyInputWrap button {
+				flex-shrink: 0;
+				height: 34px;
+				font-size: 14px;
+				padding: 0 12px;
+				border-radius: 16px;
+			}
+			.replyInputWrap .emojiBtn {
+				width: 34px;
+				height: 34px;
+				padding: 0;
+				font-size: 16px;
+				margin: 0;
 			}
 		</style>
 	</head>
@@ -2467,7 +2653,11 @@
 				<input id="regUser" placeholder="用户名">
 				<input id="regPass" type="password" placeholder="密码">
 				<input id="regPass2" type="password" placeholder="再次输入密码">
-				<button id="registerBtn">注册</button>
+				<div id="captchaRow" style="display:flex;align-items:center;gap:8px;margin:8px 0;">
+					<button id="captchaBtn" type="button" style="flex:1;">点击完成人机验证</button>
+					<span id="captchaStatus" style="font-size:18px;"></span>
+				</div>
+				<button id="registerBtn" disabled style="opacity:.5;cursor:not-allowed;">注册</button>
 				<h6 style="text-align:center;">
 					<span id="regAgreePrefix">注册即代表您同意</span> <a id="termsBtn" style="cursor:pointer;">用户协议</a><br>
 					<span id="regRemember">请牢记用户名和密码。如无法注册，请联系管理员。</span>
@@ -2509,10 +2699,10 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span id="noticeUpdatesContent">
-							· 重大BUG修复<br>
-							· Emojis<br>
-							· 多语言<br>
-							· 访客模式<br>
+							· 粉丝与关注
+							· 回复评论功能
+							· 更多Emoji
+							· 修复通知中心BUG
 						</span>
 					</details>
 				</div>
@@ -2588,18 +2778,22 @@
 			</div>
 		</div>
 		<div id="userListPage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
-			<div style="padding:20px;flex:1;overflow-y:auto;">
+			<div style="padding:20px;flex:1;overflow-y:auto;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;">
 				<div id="logoRow">
 					<div id="logo">
 						<img src="icon.svg">
 						<span id="rankingsLogoText">排行榜</span>
 					</div>
 				</div>
+				<div class="rankToggleWrap">
+					<button id="rankToggleCoins" class="rankToggleBtn active">金币</button>
+					<button id="rankToggleFollowers" class="rankToggleBtn">粉丝</button>
+				</div>
 				<input id="rankSearch" class="rankSearch" placeholder="搜索用户名..." autocomplete="off">
 				<div
 					style="display:flex;font-weight:bold;padding:8px 0;border-bottom:1px solid #ccc;width:100%;max-width:500px;">
 					<div style="flex:1;" id="rankColName">用户名</div>
-					<div style="width:150px;text-align:right;" id="rankColCoins">金币数</div>
+					<div style="width:150px;text-align:right;" id="rankColValue">金币数</div>
 				</div>
 				<div id="userItems"></div>
 			</div>
@@ -2666,11 +2860,24 @@
 				style="width:100%;max-width:800px;overflow-y:auto;overflow-x:hidden;flex:1;padding:20px 0;margin:0 auto;box-sizing:border-box;">
 			</div>
 		</div>
-
 		<div id="modal" class="modal hidden">
 			<div class="modalBox">
 				<div id="modalText"></div>
 				<div style="margin-top:20px"><button id="closeModal">关闭</button></div>
+			</div>
+		</div>
+		<div id="captchaModal" class="modal hidden">
+			<div class="modalBox" style="width:380px;text-align:center;">
+				<div style="font-weight:bold;margin-bottom:10px;">人机验证 — 拖到闪烁虚线框中</div>
+				<div style="position:relative;display:inline-block;">
+					<canvas id="captchaCanvas" width="320" height="160" style="border-radius:8px;display:block;"></canvas>
+					<div id="captchaTarget" style="position:absolute;top:0;left:0;width:48px;height:160px;border:2px dashed rgba(255,255,255,.8);border-radius:4px;pointer-events:none;box-sizing:border-box;background:rgba(0,200,0,.12);"></div>
+				</div>
+				<div id="captchaTrack" style="position:relative;width:320px;height:36px;margin:10px auto 0;background:var(--bg);border-radius:18px;touch-action:none;user-select:none;">
+					<div id="captchaThumb" style="position:absolute;top:2px;left:0;width:44px;height:32px;background:var(--green);border-radius:16px;cursor:grab;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:2;">→</div>
+				</div>
+				<div style="margin-top:8px;font-size:12px;color:var(--sub);">← 拖动滑块完成拼图 →</div>
+				<div style="margin-top:10px"><button id="captchaCloseBtn">关闭</button></div>
 			</div>
 		</div>
 		<div id="coinMsg">
@@ -3166,6 +3373,20 @@
 					es: "Enviar",
 					de: "Senden",
 					"zh-TW": "發送"
+				},
+				reply: {
+					zh: "回复",
+					en: "Reply",
+					es: "Responder",
+					de: "Antworten",
+					"zh-TW": "回覆"
+				},
+				reply_ph: {
+					zh: "回复 {0}...",
+					en: "Reply to {0}...",
+					es: "Responder a {0}...",
+					de: "Antworte {0}...",
+					"zh-TW": "回覆 {0}..."
 				},
 				post_expand: {
 					zh: "展开",
@@ -4258,6 +4479,55 @@
 					es: "Pregunta",
 					de: "Frage",
 					"zh-TW": "提問"
+				},
+				follow_btn: {
+					zh: "关注",
+					en: "Follow",
+					es: "Seguir",
+					de: "Folgen",
+					"zh-TW": "關注"
+				},
+				unfollow_btn: {
+					zh: "已关注",
+					en: "Following",
+					es: "Siguiendo",
+					de: "Folge ich",
+					"zh-TW": "已關注"
+				},
+				followers: {
+					zh: "粉丝",
+					en: "Followers",
+					es: "Seguidores",
+					de: "Follower",
+					"zh-TW": "粉絲"
+				},
+				following: {
+					zh: "关注中",
+					en: "Following",
+					es: "Siguiendo",
+					de: "Gefolgt",
+					"zh-TW": "關注中"
+				},
+				follow_list_private: {
+					zh: "该用户未公开关注列表",
+					en: "This user's follow list is private",
+					es: "La lista de seguimiento de este usuario es privada",
+					de: "Die Folgeliste dieses Benutzers ist privat",
+					"zh-TW": "該用戶未公開關注列表"
+				},
+				follow_public_label: {
+					zh: "公开关注/粉丝列表",
+					en: "Public follow list",
+					es: "Lista de seguimiento pública",
+					de: "Öffentliche Folgeliste",
+					"zh-TW": "公開關注/粉絲列表"
+				},
+				follow_self: {
+					zh: "不能关注自己",
+					en: "Cannot follow yourself",
+					es: "No puedes seguirte a ti mismo",
+					de: "Kann dir nicht selbst folgen",
+					"zh-TW": "不能關注自己"
 				}
 			};
 			const PAGE_TITLE_TRANS = {
@@ -4489,6 +4759,7 @@
 					setT("showUsersBtn", t("nav_rankings"));
 					setT("discoverBtn", t("nav_discover"));
 					setT("profileBtn", t("nav_profile"));
+					setT("logoutBtn", t("profile_logout"));
 					setT("welcomeTitle", t("login_title"));
 					setPH("loginUser", t("login_username"));
 					setPH("loginPass", t("login_password"));
@@ -4516,7 +4787,6 @@
 					setT("insertMusicBtn", t("editor_insert_music"));
 					setPH("customTag", t("editor_custom_tag_ph"));
 					setT("sendBtn", t("editor_send"));
-					setT("logoutBtn", t("profile_logout"));
 					setT("randomPostBtn", t("random_post_btn"));
 					setT("fortuneBtn", t("fortune_btn"));
 					setT("fortuneTitle", t("fortune_title"));
@@ -4525,7 +4795,8 @@
 					setPH("rankSearch", t("rankings_search_ph"));
 					setT("rankingsLogoText", t("rankings_title"));
 					setT("rankColName", t("rankings_col_name"));
-					setT("rankColCoins", t("rankings_col_coins"));
+					const colVal = $("rankColValue");
+					if (colVal) colVal.textContent = rankMode === "followers" ? t("followers") : t("rankings_col_coins");
 					setT("discoverLogoText", t("discover_title"));
 					setT("noticeTitle", t("notice_title"));
 					setH("noticeWelcome", t("notice_welcome"));
@@ -4589,6 +4860,127 @@
 				$("closeModal").onclick = () => {
 					$("modal").classList.add("hidden");
 					document.querySelector(".modalBox").style.width = "300px";
+				}
+				let captchaPassed = false;
+				let captchaOffset = 0;
+				let captchaCleanup = null;
+				function openCaptchaModal() {
+					$("captchaModal").classList.remove("hidden");
+					const canvas = $("captchaCanvas");
+					const ctx = canvas.getContext("2d");
+					const W = 320, H = 160;
+					const pieceW = 48;
+					const seed = Math.floor(Math.random() * 1000000);
+					captchaOffset = 30 + Math.floor(Math.random() * (W - pieceW - 60));
+					captchaPassed = false;
+					function seededRand(s) {
+						let x = Math.sin(s * 9301 + 49297) * 49297;
+						return x - Math.floor(x);
+					}
+					const colors = [];
+					for (let i = 0; i < 40; i++) {
+						const r = Math.floor(seededRand(seed + i * 3) * 180 + 60);
+						const g = Math.floor(seededRand(seed + i * 3 + 1) * 180 + 60);
+						const b = Math.floor(seededRand(seed + i * 3 + 2) * 180 + 60);
+						colors.push(`rgb(${r},${g},${b})`);
+					}
+					ctx.clearRect(0, 0, W, H);
+					const stripW = W / colors.length;
+					for (let i = 0; i < colors.length; i++) {
+						ctx.fillStyle = colors[i];
+						ctx.fillRect(i * stripW, 0, Math.ceil(stripW) + 1, H);
+					}
+					ctx.fillStyle = "#000";
+					ctx.globalAlpha = 0.1;
+					for (let i = 0; i < 6; i++) {
+						const x = seededRand(seed + i * 7) * W;
+						const w = 1 + seededRand(seed + i * 11) * 2;
+						ctx.fillRect(x, 0, w, H);
+					}
+					ctx.globalAlpha = 1;
+					ctx.fillStyle = "rgba(0,200,0,.15)";
+					ctx.fillRect(captchaOffset, 0, pieceW, H);
+					ctx.strokeStyle = "rgba(0,255,0,.8)";
+					ctx.lineWidth = 2;
+					ctx.setLineDash([6, 4]);
+					ctx.strokeRect(captchaOffset, 0, pieceW, H);
+					ctx.setLineDash([]);
+					const target = $("captchaTarget");
+					target.style.left = captchaOffset + "px";
+					target.style.width = pieceW + "px";
+					const thumb = $("captchaThumb");
+					thumb.style.left = "0px";
+					thumb.textContent = "→";
+					thumb.style.background = "var(--green)";
+					thumb.style.cursor = "grab";
+					let dragging = false, startX = 0, thumbOff = 0;
+					function onMove(clientX) {
+						if (!dragging) return;
+						let dx = clientX - startX + thumbOff;
+						dx = Math.max(0, Math.min(W - pieceW, dx));
+						thumb.style.left = dx + "px";
+						const diff = Math.abs(dx - captchaOffset);
+						if (diff < 8) {
+							thumb.style.background = "#0a0";
+							thumb.textContent = "✓";
+						} else {
+							thumb.style.background = "var(--green)";
+							thumb.textContent = "→";
+						}
+					}
+					function onEnd() {
+						if (!dragging) return;
+						dragging = false;
+						thumb.style.cursor = "grab";
+						const dx = parseInt(thumb.style.left) || 0;
+						if (Math.abs(dx - captchaOffset) < 8) {
+							thumb.style.left = captchaOffset + "px";
+							thumb.style.background = "#0a0";
+							thumb.textContent = "✓";
+							captchaPassed = true;
+							$("captchaStatus").textContent = "✅";
+							$("registerBtn").disabled = false;
+							$("registerBtn").style.opacity = "1";
+							$("registerBtn").style.cursor = "pointer";
+							setTimeout(() => { $("captchaModal").classList.add("hidden"); cleanup(); }, 600);
+						} else {
+							thumb.style.left = "0px";
+							thumb.textContent = "→";
+							thumb.style.background = "var(--green)";
+						}
+					}
+					function onDown(clientX) {
+						dragging = true;
+						startX = clientX;
+						thumbOff = parseInt(thumb.style.left) || 0;
+						thumb.style.cursor = "grabbing";
+					}
+					function onMouseMove(e) { onMove(e.clientX); }
+					function onMouseUp() { onEnd(); }
+					function onTouchMove(e) { onMove(e.touches[0].clientX); }
+					function onTouchEnd() { onEnd(); }
+					function cleanup() {
+						document.removeEventListener("mousemove", onMouseMove);
+						document.removeEventListener("mouseup", onMouseUp);
+						document.removeEventListener("touchmove", onTouchMove);
+						document.removeEventListener("touchend", onTouchEnd);
+					}
+					thumb.onmousedown = (e) => { onDown(e.clientX); e.preventDefault(); };
+					thumb.ontouchstart = (e) => { onDown(e.touches[0].clientX); e.preventDefault(); };
+					document.addEventListener("mousemove", onMouseMove);
+					document.addEventListener("mouseup", onMouseUp);
+					document.addEventListener("touchmove", onTouchMove, { passive: false });
+					document.addEventListener("touchend", onTouchEnd);
+					captchaCleanup = cleanup;
+					document.querySelector("#captchaModal .modalBox").style.width = "";
+				}
+				$("captchaCloseBtn").onclick = () => { $("captchaModal").classList.add("hidden"); if (captchaCleanup) captchaCleanup(); };
+				function resetCaptcha() {
+					captchaPassed = false;
+					$("captchaStatus").textContent = "";
+					$("registerBtn").disabled = true;
+					$("registerBtn").style.opacity = ".5";
+					$("registerBtn").style.cursor = "not-allowed";
 				}
 				async function hash(text) {
 					const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
@@ -4842,7 +5234,11 @@
 					"ok",
 					"jesus",
 					"maga",
-					"14"
+					"14",
+					"sob",
+					"saka",
+					"doge",
+					"chill"
 				];
 
 				function renderEmojis(root) {
@@ -4930,7 +5326,7 @@
 				$("showUsersBtn").onclick = () => {
 					show("userListPage");
 					loadNewUsers();
-
+					setupRankToggle();
 					loadUserList();
 					setActive("showUsersBtn");
 				};
@@ -4951,6 +5347,19 @@
 
 					setActive("profileBtn");
 				};
+				$("logoutBtn").onclick = () => {
+					stopPresence();
+					localStorage.removeItem("loginUser");
+					currentUser = null;
+					guestMode = false;
+					$("postFilterBar").style.display = "";
+					const mini = document.querySelector("#logoRow #onlineMini");
+					if (mini) mini.style.display = "";
+					const notif = document.querySelector("#logoRow #notifBtn");
+					if (notif) notif.style.display = "";
+					$("nav").classList.add("hidden");
+					show("welcomePage");
+				};
 				$("backBtn").onclick = () => {
 					show("main");
 					renderPostFilters();
@@ -4963,19 +5372,8 @@
 					loadPosts(postPage);
 					setActive("homeBtn");
 				};
-				$("goRegister").onclick = () => show("registerPage");
+				$("goRegister").onclick = () => { resetCaptcha(); show("registerPage"); };
 				$("backLogin").onclick = () => show("welcomePage");
-				$("logoutBtn").onclick = () => {
-					stopPresence();
-					localStorage.removeItem("loginUser");
-					currentUser = null;
-					guestMode = false;
-					$("postFilterBar").style.display = "";
-					$("logoRow").querySelector("#onlineMini").style.display = "";
-					$("logoRow").querySelector("#notifBtn").style.display = "";
-					$("nav").classList.add("hidden");
-					show("welcomePage");
-				};
 				$("termsBtn").onclick = () => {
 					document.querySelector(".modalBox").style.width = "800px";
 					modal(t("terms_content"));
@@ -5154,6 +5552,7 @@
 					$(id).classList.add("active");
 				}
 				$("registerBtn").onclick = async () => {
+					if (!captchaPassed) return modal("请先完成人机验证");
 					let u = $("regUser").value.trim();
 					let p1 = $("regPass").value.trim();
 					let p2 = $("regPass2").value.trim();
@@ -5178,6 +5577,7 @@
 						modal(t("register_fail", e.message));
 					}
 				};
+				$("captchaBtn").onclick = openCaptchaModal;
 				$("loginBtn").onclick = async () => {
 					let u = $("loginUser").value.trim();
 					let p = $("loginPass").value.trim();
@@ -5367,40 +5767,12 @@
 				}
 				async function openNotificationPost(postId) {
 					$("modal").classList.add("hidden");
+					history.replaceState(null, "", "?pid=" + postId);
 					try {
-						await apiGet("/api/posts/single?id=" + postId);
+						await openSinglePost(postId);
 					} catch {
 						modal(t("post_not_found"));
-						return;
 					}
-					activePostTag = "全部";
-					postSearch = "";
-					renderPostFilters();
-					show("main");
-					try {
-						const pageRes = await apiGet("/api/posts?perPage=10000&tag=全部");
-						const posts = pageRes.posts || [];
-						const count = posts.length;
-						const higher = posts.filter(p => p.id > postId).length;
-						const perPage = getPostsPerPage();
-						const page = Math.floor(higher / perPage) + 1;
-						await loadPosts(page);
-					} catch {
-						await loadPosts(1);
-					}
-					setTimeout(() => {
-						const target = document.querySelector(`.post[data-post-id="${postId}"]`);
-						if (!target) {
-							modal(t("post_not_found"));
-							return;
-						}
-						target.scrollIntoView({
-							behavior: "smooth",
-							block: "center"
-						});
-						target.classList.add("postHighlight");
-						setTimeout(() => target.classList.remove("postHighlight"), 2000);
-					}, 200);
 				}
 				async function openSinglePost(postId) {
 					show("postPage");
@@ -5541,6 +5913,14 @@
 				async function openNotifications() {
 					if (!currentUser) return;
 					await cleanupNotifications();
+					await ensureAllUsersCache();
+					document.querySelector(".modalBox").style.width = "420px";
+					modal(`<h3>${t("notif_title")}</h3>
+						<div id="notifListWrap" style="max-height:320px;overflow:auto;text-align:left;"><p style="text-align:center;color:var(--sub);">Loading...</p></div>
+						<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
+							<button id="clearNotifBtn">${t("modal_delete_all")}</button>
+							<button id="markAllReadBtn">${t("modal_mark_read")}</button>
+						</div>`);
 					let rows;
 					try {
 						rows = await apiGet("/api/notifications?target_id=" + currentUser.id);
@@ -5552,12 +5932,13 @@
 					const notifHtml = rows.length ?
 						rows.map(n => {
 							const a = n.actor;
+							const actorFromId = a == null && n.actor_id != null ? n.actor_id : a;
 							let actorName, actorAvatar;
-							if (typeof a === 'object' && a) {
-								actorName = a.name || t("post_unknown");
-								actorAvatar = getAvatar(a);
-							} else if (a != null) {
-								const uid = Number(a);
+							if (typeof actorFromId === 'object' && actorFromId) {
+								actorName = actorFromId.name || t("post_unknown");
+								actorAvatar = getAvatar(actorFromId);
+							} else if (actorFromId != null) {
+								const uid = Number(actorFromId);
 								const found = allUsersCache.find(u => u.id === uid);
 								actorName = found ? found.name : t("post_unknown");
 								actorAvatar = found ? getAvatar(found) : DEFAULT_AVATAR;
@@ -5585,17 +5966,8 @@
 							`;
 						}).join("") :
 						`<div style="color:var(--sub);padding:8px 0;">${t("modal_no_notifs")}</div>`;
-					document.querySelector(".modalBox").style.width = "420px";
-					modal(`
-						<h3>${t("notif_title")}</h3>
-						<div style="max-height:320px;overflow:auto;text-align:left;">
-							${notifHtml}
-						</div>
-						<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">
-							<button id="clearNotifBtn">${t("modal_delete_all")}</button>
-							<button id="markAllReadBtn">${t("modal_mark_read")}</button>
-						</div>
-					`);
+					const wrap = $("notifListWrap");
+					if (wrap) wrap.innerHTML = notifHtml;
 					$("markAllReadBtn").onclick = async () => {
 						try {
 							await apiPut("/api/notifications/read", {
@@ -5624,11 +5996,13 @@
 							await markNotificationRead(Number(el.dataset.nid));
 							await refreshNotificationBadge();
 							const post = el.dataset.post;
-							if (post && isNaN(post)) {
+							const postId = Number(post);
+							if (!post || post === "null" || post === "undefined") return;
+							if (isNaN(postId)) {
 								const gift = SHOP_ITEMS.find(i => i.id === post);
 								modal(t("gift_received", gift ? gift.name : t("shop_item_generic")));
 							} else {
-								await openNotificationPost(Number(post));
+								await openNotificationPost(postId);
 							}
 						};
 					});
@@ -6275,6 +6649,41 @@
 						modal(t("modal_load_fail") + "：" + e.message);
 					}
 				}
+				function parseCommentContent(content) {
+					const match = String(content || "").match(/^\[reply:(\d+)\]\s*/);
+					if (match) {
+						return { parentId: parseInt(match[1]), text: content.slice(match[0].length) };
+					}
+					return { parentId: null, text: content || "" };
+				}
+				function buildCommentTree(comments) {
+					const map = {};
+					for (const c of comments) {
+						const parsed = parseCommentContent(c.content || "");
+						c._parentId = parsed.parentId;
+						c._text = parsed.text;
+						c._children = [];
+						map[c.id] = c;
+					}
+					for (const c of comments) {
+						if (c._parentId && map[c._parentId]) {
+							c._replyToName = map[c._parentId].users?.name || null;
+						}
+					}
+					const roots = [];
+					for (const c of comments) {
+						if (c._parentId && map[c._parentId]) {
+							map[c._parentId]._children.push(c);
+						} else {
+							roots.push(c);
+						}
+					}
+					roots.sort((a, b) => new Date(a.time) - new Date(b.time));
+					for (const c of comments) {
+						c._children.sort((a, b) => new Date(a.time) - new Date(b.time));
+					}
+					return roots;
+				}
 				async function renderComments(postId, container, comments) {
 					container.innerHTML = "";
 					if (!comments) {
@@ -6284,42 +6693,85 @@
 							comments = [];
 						}
 					}
-					for (let c of comments) {
-						let div = document.createElement("div");
-						const avatar = getAvatar(c.users);
-						div.className = "comment";
-						div.innerHTML =
-							`<span class="userLink userLinkWithAvatar" data-user="${c.author}">
-								<img class="avatar" src="${avatar}" onerror="this.onerror=null;this.src='head.svg'">
-								<b>${c.users?.name || t("post_unknown")}</b>
-								<span class="userLevel">${getUserLevel(c.users?.coins || 0)}</span>
-								${getRoleBadge(c.users)}
-							</span>: <span class="commentContent"></span>
-							${currentUser && c.author === currentUser.id
+					const tree = buildCommentTree(comments);
+					const indent = window.innerWidth <= 800 ? 12 : 24;
+					const postAuthorId = Number(container.closest(".post")?.dataset.authorId) || null;
+					async function renderTree(parentEl, list, depth) {
+						if (depth > 2) return;
+						for (const c of list) {
+							const div = document.createElement("div");
+							div.className = "comment";
+							div.style.paddingLeft = (depth * indent) + "px";
+							const avatar = getAvatar(c.users);
+							const replyTag = c._replyToName
+								? `<span class="replyToTag">${t("reply")} <b>@${c._replyToName}</b>:</span>`
+								: "";
+							const delBtn = currentUser && c.author === currentUser.id
 								? `<button class="commentDel" data-cdel="${c.id}">${t("post_delete")}</button>`
-								: ""}`;
-						div.querySelector(".commentContent").textContent = c.content || "";
-						await ensureAllUsersCache();
-						linkifyMentions(div);
-						renderEmojis(div);
-						container.appendChild(div);
-						const userLink = div.querySelector(".userLink");
-						if (userLink) {
-							userLink.onclick = () => viewUser(c.author);
-						}
-						const del = div.querySelector("[data-cdel]");
-						if (del && currentUser) {
-							del.onclick = async () => {
-								try {
-									await apiDelete("/api/comments/" + c.id);
-								} catch (e) {
-									console.error(e);
-								}
-								renderComments(postId, container);
-								await changeCoins(currentUser.id, -3);
+								: "";
+							div.innerHTML =
+								`<span class="userLink userLinkWithAvatar" data-user="${c.author}">
+									<img class="avatar" src="${avatar}" onerror="this.onerror=null;this.src='head.svg'">
+									<b>${c.users?.name || t("post_unknown")}</b>
+									<span class="userLevel">${getUserLevel(c.users?.coins || 0)}</span>
+									${getRoleBadge(c.users)}
+								</span>: ${replyTag}<span class="commentContent"></span>
+								<span class="replyBtn" data-reply-to="${c.id}">${t("reply")}</span>
+								${delBtn}
+								<div class="commentChildren" data-children-of="${c.id}" style="width:100%"></div>`;
+							const contentEl = div.querySelector(".commentContent");
+							contentEl.textContent = c._text || "";
+							parentEl.appendChild(div);
+							linkifyMentions(div);
+							renderEmojis(div);
+							const userLink = div.querySelector(".userLink");
+							if (userLink) {
+								userLink.onclick = () => viewUser(c.author);
+							}
+							const del = div.querySelector("[data-cdel]");
+							if (del && currentUser) {
+								del.onclick = async () => {
+									try {
+										await apiDelete("/api/comments/" + c.id);
+									} catch (e) {
+										console.error(e);
+									}
+									renderComments(postId, container);
+									await changeCoins(currentUser.id, -3);
+								};
+							}
+							const replyBtn = div.querySelector(".replyBtn");
+							replyBtn.onclick = (e) => {
+								e.stopPropagation();
+								const existing = div.querySelector(".replyInputWrap");
+								if (existing) { existing.remove(); return; }
+								const w = document.createElement("div");
+								w.className = "replyInputWrap";
+								const placeholder = c.users?.name ? t("reply_ph", c.users.name) : t("reply");
+								w.innerHTML =
+									`<input data-input="reply-${c.id}" data-mention-input="1" placeholder="${placeholder}">
+									<button class="emojiBtn" data-emoji-target="reply-${c.id}" type="button" title="表情">
+										<img src="emojis/happy.svg" style="width:16px;height:16px;display:block;pointer-events:none;">
+									</button>
+									<button class="replySendBtn" data-reply-send="${c.id}">${t("post_send")}</button>`;
+								const childrenContainer = div.querySelector(".commentChildren");
+								div.insertBefore(w, childrenContainer);
+								const inp = w.querySelector("input");
+								inp.focus();
+								const send = () => {
+									const text = inp.value.trim();
+									if (text) addReply(postId, c.id, text, postAuthorId, c.author);
+								};
+								w.querySelector(".replySendBtn").onclick = send;
+								inp.addEventListener("keydown", e => e.key === "Enter" && send());
 							};
+							if (c._children.length > 0) {
+								const childContainer = div.querySelector(".commentChildren");
+								await renderTree(childContainer, c._children, depth + 1);
+							}
 						}
 					}
+					await renderTree(container, tree, 0);
 				}
 				async function openVotePeople(postId, kind) {
 					let data;
@@ -6342,7 +6794,6 @@
 																<span>${x.users?.name || t("post_unknown")}</span>
 																<span class="userLevel">${getUserLevel(x.users?.coins || 0)}</span>
 																${getRoleBadge(x.users)}
-															</div>
 														`).join("")
 														: `<div style="color:var(--sub);padding:8px 0;">${t("vote_none")}</div>`
 												}
@@ -6383,6 +6834,48 @@
 								input.value = "";
 								input.blur();
 							}
+							const list = postDiv.querySelector(".commentList");
+							if (list) await renderComments(postId, list);
+						}
+						await changeCoins(currentUser.id, 3);
+						await refreshNotificationBadge();
+						await loadStats();
+					} catch (e) {
+						console.error(e);
+						modal(t("comment_fail", e.message));
+					}
+				}
+				async function addReply(postId, parentId, content, postAuthorId, parentAuthorId) {
+					const text = String(content || "").trim();
+					if (!text) return;
+					const replyContent = `[reply:${parentId}] ${sanitizePostHtml(text)}`;
+					try {
+						const result = await apiPost("/api/comments", {
+							postid: postId,
+							content: replyContent,
+							author: currentUser.id,
+							time: new Date().toISOString()
+						});
+						const commentId = result?.id || null;
+						await notifyMentions(text, postId, commentId);
+						await createNotification({
+							targetId: postAuthorId,
+							actorId: currentUser.id,
+							postId: postId,
+							commentId: commentId,
+							type: "comment"
+						});
+						if (parentAuthorId && parentAuthorId !== postAuthorId) {
+							await createNotification({
+								targetId: parentAuthorId,
+								actorId: currentUser.id,
+								postId: postId,
+								commentId: commentId,
+								type: "comment"
+							});
+						}
+						const postDiv = document.querySelector(`.post[data-post-id="${postId}"]`);
+						if (postDiv) {
 							const list = postDiv.querySelector(".commentList");
 							if (list) await renderComments(postId, list);
 						}
@@ -6555,21 +7048,55 @@
 						.replace(/</g, "&lt;")
 						.replace(/>/g, "&gt;");
 				}
+			let rankMode = "coins";
+			function setupRankToggle() {
+				const coinsBtn = $("rankToggleCoins");
+				const followersBtn = $("rankToggleFollowers");
+				if (!coinsBtn || coinsBtn._setup) return;
+				coinsBtn._setup = true;
+				coinsBtn.onclick = () => {
+					if (rankMode === "coins") return;
+					rankMode = "coins";
+					coinsBtn.classList.add("active");
+					followersBtn.classList.remove("active");
+					const colVal = $("rankColValue");
+					if (colVal) colVal.textContent = t("rankings_col_coins");
+					loadUserList();
+				};
+				followersBtn.onclick = () => {
+					if (rankMode === "followers") return;
+					rankMode = "followers";
+					followersBtn.classList.add("active");
+					coinsBtn.classList.remove("active");
+					const colVal = $("rankColValue");
+					if (colVal) colVal.textContent = t("followers");
+					loadUserList();
+				};
+			}
 				async function loadUserList() {
 					let box = $("userItems");
 					box.innerHTML = "<p style='text-align:center;color:var(--sub);margin-top:20px;'>Loading...</p>";
 					let data = [];
 					try {
-						data = await apiGet("/api/users");
+						data = await apiGet("/api/users" + (rankMode === "followers" ? "?includeFollowers=true" : ""));
 					} catch {
 						data = [];
 					}
-					data.sort((a, b) => {
-						let coinsA = a.coins || 0;
-						let coinsB = b.coins || 0;
-						if (coinsB !== coinsA) return coinsB - coinsA;
-						return a.name.localeCompare(b.name);
-					});
+					if (rankMode === "followers") {
+						data.sort((a, b) => {
+							let fa = a.follower_count || 0;
+							let fb = b.follower_count || 0;
+							if (fb !== fa) return fb - fa;
+							return a.name.localeCompare(b.name);
+						});
+					} else {
+						data.sort((a, b) => {
+							let coinsA = a.coins || 0;
+							let coinsB = b.coins || 0;
+							if (coinsB !== coinsA) return coinsB - coinsA;
+							return a.name.localeCompare(b.name);
+						});
+					}
 					box.innerHTML = "";
 					const items = [];
 					data.forEach((u, i) => {
@@ -6593,7 +7120,7 @@
 									</div>
 								</div>
 							</div>
-							<div style="width:100px; text-align:right;">${u.coins || 0}</div>
+							<div style="width:100px; text-align:right;">${rankMode === "followers" ? (u.follower_count || 0) : (u.coins || 0)}</div>
 						`;
 						div.onclick = () => viewUser(u.id);
 						items.push({
@@ -6662,6 +7189,16 @@
 						`${t("profile_coins")}：${user.coins || 0}` +
 						"&ensp;<button class='helpBtn' id='coinBtn'>?</button>" +
 						`&emsp;&emsp;${t("profile_reg_time")}：${new Date(user.time).toISOString()}`;
+					const oldStats = document.querySelector(".followStats");
+					if (oldStats) oldStats.remove();
+					const oldToggle = document.querySelector(".followPublicRow");
+					if (oldToggle) oldToggle.remove();
+					const followStats = document.createElement("div");
+					followStats.className = "followStats";
+					followStats.innerHTML =
+						`<a id="followersLink">${t("followers")} <b class="followerCount">${user.follower_count || 0}</b></a>` +
+						`<a id="followingLink">${t("following")} <b>${user.following_count || 0}</b></a>`;
+					$("moreInfo").after(followStats);
 					renderLevelProgress(user.coins || 0);
 					$("levelBtn").onclick = () => {
 						document.querySelector(".modalBox").style.width = "600px";
@@ -6678,6 +7215,7 @@
 						(isSelf ? `<div class="pbtn" data-action="about">${t("profile_about")}</div>` : '') +
 						(isSelf ? `<div class="pbtn" data-action="sponsor">${t("profile_sponsor")}</div>` : '') +
 						(isSelf ? `<div class="pbtn" data-action="download">${t("profile_download")}</div>` : '') +
+						(!isSelf && currentUser ? `<div class="pbtn${user.is_following ? " following" : ""}" id="followBtn">${user.is_following ? t("unfollow_btn") : t("follow_btn")}</div>` : '') +
 						(isSelf ?
 							`<div class="themeRow"><button id="sysTheme2">${t("profile_theme_sys")}</button><button id="lightTheme2">${t("profile_theme_light")}</button><button id="darkTheme2">${t("profile_theme_dark")}</button></div>` :
 							'');
@@ -6693,9 +7231,7 @@
 					if (isSelf) {
 						container.querySelector("[data-action='about']").onclick = () => {
 							document.querySelector(".modalBox").style.width = "800px";
-							modal(
-								`<h2>${t("about_title")}</h2><div style="text-align:left;">${t("about_content")}</div><h6><a href="#">${t("login_title")}</a> · <a href="https://zhujingqi.com">Zhujingqi</a></h6><h6>© Jacky Forum. All rights reserved.</h6>`
-							);
+							modal(`<h2>${t("about_title")}</h2><div style="text-align:left;">${t("about_content")}</div><h6><a href="#">${t("login_title")}</a> · <a href="https://zhujingqi.com">Zhujingqi</a></h6><h6>© Jacky Forum. All rights reserved.</h6>`);
 						};
 						container.querySelector("[data-action='sponsor']").onclick = () => {
 							modal(`<h2>${t("sponsor_title")}</h2>${t("sponsor_content")}`);
@@ -6703,15 +7239,27 @@
 						container.querySelector("[data-action='shop']").onclick = openShop;
 						container.querySelector("[data-action='download']").onclick = () => {
 							document.querySelector(".modalBox").style.width = "800px";
-							modal(
-								`<h3>${t("download_title")}</h3>${t("download_content")}`
-							);
+							modal(`<h3>${t("download_title")}</h3>${t("download_content")}`);
 						};
 						$("sysTheme2").onclick = () => document.body.classList.remove("dark");
 						$("lightTheme2").onclick = () => document.body.classList.remove("dark");
 						$("darkTheme2").onclick = () => document.body.classList.add("dark");
+						const row = document.createElement("label");
+						row.className = "followPublicRow";
+						row.style.cssText = "display:flex;align-items:center;gap:6px;grid-column:1/-1;justify-content:center;font-size:13px;cursor:pointer;";
+						row.innerHTML = `<input type="checkbox" id="followPublicToggle" ${user.follow_public ? "checked" : ""}> ${t("follow_public_label")}`;
+						container.querySelector(".themeRow")?.after(row);
+						$("followPublicToggle").onchange = async () => {
+							try {
+								await apiPut("/api/users/" + currentUser.id, { follow_public: $("followPublicToggle").checked });
+							} catch { $("followPublicToggle").checked = !$("followPublicToggle").checked; }
+						};
 					}
-					$("logoutBtn").style.display = (currentUser && uid === currentUser.id) ? "inline-block" : "none";
+					if (!isSelf && currentUser) {
+						$("followBtn").onclick = () => toggleFollow(uid, $("followBtn"));
+					}
+					$("followersLink").onclick = () => openFollowList(uid, "followers");
+					$("followingLink").onclick = () => openFollowList(uid, "following");
 					$("userDescription").innerText = user.description || t("profile_no_desc");
 					if (currentUser && uid === currentUser.id) {
 						let editBtn = document.createElement("button");
@@ -6744,7 +7292,68 @@
 							};
 						};
 					}
+					$("logoutBtn").style.display = (currentUser && uid === currentUser.id) ? "inline-block" : "none";
 					show("profilePage");
+				}
+
+				async function toggleFollow(followeeId, btn) {
+					const wasFollowing = btn.classList.contains("following");
+					btn.classList.toggle("following", !wasFollowing);
+					btn.textContent = wasFollowing ? t("follow_btn") : t("unfollow_btn");
+					try {
+						const res = await apiPost("/api/follows/toggle", {
+							follower_id: currentUser.id,
+							followee_id: followeeId,
+						});
+						const fc = document.querySelector(".followerCount");
+						if (fc) {
+							fc.textContent = Math.max(0, parseInt(fc.textContent) + (res.action === "followed" ? 1 : -1));
+						}
+					} catch {
+						btn.classList.toggle("following", wasFollowing);
+						btn.textContent = wasFollowing ? t("unfollow_btn") : t("follow_btn");
+					}
+				}
+
+				async function openFollowList(userId, type) {
+					document.querySelector(".modalBox").style.width = "360px";
+					modal(`<h3>${type === "followers" ? t("followers") : t("following")}</h3>
+						<div style="max-height:320px;overflow:auto;text-align:left;"><p style="text-align:center;color:var(--sub);">Loading...</p></div>`);
+					let data;
+					try {
+						data = await apiGet("/api/follows/list?user_id=" + userId + "&type=" + type + (currentUser ? "&requester_id=" + currentUser.id : ""));
+					} catch {
+						modal(t("read_fail", ""));
+						return;
+					}
+					if (data === null) {
+						modal(t("follow_list_private"));
+						return;
+					}
+					const rows = data || [];
+					const content = rows.length
+						? rows.map(x => {
+							const u = x.users;
+							return `<div class="onlineUser voteUser" data-user="${u?.id}" style="display:flex;align-items:center;gap:8px;">
+								<img class="avatar onlineAvatar" src="${getAvatar(u)}" onerror="this.onerror=null;this.src='head.svg'">
+								<span>${u?.name || t("post_unknown")}</span>
+								<span class="userLevel">${getUserLevel(u?.coins || 0)}</span>
+								${getRoleBadge(u)}
+							</div>`;
+						}).join("")
+						: `<div style="color:var(--sub);padding:8px 0;">${t("vote_none")}</div>`;
+					const listDiv = document.querySelector(".modalBox")?.querySelector("div div");
+					if (listDiv) {
+						listDiv.innerHTML = content;
+						setTimeout(() => {
+							listDiv.querySelectorAll(".voteUser").forEach(el => {
+								el.onclick = () => {
+									$("modal").classList.add("hidden");
+									viewUser(Number(el.dataset.user));
+								};
+							});
+						}, 0);
+					}
 				}
 
 				async function openShop() {
