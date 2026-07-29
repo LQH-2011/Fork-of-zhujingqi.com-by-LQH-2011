@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -590,7 +589,6 @@
 				justify-content: flex-start;
 				align-items: flex-start;
 				column-gap: 6px;
-				row-gap: 0;
 			}
 
 			.comment + .comment {
@@ -602,7 +600,16 @@
 			}
 
 			.comment > button {
+				flex-shrink: 0;
+			}
+
+			.commentActions {
 				margin-left: auto;
+				flex-shrink: 0;
+				white-space: nowrap;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
 			}
 
 			.commentDel {
@@ -724,7 +731,7 @@
 			}
 
 			.userLevel {
-				font-size: 14px;
+				font-size: 11px;
 				color: #888;
 				margin-left: 1px;
 			}
@@ -2261,6 +2268,7 @@
 					display: none;
 				}
 
+				#postTagBar,
 				#tagBar {
 					display: none !important;
 				}
@@ -2549,10 +2557,11 @@
 				font-size: 12px;
 				color: var(--sub);
 				cursor: pointer;
-				margin-left: 6px;
 				user-select: none;
 				transition: .2s;
 				vertical-align: middle;
+				flex-shrink: 0;
+				white-space: nowrap;
 			}
 			.replyBtn:hover {
 				color: var(--green);
@@ -2609,6 +2618,14 @@
 				font-size: 16px;
 				margin: 0;
 			}
+		@media (min-width: 801px) {
+			.comment .replyBtn {
+				display: none;
+			}
+			.comment:hover > .commentActions > .replyBtn {
+				display: inline;
+			}
+		}
 		</style>
 	</head>
 	<body>
@@ -2699,10 +2716,10 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span id="noticeUpdatesContent">
+							· 美化部分UI
+							· 关注通知
 							· 粉丝与关注
 							· 回复评论功能
-							· 更多Emoji
-							· 修复通知中心BUG
 						</span>
 					</details>
 				</div>
@@ -2734,6 +2751,7 @@
 					</div>
 				</div>
 				<button id="randomPostBtn" style="margin-top:8px;width:100%;font-size:14px;">随机帖子</button>
+				<button id="announcementBtn" style="margin-top:6px;width:100%;font-size:14px;">最新公告</button>
 			</div>
 			<div id="mobileSideBtn">☰</div>
 			<div id="posts"></div>
@@ -2757,8 +2775,8 @@
 				</div>
 				<div class="tagBarContainer"
 					style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;margin-top:8px;">
-					<div class="tagBar" id="tagBar" style="display:flex;gap:6px;flex-shrink:1;overflow-x:auto;"></div>
-					<input id="customTag" placeholder="自定义标签（你也可以不选择任何标签）"
+					<div class="tagBar" id="tagBar" style="display:flex;gap:6px;flex-shrink:1;overflow-x:auto;flex-wrap:nowrap;"></div>
+					<input id="customTag" placeholder="自定义标签（可不填）"
 						style="height:36px;font-size:14px;flex-shrink:0;width:300px;" maxlength="10">
 				</div>
 				<div class="sensitiveWrap">
@@ -2908,6 +2926,21 @@
 						const j = JSON.parse(text);
 						if (j.error) msg = j.error;
 					} catch {}
+					if (res.status === 401 || /jwt|expir|unauthorized/i.test(msg)) {
+						localStorage.removeItem("token");
+						localStorage.removeItem("loginUser");
+						setTimeout(() => {
+							const mt = document.getElementById("modalText");
+							const me = document.getElementById("modal");
+							if (mt && me) {
+								const errMsg = typeof t === "function" ? t("jwt_expired") : "登录已过期，请重新登录";
+								const btnText = typeof t === "function" ? t("jwt_login_btn") : "去登录";
+								mt.innerHTML = errMsg + '<br><br><button onclick="document.getElementById(\'modal\').classList.add(\'hidden\');show(\'welcomePage\')" style="background:var(--green);color:#fff;padding:10px 30px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' + btnText + '</button>';
+								me.classList.remove("hidden");
+							}
+						}, 0);
+						throw new Error("JWT_EXPIRED");
+					}
 					throw new Error(msg);
 				}
 				return text ? JSON.parse(text) : null;
@@ -3220,13 +3253,20 @@
 					de: "Vermeiden",
 					"zh-TW": "忌"
 				},
-				random_post_btn: {
-					zh: "随机帖子",
-					en: "Random Post",
-					es: "Publicación aleatoria",
-					de: "Zufälliger Beitrag",
-					"zh-TW": "隨機帖子"
-				},
+			random_post_btn: {
+				zh: "随机帖子",
+				en: "Random Post",
+				es: "Publicación aleatoria",
+				de: "Zufälliger Beitrag",
+				"zh-TW": "隨機帖子"
+			},
+			announcement_btn: {
+				zh: "最新公告",
+				en: "Announcement",
+				es: "Anuncio",
+				de: "Ankündigung",
+				"zh-TW": "最新公告"
+			},
 				editor_custom_tag_ph: {
 					zh: "自定义标签（你也可以不选择任何标签）",
 					en: "Custom tag (optional)",
@@ -3513,6 +3553,20 @@
 					es: "¡te envió un regalo!",
 					de: "hat dir ein Geschenk geschickt!",
 					"zh-TW": "送了你一個禮物！"
+				},
+				notif_follow: {
+					zh: "关注了你",
+					en: "followed you",
+					es: "te siguió",
+					de: "folgt dir",
+					"zh-TW": "關注了你"
+				},
+				notif_reply: {
+					zh: "回复了你的评论",
+					en: "replied to your comment",
+					es: "respondió a tu comentario",
+					de: "hat auf deinen Kommentar geantwortet",
+					"zh-TW": "回覆了你的評論"
 				},
 				notif_new: {
 					zh: "有新通知",
@@ -4528,6 +4582,20 @@
 					es: "No puedes seguirte a ti mismo",
 					de: "Kann dir nicht selbst folgen",
 					"zh-TW": "不能關注自己"
+				},
+				jwt_expired: {
+					zh: "登录已过期，请重新登录",
+					en: "Login expired, please log in again",
+					es: "Sesión expirada, inicia sesión de nuevo",
+					de: "Sitzung abgelaufen, bitte erneut anmelden",
+					"zh-TW": "登錄已過期，請重新登錄"
+				},
+				jwt_login_btn: {
+					zh: "去登录",
+					en: "Go to Login",
+					es: "Ir a iniciar sesión",
+					de: "Zum Login",
+					"zh-TW": "去登錄"
 				}
 			};
 			const PAGE_TITLE_TRANS = {
@@ -4788,6 +4856,7 @@
 					setPH("customTag", t("editor_custom_tag_ph"));
 					setT("sendBtn", t("editor_send"));
 					setT("randomPostBtn", t("random_post_btn"));
+					setT("announcementBtn", t("announcement_btn"));
 					setT("fortuneBtn", t("fortune_btn"));
 					setT("fortuneTitle", t("fortune_title"));
 					setT("fortuneGoodLabel", t("fortune_good") + "：");
@@ -5679,9 +5748,10 @@
 							author: currentUser.id,
 							tag: tag
 						});
-					} catch (e) {
-						return modal(t("post_fail", e.message));
-					}
+				} catch (e) {
+					if (e.message === "JWT_EXPIRED") return;
+					return modal(t("post_fail", e.message));
+				}
 					await notifyMentions(finalContent, postId, null);
 					$("text").value = "";
 					$("customTag").value = "";
@@ -5705,23 +5775,26 @@
 					type
 				}) {
 					if (!targetId || !actorId || targetId === actorId) return;
-					if (type !== "comment" && type !== "mention" && type !== "gift") return;
+					if (type !== "comment" && type !== "mention" && type !== "gift" && type !== "follow" && type !== "reply") return;
 					try {
-						await apiPost("/api/notifications", {
+						const body = {
 							target_id: targetId,
 							actor_id: actorId,
-							post_id: postId,
-							comment_id: commentId,
 							type,
 							is_read: false,
 							created_at: new Date().toISOString()
-						});
+						};
+						if (postId != null) body.post_id = postId;
+						if (commentId != null) body.comment_id = commentId;
+						await apiPost("/api/notifications", body);
 					} catch (e) {
 						console.error("通知插入失败", e);
 					}
 				}
 
 				function notifLabel(n) {
+					if (n.type === "follow") return t("notif_follow");
+					if (n.type === "reply") return t("notif_reply");
 					if (n.type === "comment") return t("notif_comment");
 					if (n.type === "mention") return t("notif_mention");
 					if (n.type === "gift") return t("notif_gift");
@@ -6703,9 +6776,6 @@
 							div.className = "comment";
 							div.style.paddingLeft = (depth * indent) + "px";
 							const avatar = getAvatar(c.users);
-							const replyTag = c._replyToName
-								? `<span class="replyToTag">${t("reply")} <b>@${c._replyToName}</b>:</span>`
-								: "";
 							const delBtn = currentUser && c.author === currentUser.id
 								? `<button class="commentDel" data-cdel="${c.id}">${t("post_delete")}</button>`
 								: "";
@@ -6715,9 +6785,11 @@
 									<b>${c.users?.name || t("post_unknown")}</b>
 									<span class="userLevel">${getUserLevel(c.users?.coins || 0)}</span>
 									${getRoleBadge(c.users)}
-								</span>: ${replyTag}<span class="commentContent"></span>
-								<span class="replyBtn" data-reply-to="${c.id}">${t("reply")}</span>
-								${delBtn}
+								</span>: <span class="commentContent"></span>
+								<span class="commentActions">
+									<span class="replyBtn" data-reply-to="${c.id}">${t("reply")}</span>
+									${delBtn}
+								</span>
 								<div class="commentChildren" data-children-of="${c.id}" style="width:100%"></div>`;
 							const contentEl = div.querySelector(".commentContent");
 							contentEl.textContent = c._text || "";
@@ -6841,6 +6913,7 @@
 						await refreshNotificationBadge();
 						await loadStats();
 					} catch (e) {
+						if (e.message === "JWT_EXPIRED") return;
 						console.error(e);
 						modal(t("comment_fail", e.message));
 					}
@@ -6871,7 +6944,7 @@
 								actorId: currentUser.id,
 								postId: postId,
 								commentId: commentId,
-								type: "comment"
+								type: "reply"
 							});
 						}
 						const postDiv = document.querySelector(`.post[data-post-id="${postId}"]`);
@@ -6883,6 +6956,7 @@
 						await refreshNotificationBadge();
 						await loadStats();
 					} catch (e) {
+						if (e.message === "JWT_EXPIRED") return;
 						console.error(e);
 						modal(t("comment_fail", e.message));
 					}
@@ -7308,6 +7382,15 @@
 						const fc = document.querySelector(".followerCount");
 						if (fc) {
 							fc.textContent = Math.max(0, parseInt(fc.textContent) + (res.action === "followed" ? 1 : -1));
+						}
+						if (res.action === "followed") {
+							await createNotification({
+								targetId: followeeId,
+								actorId: currentUser.id,
+								postId: null,
+								type: "follow"
+							});
+							await refreshNotificationBadge();
 						}
 					} catch {
 						btn.classList.toggle("following", wasFollowing);
@@ -8270,6 +8353,20 @@
 						if (randomPost && randomPost.id) {
 							history.replaceState(null, "", "?pid=" + randomPost.id);
 							openSinglePost(randomPost.id);
+						}
+					} catch {
+						modal(t("post_no_posts"));
+					}
+				};
+				$("announcementBtn").onclick = async () => {
+					try {
+						const res = await apiGet("/api/posts?tag=公告&perPage=1");
+						const post = res?.posts?.[0];
+						if (post && post.id) {
+							history.replaceState(null, "", "?pid=" + post.id);
+							openSinglePost(post.id);
+						} else {
+							modal(t("post_no_posts"));
 						}
 					} catch {
 						modal(t("post_no_posts"));
