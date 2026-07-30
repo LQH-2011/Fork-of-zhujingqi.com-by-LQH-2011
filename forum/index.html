@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -1343,6 +1344,42 @@
 				color: var(--green);
 			}
 
+			#announceBar {
+				position: absolute;
+				right: 2%;
+				top: 42%;
+				width: 10%;
+				background: var(--card);
+				padding: 20px;
+				border-radius: 20px;
+				box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+				text-align: left;
+				font-size: 14px;
+				max-height: 320px;
+				overflow-y: auto;
+			}
+			#announceBar .annTitle {
+				font-weight: 700;
+				font-size: 15px;
+				margin-bottom: 10px;
+				color: var(--green);
+			}
+			.annItem {
+				padding: 8px 0;
+				font-size: 14px;
+				cursor: pointer;
+				border-bottom: 1px solid rgba(0,0,0,.06);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				transition: .15s;
+			}
+			.annItem:last-child {
+				border-bottom: none;
+			}
+			.annItem:hover {
+				color: var(--green);
+			}
 			#fortuneBox {
 				text-align: center;
 				position: absolute;
@@ -2184,6 +2221,9 @@
 				#fortuneToggleBtn {
 					display: none !important;
 				}
+				#announceBar {
+					display: none !important;
+				}
 
 				#mobileSideBtn {
 					display: flex;
@@ -2738,6 +2778,7 @@
 					</a>
 				</div>
 			</div>
+			<div id="announceBar"></div>
 			<div id="fortuneBox">
 				<span id="fortuneTitle">今日运势</span>
 				<button id="fortuneBtn">获取运势</button>
@@ -3575,6 +3616,20 @@
 					de: "Neue Benachrichtigung",
 					"zh-TW": "有新通知"
 				},
+				notif_chat: {
+					zh: "Jacky Chat",
+					en: "Jacky Chat",
+					es: "Jacky Chat",
+					de: "Jacky Chat",
+					"zh-TW": "Jacky Chat"
+				},
+				notif_chat_msg: {
+					zh: "有 {0} 条未读消息",
+					en: "{0} unread messages",
+					es: "{0} mensajes no leídos",
+					de: "{0} ungelesene Nachrichten",
+					"zh-TW": "有 {0} 條未讀訊息"
+				},
 				notif_title: {
 					zh: "通知",
 					en: "Notifications",
@@ -4043,6 +4098,13 @@
 					es: "Otro",
 					de: "Sonstige",
 					"zh-TW": "其它"
+				},
+				filter_following: {
+					zh: "关注",
+					en: "Following",
+					es: "Siguiendo",
+					de: "Gefolgt",
+					"zh-TW": "關注"
 				},
 				img_insert_title: {
 					zh: "插入图片",
@@ -4548,6 +4610,20 @@
 					de: "Folge ich",
 					"zh-TW": "已關注"
 				},
+				unfollow_confirm: {
+					zh: "确定取消关注？",
+					en: "Unfollow this user?",
+					es: "¿Dejar de seguir?",
+					de: "Diesem Benutzer entfolgen?",
+					"zh-TW": "確定取消關注？"
+				},
+				confirm_btn: {
+					zh: "确定",
+					en: "OK",
+					es: "Aceptar",
+					de: "OK",
+					"zh-TW": "確定"
+				},
 				followers: {
 					zh: "粉丝",
 					en: "Followers",
@@ -4721,6 +4797,7 @@
 				let activePostTag = "全部";
 				const filterTags = [
 					"全部",
+					"关注",
 					"公告",
 					...defaultTags,
 					"其它"
@@ -5385,6 +5462,7 @@
 					startPresence();
 					refreshNotificationBadge();
 					setActive("homeBtn");
+					loadAnnouncements();
 				};
 				$("editorBtn").onclick = () => {
 					show("editorPage");
@@ -5434,12 +5512,14 @@
 					renderPostFilters();
 					loadPosts(postPage);
 					setActive("homeBtn");
+					loadAnnouncements();
 				};
 				$("postBackBtn").onclick = () => {
 					show("main");
 					renderPostFilters();
 					loadPosts(postPage);
 					setActive("homeBtn");
+					loadAnnouncements();
 				};
 				$("goRegister").onclick = () => { resetCaptcha(); show("registerPage"); };
 				$("backLogin").onclick = () => show("welcomePage");
@@ -5674,6 +5754,7 @@
 						loadOnlineUsers();
 						startPresence();
 						refreshNotificationBadge();
+						loadAnnouncements();
 						modal(t("welcome_back", data.name));
 					} catch (e) {
 						const msg = e.message;
@@ -5691,6 +5772,7 @@
 					$("logoRow").querySelector("#notifBtn").style.display = "none";
 					loadPosts(1);
 					loadStats();
+					loadAnnouncements();
 				};
 				document.addEventListener("click", e => {
 					if (!guestMode) return;
@@ -5765,6 +5847,7 @@
 					loadStats();
 					loadPosts(1);
 					setActive("homeBtn");
+					loadAnnouncements();
 					await changeCoins(currentUser.id, 5);
 				};
 				async function createNotification({
@@ -5804,12 +5887,15 @@
 				async function refreshNotificationBadge() {
 					if (!currentUser) return;
 					try {
-						const {
-							count
-						} = await apiGet("/api/notifications/count?target_id=" + currentUser.id);
+						const notifRes = await apiGet("/api/notifications/count?target_id=" + currentUser.id);
+						let chatCount = 0;
+						try {
+							const chatRes = await apiGet("/api/chat/unread?user_id=" + currentUser.id);
+							chatCount = chatRes.count || 0;
+						} catch {}
 						const badge = $("notifBadge");
 						if (!badge) return;
-						const unread = count || 0;
+						const unread = (notifRes.count || 0) + chatCount;
 						badge.textContent = unread;
 						badge.hidden = false;
 						badge.style.background = unread === 0 ? 'var(--card)' : '#ff3b30';
@@ -5834,7 +5920,7 @@
 				function buildPostQuery(page, perPage) {
 					let q = `?page=${page}&perPage=${perPage}`;
 					if (currentUser) q += "&userId=" + currentUser.id;
-					if (activePostTag && activePostTag !== "全部" && activePostTag !== "其它") q += "&tag=" + encodeURIComponent(activePostTag);
+					if (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" && activePostTag !== "关注") q += "&tag=" + encodeURIComponent(activePostTag);
 					if (postSearch) q += "&search=" + encodeURIComponent(postSearch);
 					return q;
 				}
@@ -5951,6 +6037,7 @@
 							renderPostFilters();
 							loadStats();
 							loadPosts(1);
+							loadAnnouncements();
 						};
 						const delBtn = postDiv.querySelector("[data-del]");
 						if (delBtn) delBtn.onclick = () => deletePost(post.id);
@@ -5995,15 +6082,34 @@
 							<button id="markAllReadBtn">${t("modal_mark_read")}</button>
 						</div>`);
 					let rows;
+					let chatUnread = 0;
 					try {
 						rows = await apiGet("/api/notifications?target_id=" + currentUser.id);
 					} catch (e) {
 						modal(t("notif_load_fail", e.message));
 						return;
 					}
+					try {
+						const chatRes = await apiGet("/api/chat/unread?user_id=" + currentUser.id);
+						chatUnread = chatRes.count || 0;
+					} catch {}
 					rows = rows || [];
+					const chatHtml = chatUnread > 0 ? `
+						<div class="notifItem chatNotifItem"
+							style="padding:8px 10px;border-bottom:1px solid var(--bg);cursor:pointer;border-radius:14px;font-weight:700;background:rgba(0,0,0,.03);">
+							<div style="display:flex;align-items:center;gap:8px;">
+								<img src="https://zhujingqi.com/chat/icon.svg" style="width:32px;height:32px;border-radius:50%;flex-shrink:0;">
+								<div style="min-width:0;flex:1;">
+									<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+										<b>${t("notif_chat")}</b>
+										<span style="color:var(--green);font-weight:700;">${t("notif_chat_msg", chatUnread)}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					` : "";
 					const notifHtml = rows.length ?
-						rows.map(n => {
+						chatHtml + rows.map(n => {
 							const a = n.actor;
 							const actorFromId = a == null && n.actor_id != null ? n.actor_id : a;
 							let actorName, actorAvatar;
@@ -6038,7 +6144,7 @@
 								</div>
 							`;
 						}).join("") :
-						`<div style="color:var(--sub);padding:8px 0;">${t("modal_no_notifs")}</div>`;
+						(chatHtml || `<div style="color:var(--sub);padding:8px 0;">${t("modal_no_notifs")}</div>`);
 					const wrap = $("notifListWrap");
 					if (wrap) wrap.innerHTML = notifHtml;
 					$("markAllReadBtn").onclick = async () => {
@@ -6065,6 +6171,10 @@
 						await refreshNotificationBadge();
 					};
 					document.querySelectorAll(".notifItem").forEach(el => {
+						if (el.classList.contains("chatNotifItem")) {
+							el.onclick = () => window.open("https://zhujingqi.com/chat/", "_blank");
+							return;
+						}
 						el.onclick = async () => {
 							await markNotificationRead(Number(el.dataset.nid));
 							await refreshNotificationBadge();
@@ -6397,8 +6507,10 @@
 					const search = $("postSearch");
 					const tagBar = $("postTagBar");
 					if (!search || !tagBar) return;
+					const isMobile = window.innerWidth <= 800;
 					const tagDisplayMap = {
 						"全部": t("filter_all"),
+						"关注": t("filter_following"),
 						"公告": t("filter_announce"),
 						"其它": t("filter_other")
 					};
@@ -6411,7 +6523,9 @@
 					for (const d of defaultTags) tagDisplayMap[d] = t(defaultTagKeys[d]) || d;
 					search.value = postSearch;
 					tagBar.innerHTML = "";
+					const mobileOnlyTags = ["全部", "关注"];
 					for (const tag of filterTags) {
+						if (isMobile && !mobileOnlyTags.includes(tag)) continue;
 						const chip = document.createElement("span");
 						chip.className = "postTagChip" + (tag === activePostTag ? " active" : "");
 						chip.textContent = tagDisplayMap[tag] || tag;
@@ -6427,7 +6541,7 @@
 					}
 					$("searchBtn").onclick = () => {
 						postSearch = search.value.trim();
-						const matchedTag = [...defaultTags, "公告"].find(t => t === postSearch);
+						const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
 						if (matchedTag) {
 							activePostTag = matchedTag;
 							postSearch = "";
@@ -6439,7 +6553,7 @@
 					search.onkeydown = e => {
 						if (e.key === "Enter") {
 							postSearch = search.value.trim();
-							const matchedTag = [...defaultTags, "公告"].find(t => t === postSearch);
+							const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
 							if (matchedTag) {
 								activePostTag = matchedTag;
 								postSearch = "";
@@ -6451,6 +6565,15 @@
 					};
 				}
 				async function fetchPostPage(page = 1, perPage = getPostsPerPage()) {
+					let authorsParam = "";
+					if (activePostTag === "关注" && currentUser) {
+						const followedIds = await getFollowedIds();
+						if (followedIds.size) {
+							authorsParam = "&authors=" + [...followedIds].join(",");
+						} else {
+							return { posts: [], count: 0 };
+						}
+					}
 					const q = buildPostQuery(page, perPage);
 					let result;
 					if (postSearch && postSearch.startsWith("@")) {
@@ -6461,9 +6584,9 @@
 						};
 						try {
 							result = await apiGet("/api/posts?search=" + encodeURIComponent(postSearch) + "&page=" +
-								page + "&perPage=" + perPage + (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" ?
+								page + "&perPage=" + perPage + (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" && activePostTag !== "关注" ?
 									"&tag=" + encodeURIComponent(activePostTag) : "") + (currentUser ?
-									"&userId=" + currentUser.id : ""));
+									"&userId=" + currentUser.id : "") + authorsParam);
 						} catch {
 							return {
 								posts: [],
@@ -6471,12 +6594,27 @@
 							};
 						}
 					} else {
-						result = await apiGet("/api/posts" + q);
+						result = await apiGet("/api/posts" + q + authorsParam);
 					}
 					return {
 						posts: result.posts || [],
 						count: result.count || 0
 					};
+				}
+				let followedIdsCache = null;
+				let followedIdsCacheTime = 0;
+				const FOLLOWED_IDS_TTL = 30000;
+				async function getFollowedIds() {
+					const now = Date.now();
+					if (followedIdsCache && now - followedIdsCacheTime < FOLLOWED_IDS_TTL) return followedIdsCache;
+					try {
+						const data = await apiGet("/api/follows/list?user_id=" + currentUser.id + "&type=following&requester_id=" + currentUser.id);
+						followedIdsCache = new Set((data || []).map(f => f.followee_id).filter(id => id));
+						followedIdsCacheTime = now;
+					} catch {
+						followedIdsCache = new Set();
+					}
+					return followedIdsCache;
 				}
 				const notice = $("notice");
 				const toggleBtn = $("toggleNoticeBtn");
@@ -6861,11 +6999,12 @@
 												${
 													rows.length
 														? rows.map(x => `
-															<div class="onlineUser voteUser" data-user="${x.users?.id}" style="display:flex;align-items:center;gap:8px;">
+															<div class="onlineUser voteUser" data-user="${x.users?.id}">
 																<img class="avatar onlineAvatar" src="${getAvatar(x.users)}" onerror="this.onerror=null;this.src='head.svg'">
 																<span>${x.users?.name || t("post_unknown")}</span>
 																<span class="userLevel">${getUserLevel(x.users?.coins || 0)}</span>
 																${getRoleBadge(x.users)}
+															</div>
 														`).join("")
 														: `<div style="color:var(--sub);padding:8px 0;">${t("vote_none")}</div>`
 												}
@@ -6899,7 +7038,7 @@
 							commentId: commentId,
 							type: "comment"
 						});
-						const postDiv = document.querySelector(`.post[data-post-id="${postId}"]`);
+						const postDiv = $("singlePost")?.querySelector(`.post[data-post-id="${postId}"]`) || document.querySelector(`.post[data-post-id="${postId}"]`);
 						if (postDiv) {
 							const input = postDiv.querySelector("[data-input]");
 							if (input) {
@@ -6947,7 +7086,7 @@
 								type: "reply"
 							});
 						}
-						const postDiv = document.querySelector(`.post[data-post-id="${postId}"]`);
+						const postDiv = $("singlePost")?.querySelector(`.post[data-post-id="${postId}"]`) || document.querySelector(`.post[data-post-id="${postId}"]`);
 						if (postDiv) {
 							const list = postDiv.querySelector(".commentList");
 							if (list) await renderComments(postId, list);
@@ -7297,6 +7436,7 @@
 						show("main");
 						$("postSearch").value = "@" + user.name;
 						postSearch = "@" + user.name;
+						loadAnnouncements();
 						activePostTag = "全部";
 						renderPostFilters();
 						loadPosts(1);
@@ -7372,6 +7512,24 @@
 
 				async function toggleFollow(followeeId, btn) {
 					const wasFollowing = btn.classList.contains("following");
+					if (wasFollowing) {
+						const confirmed = await new Promise(resolve => {
+							const box = document.querySelector(".modalBox");
+							const origW = box.style.width;
+							box.style.width = "320px";
+							modal(
+								'<h3 style="margin:0 0 16px;text-align:center;">' + t("unfollow_confirm") + '</h3>' +
+								'<div style="text-align:center">' +
+								'<button id="unfConfirm" style="background:#e74c3c;color:#fff;padding:10px 40px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' + t("confirm_btn") + '</button>' +
+								'</div>'
+							);
+							$("unfConfirm").onclick = () => { $("modal").classList.add("hidden"); box.style.width = origW; resolve(true); };
+							const closeModalHandler = () => { $("modal").classList.add("hidden"); box.style.width = origW; resolve(false); };
+							$("modalClose").onclick = closeModalHandler;
+							$("modal").onclick = e => { if (e.target === $("modal")) closeModalHandler(); };
+						});
+						if (!confirmed) return;
+					}
 					btn.classList.toggle("following", !wasFollowing);
 					btn.textContent = wasFollowing ? t("follow_btn") : t("unfollow_btn");
 					try {
@@ -8358,6 +8516,42 @@
 						modal(t("post_no_posts"));
 					}
 				};
+				function stripInternalCodes(txt) {
+					const meta = getPostMeta(txt);
+					return meta.content.replace(/\[\[.*?\]\]|\[.*?\]/g, "").trim();
+				}
+				function renderAnnouncementEmojis(snippet) {
+					return snippet.replace(/:([a-zA-Z0-9_-]+):/g, (m, name) =>
+						EMOJI_MAP.includes(name.toLowerCase())
+							? `<img src="emojis/${name.toLowerCase()}.svg" class="emojiInPost" alt=":${name}:" style="width:1.1em;height:1.1em;vertical-align:middle;display:inline;">`
+							: m
+					);
+				}
+				async function loadAnnouncements() {
+					const bar = $("announceBar");
+					if (!bar || window.innerWidth <= 800) return;
+					try {
+						const res = await apiGet("/api/posts?tag=公告&perPage=3");
+						const posts = res?.posts || [];
+						if (!posts.length) { bar.innerHTML = ""; return; }
+						bar.innerHTML =
+							'<div class="annTitle">' + t("announcement_btn") + '</div>' +
+							posts.map(p => {
+								const text = stripInternalCodes(p.content || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+								const snippet = text.length > 50 ? text.slice(0, 50) + "…" : text;
+								return '<div class="annItem" data-pid="' + p.id + '">' + renderAnnouncementEmojis(snippet) + '</div>';
+							}).join("");
+						bar.querySelectorAll(".annItem").forEach(el => {
+							el.onclick = () => {
+								const pid = Number(el.dataset.pid);
+								if (pid) {
+									history.replaceState(null, "", "?pid=" + pid);
+									openSinglePost(pid);
+								}
+							};
+						});
+					} catch { bar.innerHTML = ""; }
+				}
 				$("announcementBtn").onclick = async () => {
 					try {
 						const res = await apiGet("/api/posts?tag=公告&perPage=1");
@@ -8586,6 +8780,7 @@
 									startPresence();
 									refreshNotificationBadge();
 									loadPosts(1);
+									loadAnnouncements();
 								}
 								return;
 							}
@@ -8600,6 +8795,7 @@
 							$("logoRow").querySelector("#onlineMini").style.display = "none";
 							$("logoRow").querySelector("#notifBtn").style.display = "none";
 							loadStats();
+							loadAnnouncements();
 							loadPosts(1);
 							if (guestPid) {
 								const pid = Number(guestPid);
