@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -57,6 +56,7 @@
 				margin: 0;
 				background: var(--bg);
 				color: var(--text);
+				overflow-x: hidden;
 			}
 
 			body::-webkit-scrollbar {
@@ -155,6 +155,225 @@
 				width: 100%;
 				height: 100vh;
 				overflow-x: hidden;
+			}
+
+			#profileCard {
+				display: flex;
+				gap: 24px;
+				background: var(--card);
+				padding: 28px 32px;
+				border-radius: 24px;
+				box-shadow: 0 8px 30px rgba(0,0,0,.1);
+				width: 80%;
+				max-width: 700px;
+				margin: 70px auto 16px auto;
+				box-sizing: border-box;
+				align-items: flex-start;
+			}
+
+			#profileLeft {
+				flex-shrink: 0;
+			}
+
+			#profileLeft .avatar.big {
+				width: 108px;
+				height: 108px;
+				border-width: 3px;
+				cursor: zoom-in;
+				display: block;
+			}
+
+			#profileRight {
+				flex: 1;
+				min-width: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+			}
+
+			#profileNameRow {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				flex-wrap: wrap;
+			}
+
+			#profileNameRow #pname {
+				font-size: 28px;
+				font-weight: 700;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				flex-wrap: wrap;
+			}
+
+			#profileNameRow #logoutBtn {
+				margin-left: auto;
+				height: 32px;
+				padding: 0 14px;
+				font-size: 13px;
+				border-radius: 999px;
+				background: var(--bg);
+				color: var(--sub);
+				border: none;
+				cursor: pointer;
+				transition: .2s;
+			}
+
+			#profileNameRow #logoutBtn:hover {
+				background: #e74c3c;
+				color: #fff;
+			}
+
+			#profileMeta {
+				font-size: 14px;
+				color: var(--sub);
+				line-height: 1.6;
+			}
+
+			#profileMeta .metaRow {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+
+			#profileBio {
+				width: 80%;
+				max-width: 700px;
+				background: var(--card);
+				border-radius: 20px;
+				padding: 18px 22px;
+				margin: 0 auto 12px auto;
+				box-sizing: border-box;
+				font-size: 15px;
+				color: var(--text);
+				word-wrap: break-word;
+				box-shadow: 0 4px 16px rgba(0,0,0,.06);
+				line-height: 1.6;
+			}
+
+			#profileBio .bioEditBtn {
+				display: block;
+				margin-top: 10px;
+				height: 32px;
+				padding: 0 14px;
+				border-radius: 999px;
+				border: 1px solid #ccc;
+				background: var(--card);
+				color: var(--sub);
+				cursor: pointer;
+				font-size: 13px;
+				transition: .2s;
+			}
+
+			#profileBio .bioEditBtn:hover {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+
+			#profileStats {
+				display: flex;
+				gap: 20px;
+				margin-top: 8px;
+				font-size: 14px;
+			}
+
+			#profileStats a {
+				cursor: pointer;
+				color: var(--text);
+				text-decoration: none;
+				transition: .2s;
+			}
+
+			#profileStats a:hover {
+				color: var(--green);
+			}
+
+			#profileStats b {
+				font-weight: 700;
+			}
+
+			#profileActions {
+				display: flex;
+				gap: 10px;
+				justify-content: center;
+				margin-bottom: 20px;
+				width: 80%;
+				max-width: 700px;
+			}
+
+			#profileActions .profileBtn {
+				flex: 1;
+				height: 42px;
+				padding: 0 20px;
+				border-radius: 999px;
+				border: none;
+				background: var(--card);
+				color: var(--text);
+				cursor: pointer;
+				font-size: 15px;
+				font-weight: 600;
+				transition: .2s;
+				box-shadow: 0 2px 8px rgba(0,0,0,.06);
+				user-select: none;
+			}
+
+			#profileActions .profileBtn:hover {
+				background: var(--green);
+				color: #fff;
+			}
+
+			#profileActions .profileBtn.following {
+				background: var(--green);
+				color: #fff;
+			}
+
+			#profileActions .profileBtn.following:hover {
+				background: #e74c3c;
+			}
+
+			#profilePage #levelProgress {
+				width: 100%;
+			}
+
+			@media (max-width: 600px) {
+				#profileCard {
+					flex-direction: column;
+					align-items: center;
+					text-align: center;
+					padding: 24px 20px;
+					margin-top: 60px;
+				}
+				#profileNameRow {
+					justify-content: center;
+				}
+				#profileNameRow #logoutBtn {
+					margin-left: 0;
+				}
+				#profileActions {
+					flex-direction: column;
+				}
+				#profileActions .profileBtn {
+					height: 50px;
+					flex: none;
+				}
+				#profileMeta {
+					text-align: center;
+				}
+				#profileMeta .metaRow {
+					justify-content: center;
+				}
+				#profileLeft .avatar.big {
+					width: 88px;
+					height: 88px;
+				}
+				#profileStats {
+					justify-content: center;
+				}
+				.modalBox {
+					padding: 20px;
+				}
 			}
 			#userItems {
 				width: 100%;
@@ -335,6 +554,7 @@
 				padding: 30px;
 				border-radius: 20px;
 				width: 300px;
+				max-width: calc(100vw - 40px);
 				text-align: center;
 			}
 
@@ -382,19 +602,6 @@
 
 			.userItem:last-child {
 				border-bottom: none;
-			}
-
-			#userDescription {
-				text-align: left;
-				font-size: 18px;
-				color: var(--text);
-				background: var(--card);
-				border-radius: 20px;
-				margin: 14px auto;
-				padding: 20px;
-				width: 80%;
-				max-width: 800px;
-				word-wrap: break-word;
 			}
 
 			.tagBar {
@@ -1835,12 +2042,6 @@
 				gap: 1px;
 			}
 
-			.profileAvatarWrap {
-				display: flex;
-				justify-content: center;
-				margin: 10px 0 16px 0;
-			}
-
 			#profileAvatar {
 				cursor: zoom-in;
 			}
@@ -2031,71 +2232,18 @@
 				line-height: 1.3;
 			}
 
-			.profileBtnGrid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-				gap: 12px;
-				width: 100%;
-				max-width: 700px;
-				margin: 16px auto 40px auto;
-				padding: 0 20px;
-				box-sizing: border-box;
-			}
-
-			.profileBtnGrid .pbtn {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				padding: 4px 16px;
-				border-radius: 20px;
-				background: var(--card);
-				color: var(--text);
-				border: none;
-				cursor: pointer;
-				font-size: 16px;
-				text-align: center;
-				transition: .2s;
-				height: 50px;
-				user-select: none;
-				font-weight: 600;
-			}
-
-			.profileBtnGrid .pbtn:hover {
-				background: var(--green);
-				color: #fff;
-			}
-
-			.themeRow {
-				display: flex;
-				gap: 8px;
-				grid-column: 1 / -1;
-			}
-
-			.themeRow button {
-				flex: 1;
-				height: 42px;
-			}
 			.settingsCard {
 				background: var(--card);
-				border-radius: 14px;
-				padding: 16px;
-				margin-bottom: 10px;
+				border-radius: 12px;
+				padding: 10px 12px;
 			}
 			.settingsLabel {
 				font-size: 13px;
 				color: var(--sub);
-				margin-bottom: 8px;
+				margin-bottom: 4px;
 			}
 			.settingsThemeBtn {
-				flex: 1;
-				padding: 8px;
-				border-radius: 20px;
-				border: 1px solid var(--bg);
-				background: var(--card);
-				color: var(--text);
-				cursor: pointer;
-				font-size: 13px;
-				transition: .2s;
+				flex:1;padding:7px;border-radius:20px;border:1px solid var(--bg);background:var(--card);color:var(--text);cursor:pointer;font-size:13px;font-weight:600;transition:.2s;
 			}
 			.settingsThemeBtn.active {
 				background: var(--green);
@@ -2103,39 +2251,10 @@
 				border-color: var(--green);
 			}
 			.settingsLinkBtn {
-				display:block;width:100%;padding:10px;border:none;background:none;color:var(--green);font-size:14px;cursor:pointer;text-align:left;border-radius:8px;
+				display:block;width:100%;padding:8px 12px;border:none;background:var(--card);color:var(--green);font-size:14px;cursor:pointer;text-align:center;border-radius:20px;font-weight:600;transition:.2s;
 			}
 			.settingsLinkBtn:hover {
-				background: var(--bg);
-			}
-
-			.followStats {
-				display: flex;
-				gap: 16px;
-				justify-content: center;
-				margin: 8px 0;
-				flex-wrap: wrap;
-			}
-			.followStats a {
-				cursor: pointer;
-				color: var(--text);
-				text-decoration: none;
-			}
-			.followStats a:hover {
-				color: var(--green);
-			}
-			.followStats b {
-				font-weight: 700;
-			}
-			#followBtn.following {
-				background: var(--green) !important;
-				color: #fff !important;
-			}
-			.followPublicRow input[type="checkbox"] {
-				width: 14px;
-				height: 14px;
-				cursor: pointer;
-				accent-color: var(--green);
+				background:var(--green);color:#fff;
 			}
 
 			@keyframes postFadeIn {
@@ -2148,6 +2267,35 @@
 					opacity: 1;
 					transform: translateY(0) scale(1)
 				}
+			}
+
+			@keyframes slideInRight {
+				from { transform: translateX(100%); opacity: .6; }
+				to { transform: translateX(0); opacity: 1; }
+			}
+			@keyframes slideInLeft {
+				from { transform: translateX(-100%); opacity: .6; }
+				to { transform: translateX(0); opacity: 1; }
+			}
+			.page-slide-right,
+			.page-slide-left {
+				position: fixed !important; top:0; left:0;
+				width:100%; height:100vh; z-index:10;
+				will-change: transform, opacity;
+			}
+			.page-slide-right {
+				animation: slideInRight .28s ease-out both;
+			}
+			.page-slide-left {
+				animation: slideInLeft .28s ease-out both;
+			}
+			@keyframes fadeOut {
+				from { opacity: 1; }
+				to { opacity: 0; }
+			}
+			.page-fade-out {
+				animation: fadeOut .28s ease-out both;
+				will-change: opacity;
 			}
 
 			.post.postEnter {
@@ -2182,10 +2330,6 @@
 				.bottom button {
 					height: 100%;
 					padding-bottom: 40px;
-				}
-
-				.profileBtnGrid {
-					margin-bottom: 70px;
 				}
 
 				#pname {
@@ -2518,6 +2662,18 @@
 					width: 32px;
 					height: 32px;
 				}
+				.settingsCard {
+					padding: 8px 10px;
+					border-radius: 10px;
+				}
+				.settingsLinkBtn {
+					padding: 6px 10px;
+					font-size: 13px;
+				}
+				.settingsThemeBtn {
+					padding: 5px;
+					font-size: 12px;
+				}
 			}
 
 			.emojiBtn {
@@ -2756,10 +2912,9 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span id="noticeUpdatesContent">
-							· 美化部分UI
-							· 关注通知
-							· 粉丝与关注
-							· 回复评论功能
+							· 全新用户主页<br>
+							· 平滑切页效果<br>
+							· 统一进设置页<br>
 						</span>
 					</details>
 				</div>
@@ -2860,17 +3015,22 @@
 		</div>
 		<div id="profilePage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
 			<div id="backBtn">←</div>
-			<div class="postHeader" style="justify-content:flex-start;align-items:center;">
-				<div class="profileAvatarWrap">
+			<div id="profileCard">
+				<div id="profileLeft">
 					<img id="profileAvatar" class="avatar big" src="head.svg">
 				</div>
-				<h2 id="pname"></h2>
-				<button id="logoutBtn" style="margin-left:20px;">登出</button>
+				<div id="profileRight">
+					<div id="profileNameRow">
+						<span id="pname"></span>
+						<button id="logoutBtn">登出</button>
+					</div>
+					<div id="profileMeta"></div>
+					<div id="levelProgress"></div>
+					<div id="profileStats"></div>
+				</div>
 			</div>
-			<div id="moreInfo" class="time"></div>
-			<div id="levelProgress" style="width:80%;max-width:600px;margin:12px auto;padding:0 10px;"></div>
-			<div id="userDescription" style=""></div>
-			<br>
+			<div id="profileBio"></div>
+			<div id="profileActions"></div>
 			<div id="userPosts"></div>
 		</div>
 		<div id="discoverPage" class="hidden">
@@ -3869,18 +4029,18 @@
 					"zh-TW": "評論失敗：{0}"
 				},
 				like_fail: {
-					zh: "点赞失败：{0}",
-					en: "Like failed: {0}",
-					es: "Error al gustar: {0}",
-					de: "Gefällt mir fehlgeschlagen: {0}",
-					"zh-TW": "點讚失敗：{0}"
+					zh: "操作失败",
+					en: "Operation failed",
+					es: "Operación fallida",
+					de: "Vorgang fehlgeschlagen",
+					"zh-TW": "操作失敗"
 				},
 				dislike_fail: {
-					zh: "踩帖失败：{0}",
-					en: "Dislike failed: {0}",
-					es: "Error al no gustar: {0}",
-					de: "Gefällt nicht fehlgeschlagen: {0}",
-					"zh-TW": "踩帖失敗：{0}"
+					zh: "操作失败",
+					en: "Operation failed",
+					es: "Operación fallida",
+					de: "Vorgang fehlgeschlagen",
+					"zh-TW": "操作失敗"
 				},
 				notif_load_fail: {
 					zh: "通知加载失败：{0}",
@@ -4672,6 +4832,20 @@
 					es: "Ir a iniciar sesión",
 					de: "Zum Login",
 					"zh-TW": "去登錄"
+				},
+				profile_settings: {
+					zh: "设置",
+					en: "Settings",
+					es: "Ajustes",
+					de: "Einstellungen",
+					"zh-TW": "設置"
+				},
+				loading: {
+					zh: "加载中…",
+					en: "Loading…",
+					es: "Cargando…",
+					de: "Laden…",
+					"zh-TW": "加載中…"
 				}
 			};
 			const PAGE_TITLE_TRANS = {
@@ -4749,7 +4923,7 @@
 				const $ = id => document.getElementById(id);
 				let currentUser = null;
 				let guestMode = false;
-				let currentPage = "home";
+				let currentPage = "main";
 				const defaultTags = ["学习", "日常", "搞笑", "提问"];
 				let selectedTags = [];
 				let postLayout = localStorage.getItem("postLayout") || "list";
@@ -4873,13 +5047,40 @@
 					}
 				}
 
+				const PAGE_ORDER = ["welcomePage","registerPage","main","editorPage","userListPage","discoverPage","profilePage","postPage"];
 				function show(p) {
+					const prev = currentPage;
 					currentPage = p;
-					["welcomePage", "registerPage", "main", "editorPage", "profilePage", "userListPage", "discoverPage",
-						"postPage"
-					]
-					.forEach(id => $(id).classList.add("hidden"));
-					$(p).classList.remove("hidden");
+					let slide = "";
+					if (prev && prev !== p) {
+						const pi = PAGE_ORDER.indexOf(prev);
+						const ci = PAGE_ORDER.indexOf(p);
+						if (pi !== -1 && ci !== -1) slide = ci > pi ? "page-slide-right" : "page-slide-left";
+					}
+					PAGE_ORDER.forEach(id => {
+						const el = $(id);
+						if (id === p) {
+							el.classList.remove("hidden");
+							if (slide) {
+								el.classList.remove("page-slide-right","page-slide-left");
+								void el.offsetWidth;
+								el.classList.add(slide);
+								setTimeout(() => el.classList.remove("page-slide-right","page-slide-left"), 300);
+							}
+						} else if (id === prev && slide) {
+							el.classList.remove("page-fade-out");
+							void el.offsetWidth;
+							el.classList.add("page-fade-out");
+						} else {
+							el.classList.add("hidden");
+						}
+					});
+					if (slide && prev) {
+						setTimeout(() => {
+							$(prev).classList.add("hidden");
+							$(prev).classList.remove("page-fade-out");
+						}, 280);
+					}
 					if (p !== "profilePage" && p !== "postPage") {
 						history.replaceState(null, "", location.pathname);
 					}
@@ -5490,8 +5691,10 @@
 					setActive("discoverBtn");
 				};
 				$("profileBtn").onclick = () => {
-					if (currentUser) viewUser(currentUser.id);
-
+					if (currentUser) {
+						show("profilePage");
+						viewUser(currentUser.id);
+					}
 					setActive("profileBtn");
 				};
 				$("logoutBtn").onclick = () => {
@@ -7126,21 +7329,20 @@
 					}
 					likeNumEl.textContent = likeCount;
 					dislikeNumEl.textContent = dislikeCount;
-					const targetType = hasLike ? 0 : 1;
 					try {
 						await apiPost("/api/likes/toggle", {
 							postid: id,
 							liker: currentUser.id,
-							type: targetType
+							type: hasLike ? 0 : 1
 						});
-						if (postDiv.dataset.authorId != currentUser.id) await changeCoins(currentUser.id, hasLike ? -1 : (hasDislike ? 2 : 1));
+						if (postDiv.dataset.authorId != currentUser.id) changeCoins(currentUser.id, hasLike ? -1 : (hasDislike ? 2 : 1));
 					} catch (e) {
 						console.error(e);
 						likeNumEl.textContent = prevLikeCount;
 						dislikeNumEl.textContent = prevDislikeCount;
 						likeBtn.classList.toggle("liked", prevLiked);
 						dislikeBtn.classList.toggle("disliked", prevDisliked);
-						modal(t("like_fail", e.message));
+						showCoinMsg(t("like_fail"));
 					}
 				}
 				async function dislikePost(id, postDiv) {
@@ -7169,21 +7371,20 @@
 					}
 					likeNumEl.textContent = likeCount;
 					dislikeNumEl.textContent = dislikeCount;
-					const targetType = hasDislike ? 0 : -1;
 					try {
 						await apiPost("/api/likes/toggle", {
 							postid: id,
 							liker: currentUser.id,
-							type: targetType
+							type: hasDislike ? 0 : -1
 						});
-						if (postDiv.dataset.authorId != currentUser.id) await changeCoins(currentUser.id, hasDislike ? 1 : (hasLike ? -2 : -1));
+						if (postDiv.dataset.authorId != currentUser.id) changeCoins(currentUser.id, hasDislike ? 1 : (hasLike ? -2 : -1));
 					} catch (e) {
 						console.error(e);
 						likeNumEl.textContent = prevLikeCount;
 						dislikeNumEl.textContent = prevDislikeCount;
 						likeBtn.classList.toggle("liked", prevLiked);
 						dislikeBtn.classList.toggle("disliked", prevDisliked);
-						modal(t("dislike_fail", e.message));
+						showCoinMsg(t("dislike_fail"));
 					}
 				}
 				async function deletePost(id) {
@@ -7363,76 +7564,158 @@
 						};
 					}
 				}
+				function openProfileSettings(user) {
+					const box = document.querySelector(".modalBox");
+					box.style.width = "440px";
+					const themeClass = document.body.classList.contains("dark") ? "dark" : "light";
+					modal(`
+						<div style="text-align:left;">
+							<h3 style="margin:0 0 10px 0;text-align:center;">${t("profile_settings")}</h3>
+							<div class="settingsCard">
+								<div class="settingsLabel">主题</div>
+								<div style="display:flex;gap:6px;">
+									<button class="settingsThemeBtn" data-theme="sys">${t("profile_theme_sys")}</button>
+									<button class="settingsThemeBtn" data-theme="light">${t("profile_theme_light")}</button>
+									<button class="settingsThemeBtn" data-theme="dark">${t("profile_theme_dark")}</button>
+								</div>
+							</div>
+							<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
+								<button class="settingsLinkBtn" id="setAvatarBtn">${t("profile_edit_avatar")}</button>
+								<button class="settingsLinkBtn" id="setBioBtn">${t("profile_edit_desc")}</button>
+							</div>
+							<div class="settingsCard" style="margin-top:6px;">
+								<div style="display:flex;align-items:center;justify-content:space-between;">
+									<span class="settingsLabel" style="margin:0;">${t("follow_public_label")}</span>
+									<input type="checkbox" id="settingsFollowPublic" ${user.follow_public ? "checked" : ""} style="width:18px;height:18px;cursor:pointer;accent-color:var(--green);">
+								</div>
+							</div>
+							<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
+								<button class="settingsLinkBtn" id="setAboutBtn">${t("profile_about")}</button>
+								<button class="settingsLinkBtn" id="setSponsorBtn">${t("profile_sponsor")}</button>
+							</div>
+							<button class="settingsLinkBtn" id="setDownloadBtn" style="margin-top:6px;">${t("profile_download")}</button>
+						</div>
+					`);
+					box.querySelectorAll(".settingsThemeBtn").forEach(btn => {
+						btn.classList.toggle("active", btn.dataset.theme === themeClass);
+						btn.onclick = () => {
+							const t = btn.dataset.theme;
+							if (t === "dark") document.body.classList.add("dark");
+							else document.body.classList.remove("dark");
+							box.querySelectorAll(".settingsThemeBtn").forEach(b => b.classList.remove("active"));
+							btn.classList.add("active");
+						};
+					});
+					$("setAvatarBtn").onclick = () => { $("modal").classList.add("hidden"); openAvatarEditor(); };
+					$("setBioBtn").onclick = () => {
+						$("modal").classList.add("hidden");
+						box.style.width = "400px";
+						$("modalText").innerHTML = `
+							<h3>${t("profile_edit_desc")}</h3>
+							<textarea id="descTextarea" maxlength="500" style="height:120px;">${user.description || ""}</textarea>
+							<div style="margin-top:10px;"><button id="saveDescBtn">${t("profile_save")}</button></div>
+						`;
+						$("modal").classList.remove("hidden");
+						$("saveDescBtn").onclick = async () => {
+							const newDesc = $("descTextarea").value.trim();
+							try {
+								await apiPut("/api/users/" + currentUser.id, { description: newDesc });
+							} catch (e) {
+								return modal(t("save_fail", e.message));
+							}
+							currentUser.description = newDesc;
+							const bio = document.getElementById("profileBio");
+							if (bio) bio.innerHTML = (newDesc || t("profile_no_desc")) + '<button class="bioEditBtn">' + t("profile_edit") + '</button>';
+							$("modal").classList.add("hidden");
+						};
+					};
+					$("settingsFollowPublic").onchange = async () => {
+						try {
+							await apiPut("/api/users/" + currentUser.id, { follow_public: $("settingsFollowPublic").checked });
+						} catch { $("settingsFollowPublic").checked = !$("settingsFollowPublic").checked; }
+					};
+					$("setAboutBtn").onclick = () => {
+						box.style.width = "800px";
+						modal(`<h2>${t("about_title")}</h2><div style="text-align:left;">${t("about_content")}</div><h6><a href="#">${t("login_title")}</a> · <a href="https://zhujingqi.com">Zhujingqi</a></h6><h6>© Jacky Forum. All rights reserved.</h6>`);
+					};
+					$("setSponsorBtn").onclick = () => {
+						modal(`<h2>${t("sponsor_title")}</h2>${t("sponsor_content")}`);
+					};
+					$("setDownloadBtn").onclick = () => {
+						box.style.width = "800px";
+						modal(`<h3>${t("download_title")}</h3>${t("download_content")}`);
+					};
+				}
+
 				async function viewUser(uid) {
-					let container = $("userPosts");
-					container.innerHTML =
-						"<p style='text-align:center;color:var(--sub);margin-top:20px;'>Loading...</p>";
+					show("profilePage");
+					$("profileAvatar").src = "head.svg";
+					$("pname").textContent = t("loading");
+					$("profileMeta").innerHTML = "";
+					renderLevelProgress(0);
+					document.getElementById("profileBio").innerHTML = `<em>${t("loading")}</em>`;
+					$("profileStats").innerHTML = "";
+					document.getElementById("profileActions").innerHTML = "";
+					$("logoutBtn").style.display = "none";
 					let user;
 					try {
-						user = await apiGet("/api/users/" + uid);
+						user = await apiGet("/api/users/" + uid + (currentUser ? "?userId=" + currentUser.id : ""));
 					} catch {
-						user = {
-							id: uid,
-							name: "?",
-							coins: 0,
-							avatar: null,
-							description: "",
-							time: "",
-							role: []
-						};
+						user = { id: uid, name: "?", coins: 0, avatar: null, description: "", time: "", role: [] };
 					}
 					const avatarUrl = getAvatar(user);
 					$("profileAvatar").src = avatarUrl;
 					$("profileAvatar").onclick = () => openViewer(avatarUrl);
-					container.innerHTML = "";
 					history.pushState(null, "", "?uid=" + uid);
 					const isSelf = currentUser && uid === currentUser.id;
-					$("pname").innerHTML =
-						user.name +
-						`<span class="userLevel">${getUserLevel(user.coins)}</span>` +
-						getRoleBadge(user) +
-						(isSelf ? `&ensp;<button id='editAvatarBtn'>${t("profile_edit_avatar")}</button>` : "") +
-						"&ensp;<button class='helpBtn' id='levelBtn'>?</button>";
-					if (isSelf) {
-						$("editAvatarBtn").onclick = () => {
-							openAvatarEditor();
-						};
-					}
-					$("moreInfo").innerHTML =
-						`${t("profile_coins")}：${user.coins || 0}` +
-						"&ensp;<button class='helpBtn' id='coinBtn'>?</button>" +
-						`&emsp;&emsp;${t("profile_reg_time")}：${new Date(user.time).toISOString()}`;
-					const oldStats = document.querySelector(".followStats");
-					if (oldStats) oldStats.remove();
-					const oldToggle = document.querySelector(".followPublicRow");
-					if (oldToggle) oldToggle.remove();
-					const followStats = document.createElement("div");
-					followStats.className = "followStats";
-					followStats.innerHTML =
-						`<a id="followersLink">${t("followers")} <b class="followerCount">${user.follower_count || 0}</b></a>` +
-						`<a id="followingLink">${t("following")} <b>${user.following_count || 0}</b></a>`;
-					$("moreInfo").after(followStats);
+					$("pname").innerHTML = user.name + `<span class="userLevel">${getUserLevel(user.coins)}</span>` + getRoleBadge(user);
+					$("profileMeta").innerHTML = `
+						<div class="metaRow">${t("profile_reg_time")}：${new Date(user.time).toLocaleString()}</div>
+						<div class="metaRow">${t("profile_coins")}：${user.coins || 0}</div>
+					`;
 					renderLevelProgress(user.coins || 0);
-					$("levelBtn").onclick = () => {
-						document.querySelector(".modalBox").style.width = "600px";
-						modal(`<h3>${t("level_rules_title")}</h3>${t("level_rules_content")}`);
+					const bio = document.getElementById("profileBio");
+					bio.innerHTML = (user.description || t("profile_no_desc"));
+					if (isSelf) {
+						const editBio = document.createElement("button");
+						editBio.className = "bioEditBtn";
+						editBio.textContent = t("profile_edit");
+						editBio.onclick = () => {
+							const box = document.querySelector(".modalBox");
+							box.style.width = "400px";
+							$("modalText").innerHTML = `
+								<h3>${t("profile_edit_desc")}</h3>
+								<textarea id="descTextarea" maxlength="500" style="height:120px;">${user.description || ""}</textarea>
+								<div style="margin-top:10px;"><button id="saveDescBtn">${t("profile_save")}</button></div>
+							`;
+							$("modal").classList.remove("hidden");
+							$("saveDescBtn").onclick = async () => {
+								const newDesc = $("descTextarea").value.trim();
+								try {
+									await apiPut("/api/users/" + currentUser.id, { description: newDesc });
+								} catch (e) {
+									return modal(t("save_fail", e.message));
+								}
+								currentUser.description = newDesc;
+								bio.innerHTML = (newDesc || t("profile_no_desc")) + '<button class="bioEditBtn">' + t("profile_edit") + '</button>';
+								bio.querySelector(".bioEditBtn").onclick = editBio.onclick;
+								$("modal").classList.add("hidden");
+							};
+						};
+						bio.appendChild(editBio);
 					}
-					$("coinBtn").onclick = () => {
-						document.querySelector(".modalBox").style.width = "600px";
-						modal(`<h3>${t("coin_rules_title")}</h3>${t("coin_rules_content")}`);
-					}
-					container.className = "profileBtnGrid";
-					container.innerHTML =
-						`<div class="pbtn" data-action="search">${isSelf ? t("profile_view_my_posts") : t("profile_view_posts", user.name)}</div>` +
-						(isSelf ? `<div class="pbtn" data-action="shop">${t("profile_shop")}</div>` : '') +
-						(isSelf ? `<div class="pbtn" data-action="about">${t("profile_about")}</div>` : '') +
-						(isSelf ? `<div class="pbtn" data-action="sponsor">${t("profile_sponsor")}</div>` : '') +
-						(isSelf ? `<div class="pbtn" data-action="download">${t("profile_download")}</div>` : '') +
-						(!isSelf && currentUser ? `<div class="pbtn${user.is_following ? " following" : ""}" id="followBtn">${user.is_following ? t("unfollow_btn") : t("follow_btn")}</div>` : '') +
-						(isSelf ?
-							`<div class="themeRow"><button id="sysTheme2">${t("profile_theme_sys")}</button><button id="lightTheme2">${t("profile_theme_light")}</button><button id="darkTheme2">${t("profile_theme_dark")}</button></div>` :
-							'');
-					container.querySelector("[data-action='search']").onclick = () => {
+					$("profileStats").innerHTML = `
+						<a id="followersLink">${t("followers")} <b class="followerCount">${user.follower_count || 0}</b></a>
+						<a id="followingLink">${t("following")} <b>${user.following_count || 0}</b></a>
+					`;
+					$("followersLink").onclick = () => openFollowList(uid, "followers");
+					$("followingLink").onclick = () => openFollowList(uid, "following");
+					const actions = document.getElementById("profileActions");
+					actions.innerHTML = "";
+					const viewPostsBtn = document.createElement("button");
+					viewPostsBtn.className = "profileBtn";
+					viewPostsBtn.textContent = isSelf ? t("profile_view_my_posts") : t("profile_view_posts", user.name);
+					viewPostsBtn.onclick = () => {
 						show("main");
 						$("postSearch").value = "@" + user.name;
 						postSearch = "@" + user.name;
@@ -7442,72 +7725,28 @@
 						loadPosts(1);
 						setActive("homeBtn");
 					};
+					actions.appendChild(viewPostsBtn);
 					if (isSelf) {
-						container.querySelector("[data-action='about']").onclick = () => {
-							document.querySelector(".modalBox").style.width = "800px";
-							modal(`<h2>${t("about_title")}</h2><div style="text-align:left;">${t("about_content")}</div><h6><a href="#">${t("login_title")}</a> · <a href="https://zhujingqi.com">Zhujingqi</a></h6><h6>© Jacky Forum. All rights reserved.</h6>`);
-						};
-						container.querySelector("[data-action='sponsor']").onclick = () => {
-							modal(`<h2>${t("sponsor_title")}</h2>${t("sponsor_content")}`);
-						};
-						container.querySelector("[data-action='shop']").onclick = openShop;
-						container.querySelector("[data-action='download']").onclick = () => {
-							document.querySelector(".modalBox").style.width = "800px";
-							modal(`<h3>${t("download_title")}</h3>${t("download_content")}`);
-						};
-						$("sysTheme2").onclick = () => document.body.classList.remove("dark");
-						$("lightTheme2").onclick = () => document.body.classList.remove("dark");
-						$("darkTheme2").onclick = () => document.body.classList.add("dark");
-						const row = document.createElement("label");
-						row.className = "followPublicRow";
-						row.style.cssText = "display:flex;align-items:center;gap:6px;grid-column:1/-1;justify-content:center;font-size:13px;cursor:pointer;";
-						row.innerHTML = `<input type="checkbox" id="followPublicToggle" ${user.follow_public ? "checked" : ""}> ${t("follow_public_label")}`;
-						container.querySelector(".themeRow")?.after(row);
-						$("followPublicToggle").onchange = async () => {
-							try {
-								await apiPut("/api/users/" + currentUser.id, { follow_public: $("followPublicToggle").checked });
-							} catch { $("followPublicToggle").checked = !$("followPublicToggle").checked; }
-						};
+						const shopBtn = document.createElement("button");
+						shopBtn.className = "profileBtn";
+						shopBtn.textContent = t("profile_shop");
+						shopBtn.onclick = () => openShop();
+						actions.appendChild(shopBtn);
+						const settingsBtn = document.createElement("button");
+						settingsBtn.className = "profileBtn";
+						settingsBtn.textContent = t("profile_settings");
+						settingsBtn.onclick = () => openProfileSettings(user);
+						actions.appendChild(settingsBtn);
 					}
 					if (!isSelf && currentUser) {
-						$("followBtn").onclick = () => toggleFollow(uid, $("followBtn"));
+						const followBtn = document.createElement("button");
+						followBtn.className = "profileBtn" + (user.is_following ? " following" : "");
+						followBtn.id = "followBtn";
+						followBtn.textContent = user.is_following ? t("unfollow_btn") : t("follow_btn");
+						followBtn.onclick = () => toggleFollow(uid, followBtn);
+						actions.appendChild(followBtn);
 					}
-					$("followersLink").onclick = () => openFollowList(uid, "followers");
-					$("followingLink").onclick = () => openFollowList(uid, "following");
-					$("userDescription").innerText = user.description || t("profile_no_desc");
-					if (currentUser && uid === currentUser.id) {
-						let editBtn = document.createElement("button");
-						editBtn.innerText = t("profile_edit");
-						let btnContainer = document.createElement("div");
-						btnContainer.style.display = "flex";
-						btnContainer.style.justifyContent = "flex-end";
-						btnContainer.appendChild(editBtn);
-						$("userDescription").appendChild(btnContainer);
-						editBtn.onclick = () => {
-							document.querySelector(".modalBox").style.width = "400px";
-							$("modalText").innerHTML = `
-					            <h3>${t("profile_edit_desc")}</h3>
-					            <textarea id="descTextarea" maxlength="500" style="height:120px;">${user.description || ""}</textarea>
-					            <div style="margin-top:10px;"><button id="saveDescBtn">${t("profile_save")}</button></div>
-					        `;
-							$("modal").classList.remove("hidden");
-							$("saveDescBtn").onclick = async () => {
-								const newDesc = $("descTextarea").value.trim();
-								try {
-									await apiPut("/api/users/" + currentUser.id, {
-										description: newDesc
-									});
-								} catch (e) {
-									return modal(t("save_fail", e.message));
-								}
-								currentUser.description = newDesc;
-								$("userDescription").innerText = newDesc || t("profile_no_desc");
-								$("modal").classList.add("hidden");
-							};
-						};
-					}
-					$("logoutBtn").style.display = (currentUser && uid === currentUser.id) ? "inline-block" : "none";
-					show("profilePage");
+					$("logoutBtn").style.display = isSelf ? "" : "none";
 				}
 
 				async function toggleFollow(followeeId, btn) {
@@ -7600,6 +7839,9 @@
 				async function openShop() {
 					const shopDiv = document.createElement("div");
 					shopDiv.id = "shopModal";
+					const box = document.querySelector(".modalBox");
+					box.style.width = "";
+					modal(`<div style="text-align:center;padding:20px;">${t("loading")}</div>`);
 					let userData;
 					try {
 						userData = await apiGet("/api/users/" + currentUser.id);
@@ -7753,6 +7995,7 @@
 						});
 					}
 
+					$("modal").classList.add("hidden");
 					renderShop();
 					document.body.appendChild(shopDiv);
 				}
