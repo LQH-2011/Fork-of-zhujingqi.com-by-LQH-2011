@@ -3087,7 +3087,7 @@
 		</div>
 		<div id="captchaModal" class="modal hidden">
 			<div class="modalBox" style="width:380px;text-align:center;">
-				<div style="font-weight:bold;margin-bottom:10px;">人机验证 — 拖到闪烁虚线框中</div>
+				<div id="captchaTitle" style="font-weight:bold;margin-bottom:10px;">人机验证 — 拖到闪烁虚线框中</div>
 				<div style="position:relative;display:inline-block;">
 					<canvas id="captchaCanvas" width="320" height="160" style="border-radius:8px;display:block;"></canvas>
 					<div id="captchaTarget" style="position:absolute;top:0;left:0;width:48px;height:160px;border:2px dashed rgba(255,255,255,.8);border-radius:4px;pointer-events:none;box-sizing:border-box;background:rgba(0,200,0,.12);"></div>
@@ -3095,7 +3095,7 @@
 				<div id="captchaTrack" style="position:relative;width:320px;height:36px;margin:10px auto 0;background:var(--bg);border-radius:18px;touch-action:none;user-select:none;">
 					<div id="captchaThumb" style="position:absolute;top:2px;left:0;width:44px;height:32px;background:var(--green);border-radius:16px;cursor:grab;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:2;">→</div>
 				</div>
-				<div style="margin-top:8px;font-size:12px;color:var(--sub);">← 拖动滑块完成拼图 →</div>
+				<div id="captchaHint" style="margin-top:8px;font-size:12px;color:var(--sub);">← 拖动滑块完成拼图 →</div>
 				<div style="margin-top:10px"><button id="captchaCloseBtn">关闭</button></div>
 			</div>
 		</div>
@@ -4693,41 +4693,6 @@
 					de: "Jackypedia (Demnächst)",
 					"zh-TW": "傑基百科（即將推出）"
 				},
-				lang_zh: {
-					zh: "中文",
-					en: "Chinese",
-					es: "Chino",
-					de: "Chinesisch",
-					"zh-TW": "中文"
-				},
-				lang_en: {
-					zh: "English",
-					en: "English",
-					es: "English",
-					de: "English",
-					"zh-TW": "English"
-				},
-				lang_es: {
-					zh: "Español",
-					en: "Español",
-					es: "Español",
-					de: "Español",
-					"zh-TW": "Español"
-				},
-				lang_de: {
-					zh: "Deutsch",
-					en: "Deutsch",
-					es: "Deutsch",
-					de: "Deutsch",
-					"zh-TW": "Deutsch"
-				},
-				lang_zh_tw: {
-					zh: "繁體中文",
-					en: "Traditional Chinese",
-					es: "Chino Tradicional",
-					de: "Traditionelles Chinesisch",
-					"zh-TW": "繁體中文"
-				},
 				tag_study: {
 					zh: "学习",
 					en: "Study",
@@ -4846,6 +4811,41 @@
 					es: "Cargando…",
 					de: "Laden…",
 					"zh-TW": "加載中…"
+				},
+				captcha_btn: {
+					zh: "点击完成人机验证",
+					en: "Click to complete verification",
+					es: "Clic para completar la verificación",
+					de: "Klicken zum Abschließen der Verifizierung",
+					"zh-TW": "點擊完成人機驗證"
+				},
+				captcha_modal_title: {
+					zh: "人机验证 — 拖到闪烁虚线框中",
+					en: "Verification — drag to the dashed box",
+					es: "Verificación — arrastra hasta la caja punteada",
+					de: "Verifizierung — in das gestrichelte Feld ziehen",
+					"zh-TW": "人機驗證 — 拖到閃爍虛線框中"
+				},
+				captcha_slider_hint: {
+					zh: "← 拖动滑块完成拼图 →",
+					en: "← Drag the slider to complete the puzzle →",
+					es: "← Arrastra el control para completar el rompecabezas →",
+					de: "← Schieberegler ziehen, um das Puzzle zu lösen →",
+					"zh-TW": "← 拖動滑塊完成拼圖 →"
+				},
+				captcha_not_done: {
+					zh: "请先完成人机验证",
+					en: "Please complete the verification first",
+					es: "Completa la verificación primero",
+					de: "Bitte zuerst die Verifizierung abschließen",
+					"zh-TW": "請先完成人機驗證"
+				},
+				notice_updates_content: {
+					zh: "· 全新用户主页<br>· 平滑切页效果<br>· 统一进设置页<br>",
+					en: "· Brand-new profile page<br>· Smooth page transitions<br>· Unified settings page<br>",
+					es: "· Nueva página de perfil<br>· Transiciones suaves<br>· Página de ajustes unificada<br>",
+					de: "· Neue Profilseite<br>· Sanfte Seitenübergänge<br>· Einheitliche Einstellungsseite<br>",
+					"zh-TW": "· 全新用戶主頁<br>· 平滑切頁效果<br>· 統一進設置頁<br>"
 				}
 			};
 			const PAGE_TITLE_TRANS = {
@@ -4855,21 +4855,25 @@
 				de: "Jacky Forum - Zhujingqi",
 				"zh-TW": "Jacky 論壇 - Zhujingqi"
 			};
+			// Language dropdown always shows each language's endonym (its own name),
+			// never a translation of the name into the currently active UI language.
+			const LANG_NATIVE_NAMES = {
+				zh: "中文",
+				en: "English",
+				es: "Español",
+				de: "Deutsch",
+				"zh-TW": "繁體中文"
+			};
 			const LANGS = [{
-				v: "zh",
-				k: "lang_zh"
+				v: "zh"
 			}, {
-				v: "en",
-				k: "lang_en"
+				v: "en"
 			}, {
-				v: "es",
-				k: "lang_es"
+				v: "es"
 			}, {
-				v: "de",
-				k: "lang_de"
+				v: "de"
 			}, {
-				v: "zh-TW",
-				k: "lang_zh_tw"
+				v: "zh-TW"
 			}];
 			let currentLang = (() => {
 				const s = localStorage.getItem("lang");
@@ -4913,7 +4917,7 @@
 				for (const l of LANGS) {
 					const o = document.createElement("option");
 					o.value = l.v;
-					o.textContent = t(l.k);
+					o.textContent = LANG_NATIVE_NAMES[l.v] || l.v;
 					sel.appendChild(o);
 				}
 				sel.value = currentLang;
@@ -4925,6 +4929,12 @@
 				let guestMode = false;
 				let currentPage = "main";
 				const defaultTags = ["学习", "日常", "搞笑", "提问"];
+				const defaultTagKeys = {
+					"学习": "tag_study",
+					"日常": "tag_daily",
+					"搞笑": "tag_funny",
+					"提问": "tag_question"
+				};
 				let selectedTags = [];
 				let postLayout = localStorage.getItem("postLayout") || "list";
 
@@ -4982,14 +4992,15 @@
 					const bar = $("tagBar");
 					bar.innerHTML = "";
 					selectedTags = [];
-					for (let t of defaultTags) {
+					for (let tag of defaultTags) {
+						const display = t(defaultTagKeys[tag] || tag);
 						let span = document.createElement("span");
 						span.className = "tag";
-						span.innerText = t;
+						span.innerText = display;
 						span.onclick = () => {
-							selectedTags = [t];
+							selectedTags = [tag];
 							bar.querySelectorAll(".tag").forEach(tagEl => {
-								tagEl.classList.toggle("active", tagEl.innerText === t);
+								tagEl.classList.toggle("active", tagEl.textContent === display);
 							});
 						};
 						bar.appendChild(span);
@@ -5086,7 +5097,7 @@
 					}
 				}
 
-				function refreshUILanguage() {
+				function refreshUILanguage(skipReload = false) {
 					document.title = PAGE_TITLE_TRANS[currentLang] || PAGE_TITLE_TRANS.zh;
 					const setT = (id, val) => {
 						const el = document.getElementById(id);
@@ -5167,16 +5178,25 @@
 					setPH("warnText", t("editor_warn_ph"));
 					const bgBtn = document.getElementById("bgBuyBtn");
 					if (bgBtn) bgBtn.textContent = selectedPostBg ? t("editor_bg_used") : t("editor_bg");
-					if (typeof renderPostFilters === "function" && currentPage === "main") renderPostFilters();
-					if (typeof loadPosts === "function" && currentPage === "main") loadPosts(postPage);
-					if (typeof loadUserList === "function" && currentPage === "userListPage") loadUserList();
-					if (typeof loadNewUsers === "function" && currentPage === "userListPage") loadNewUsers();
-					if (typeof loadOnlineUsers === "function" && currentPage === "main") loadOnlineUsers();
-					if (typeof refreshNotificationBadge === "function" && currentUser) refreshNotificationBadge();
+					if (!skipReload) {
+						if (typeof renderPostFilters === "function" && currentPage === "main") renderPostFilters();
+						if (typeof loadPosts === "function" && currentPage === "main") loadPosts(postPage);
+						if (typeof loadUserList === "function" && currentPage === "userListPage") loadUserList();
+						if (typeof loadNewUsers === "function" && currentPage === "userListPage") loadNewUsers();
+						if (typeof loadOnlineUsers === "function" && currentPage === "main") loadOnlineUsers();
+						if (typeof refreshNotificationBadge === "function" && currentUser) refreshNotificationBadge();
+					}
 					renderLangSelect(document.getElementById("langSelect"));
 					renderLangSelect(document.getElementById("langSelectReg"));
 					renderLangSelect(document.getElementById("langSelectMain"));
 					setT("closeModal", t("modal_close"));
+					setT("captchaBtn", t("captcha_btn"));
+					setT("captchaTitle", t("captcha_modal_title"));
+					setT("captchaHint", t("captcha_slider_hint"));
+					setT("captchaCloseBtn", t("modal_close"));
+					setH("noticeUpdatesContent", t("notice_updates_content"));
+					setT("rankToggleCoins", t("profile_coins"));
+					setT("rankToggleFollowers", t("followers"));
 					const nb = document.getElementById("notifBtn");
 					if (nb) {
 						for (const c of nb.childNodes) {
@@ -5904,7 +5924,7 @@
 					$(id).classList.add("active");
 				}
 				$("registerBtn").onclick = async () => {
-					if (!captchaPassed) return modal("请先完成人机验证");
+					if (!captchaPassed) return modal(t("captcha_not_done"));
 					let u = $("regUser").value.trim();
 					let p1 = $("regPass").value.trim();
 					let p2 = $("regPass2").value.trim();
@@ -6716,12 +6736,6 @@
 						"关注": t("filter_following"),
 						"公告": t("filter_announce"),
 						"其它": t("filter_other")
-					};
-					const defaultTagKeys = {
-						"学习": "tag_study",
-						"日常": "tag_daily",
-						"搞笑": "tag_funny",
-						"提问": "tag_question"
 					};
 					for (const d of defaultTags) tagDisplayMap[d] = t(defaultTagKeys[d]) || d;
 					search.value = postSearch;
@@ -8982,6 +8996,10 @@
 					}));
 					emojiPicker.classList.remove("show");
 				});
+
+				// Apply the persisted UI language to the static DOM once at startup,
+				// before the init IIFE below decides which page to show.
+				refreshUILanguage(true);
 
 				(async () => {
 					const mask = document.createElement("div");
