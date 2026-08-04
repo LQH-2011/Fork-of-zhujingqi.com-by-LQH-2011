@@ -24,6 +24,9 @@ html, body { height: 100%; overflow: hidden; }
   --link-hover: #64b5f6;
   --toggle-color: rgba(255,255,255,0.2);
   --toggle-hover: rgba(255,255,255,0.35);
+  --brand-color: rgba(255,255,255,0.3);
+  --desc-color: rgba(255,255,255,0.4);
+  --modal-overlay: rgba(0,0,0,0.75);
 }
 body.light {
   --bg: #eef1f5;
@@ -40,6 +43,9 @@ body.light {
   --link-hover: #2563eb;
   --toggle-color: rgba(0,0,0,0.2);
   --toggle-hover: rgba(0,0,0,0.35);
+  --brand-color: #8a9aaa;
+  --desc-color: #6a7a8a;
+  --modal-overlay: rgba(0,0,0,0.5);
 }
 
 body {
@@ -205,6 +211,151 @@ body {
   margin-bottom: 8px;
 }
 
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background 0.4s, border 0.4s;
+}
+.modal::-webkit-scrollbar { width: 3px; }
+.modal::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.15); border-radius: 4px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(16px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal .m-img {
+  width: 100%;
+  display: block;
+  background: var(--img-bg);
+}
+.modal .m-fallback {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3em; color: var(--fallback-color);
+  background: var(--img-bg);
+}
+
+.modal-body { padding: 20px 24px 24px; }
+.modal-body .m-brand {
+  font-size: 0.78em; color: var(--brand-color); margin-bottom: 4px;
+  transition: color 0.4s;
+}
+.modal-body h2 { font-size: 1.3em; font-weight: 600; margin-bottom: 6px; }
+.modal-body .m-desc {
+  color: var(--desc-color); font-size: 0.92em; line-height: 1.7;
+  margin-bottom: 8px; white-space: pre-wrap; transition: color 0.4s;
+}
+
+.m-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.3);
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  line-height: 0;
+}
+.m-close:hover { background: rgba(0,0,0,0.5); }
+body.light .m-close { background: rgba(0,0,0,0.08); color: #333; }
+body.light .m-close:hover { background: rgba(0,0,0,0.15); }
+
+/* ===== Immersive Image Viewer ===== */
+.img-viewer {
+  position: fixed; inset: 0;
+  background: #000;
+  z-index: 3000;
+  display: none;
+  overflow: hidden;
+  cursor: grab;
+}
+.img-viewer.open { display: block; }
+
+.img-viewer .close-btn {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 10;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: rgba(255,255,255,0.4);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  line-height: 1;
+}
+.img-viewer .close-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.img-viewer .caption {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 40px 24px 24px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  color: #fff;
+  z-index: 10;
+  pointer-events: none;
+}
+.img-viewer .caption h2 { font-size: 1.1em; font-weight: 600; }
+.img-viewer .caption p { font-size: 0.82em; opacity: 0.6; margin-top: 2px; }
+
+.img-viewer .img-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-viewer .img-stage img {
+  display: block;
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: contain;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: grab;
+}
+.img-viewer .img-stage img.zoomed {
+  max-width: none;
+  max-height: none;
+  cursor: grab;
+}
+.img-viewer .img-stage img.grabbing { cursor: grabbing; }
+
 @media (max-width: 768px) {
   .header { padding: 24px 16px 6px; }
   .header h1 { font-size: 1.5em; }
@@ -245,6 +396,24 @@ body {
 </div>
 
 <div class="footer">&copy; TheStar_Blue</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBox" onclick="if(event.target===this)closeModal()">
+    <button class="m-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div class="img-viewer" id="imgViewer">
+  <button class="close-btn" id="viewerClose">&times;</button>
+  <div class="caption">
+    <h2 id="viewerName"></h2>
+    <p id="viewerDesc"></p>
+  </div>
+  <div class="img-stage" id="imgStage">
+    <img src="" alt="" id="viewerImg" draggable="false">
+  </div>
+</div>
 
 <script>
 var TEXTDB_KEY = 'TheStarBlue_ProdData';
@@ -353,7 +522,9 @@ var TEXTDB_KEY = 'TheStarBlue_ProdData';
             (p.description ? '<div class="title">' + esc(p.description) + '</div>' : '') +
           '</div>';
 
-        // no click action
+        card.addEventListener('click', (function(product) {
+          return function() { openModal(product); };
+        })(p));
 
         frag.appendChild(card);
       });
@@ -381,6 +552,172 @@ function esc(s) {
 function escAttr(s) {
   return String(s).replace(/"/g,'&quot;').replace(/&/g,'&amp;');
 }
+
+// ===== Modal =====
+var modalOv = document.getElementById('modalOverlay');
+var modalContent = document.getElementById('modalContent');
+var currentProduct = null;
+
+function openModal(product) {
+  currentProduct = product;
+  var hasImg = !!product.image;
+  var imgHtml = product.image
+    ? '<img class="m-img" src="' + product.image.replace(/"/g,'&quot;') + '" alt="' + esc(product.name) + '" onerror="this.outerHTML=\'<div class=m-fallback>✦</div>\'" style="cursor:zoom-in">'
+    : '<div class="m-fallback">✦</div>';
+
+  modalContent.innerHTML = imgHtml +
+    '<div class="modal-body">' +
+      '<div class="m-brand">TheStar_Blue</div>' +
+      '<h2>' + esc(product.name) + '</h2>' +
+      (product.description ? '<div class="m-desc">' + esc(product.description) + '</div>' : '') +
+    '</div>';
+
+  if (hasImg) {
+    var mImg = modalContent.querySelector('.m-img');
+    if (mImg) mImg.addEventListener('click', function() { openImage(currentProduct); });
+  }
+
+  modalOv.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOv.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+modalOv.addEventListener('click', function(e) {
+  if (e.target === modalOv) closeModal();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== Immersive Image Viewer =====
+var viewer = document.getElementById('imgViewer');
+var viewerImg = document.getElementById('viewerImg');
+var viewerName = document.getElementById('viewerName');
+var viewerDesc = document.getElementById('viewerDesc');
+var viewerClose = document.getElementById('viewerClose');
+var imgStage = document.getElementById('imgStage');
+
+var vScale = 1, vTx = 0, vTy = 0;
+var isPanning = false, startX, startY, startTx, startTy;
+var zoomed = false;
+
+function resetViewer() {
+  vScale = 1; vTx = 0; vTy = 0; zoomed = false;
+  viewerImg.className = '';
+  viewerImg.style.transform = '';
+}
+
+function openImage(product) {
+  if (!product.image) return;
+  resetViewer();
+  viewerImg.src = product.image;
+  viewerImg.alt = product.name || '';
+  viewerName.textContent = product.name || '';
+  viewerDesc.textContent = product.description || '';
+  viewer.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeViewer() {
+  viewer.classList.remove('open');
+  document.body.style.overflow = '';
+  resetViewer();
+}
+
+function applyVTransform() {
+  viewerImg.style.transform = 'translate(' + vTx + 'px, ' + vTy + 'px) scale(' + vScale + ')';
+}
+
+function zoomAt(wheelDelta, clientX, clientY) {
+  var rect = viewerImg.getBoundingClientRect();
+  var cx = (clientX - rect.left) / rect.width;
+  var cy = (clientY - rect.top) / rect.height;
+  var oldScale = vScale;
+  vScale *= (1 - wheelDelta * 0.002);
+  vScale = Math.min(Math.max(vScale, 0.5), 8);
+  zoomed = vScale > 1.2;
+  viewerImg.className = zoomed ? 'zoomed' : '';
+  applyVTransform();
+}
+
+viewerImg.addEventListener('wheel', function(e) {
+  e.preventDefault();
+  zoomAt(e.deltaY, e.clientX, e.clientY);
+}, { passive: false });
+
+viewerImg.addEventListener('mousedown', function(e) {
+  isPanning = true;
+  startX = e.clientX;
+  startY = e.clientY;
+  startTx = vTx;
+  startTy = vTy;
+  viewerImg.classList.add('grabbing');
+});
+document.addEventListener('mousemove', function(e) {
+  if (!isPanning) return;
+  var dx = e.clientX - startX;
+  var dy = e.clientY - startY;
+  vTx = startTx + dx;
+  vTy = startTy + dy;
+  viewerImg.style.transform = 'translate(' + vTx + 'px, ' + vTy + 'px) scale(' + vScale + ')';
+});
+document.addEventListener('mouseup', function() {
+  if (!isPanning) return;
+  isPanning = false;
+  viewerImg.classList.remove('grabbing');
+});
+
+imgStage.addEventListener('click', function(e) {
+  if (e.target === imgStage) closeViewer();
+});
+
+viewerClose.addEventListener('click', closeViewer);
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeViewer();
+});
+
+// Touch support
+var lastDist = 0;
+viewerImg.addEventListener('touchstart', function(e) {
+  if (e.touches.length === 1) {
+    isPanning = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    startTx = vTx;
+    startTy = vTy;
+  } else if (e.touches.length === 2) {
+    isPanning = false;
+    var t = e.touches;
+    lastDist = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  }
+});
+viewerImg.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+  if (e.touches.length === 1 && isPanning) {
+    vTx = startTx + (e.touches[0].clientX - startX);
+    vTy = startTy + (e.touches[0].clientY - startY);
+    viewerImg.style.transform = 'translate(' + vTx + 'px, ' + vTy + 'px) scale(' + vScale + ')';
+  } else if (e.touches.length === 2) {
+    var t = e.touches;
+    var dist = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    if (lastDist > 0) {
+      vScale *= dist / lastDist;
+      vScale = Math.min(Math.max(vScale, 0.5), 8);
+      zoomed = vScale > 1.2;
+      viewerImg.className = zoomed ? 'zoomed' : '';
+      applyVTransform();
+    }
+    lastDist = dist;
+  }
+}, { passive: false });
+viewerImg.addEventListener('touchend', function() {
+  isPanning = false;
+  lastDist = 0;
+});
 
 
 
