@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 		<title>Jacky 论坛 - Zhujingqi</title>
 		<link rel="icon" type="image/png" href="icon.svg">
 		<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
@@ -2822,6 +2823,376 @@
 				display: inline;
 			}
 		}
+
+			@media (max-width: 480px) {
+				:root {
+					font-size: 14px;
+				}
+
+				body {
+					padding-bottom: 64px;
+				}
+
+				.card {
+					width: min(340px, 92vw);
+					padding: 16px;
+					border-radius: 16px;
+				}
+
+				.big {
+					font-size: 22px;
+					margin-bottom: 10px;
+				}
+
+				#main,
+				#profilePage,
+				#userListPage {
+					align-items: stretch;
+				}
+
+				#posts,
+				#userPosts {
+					padding-bottom: 10px;
+				}
+
+				.post,
+				.userItem {
+					width: 96%;
+					max-width: 100%;
+					padding: 8px 10px;
+					border-radius: 12px;
+					margin: 6px auto;
+					font-size: 13px;
+					box-sizing: border-box;
+				}
+
+				.postHeaderTop .userLink {
+					margin-bottom: 2px;
+				}
+
+				.postHeaderTop .time {
+					font-size: 11px;
+				}
+
+				.postContent {
+					line-height: 1.5;
+				}
+
+				.comment {
+					font-size: 12px;
+					gap: 4px;
+				}
+
+				.comment .avatar {
+					width: 16px;
+					height: 16px;
+				}
+
+				.commentRow input,
+				.commentRow button {
+					height: 34px;
+				}
+
+				.avatar {
+					width: 24px;
+					height: 24px;
+				}
+
+				.avatar.big,
+				#profileAvatar {
+					width: 72px;
+					height: 72px;
+				}
+
+				img.zoomable {
+					max-width: 100% !important;
+					height: auto;
+				}
+
+				.emojiInPost {
+					width: 16px;
+					height: 16px;
+				}
+
+				.bottom {
+					height: 44px;
+					padding-bottom: env(safe-area-inset-bottom);
+				}
+
+				.bottom button {
+					font-size: 12px;
+					padding-bottom: 0;
+				}
+
+				.langSelect {
+					height: 28px;
+					font-size: 12px;
+					padding: 0 6px;
+				}
+
+				#logoRow {
+					padding: 8px 10px 4px 10px;
+				}
+
+				#logo {
+					font-size: 20px;
+					gap: 6px;
+				}
+
+				#logo img {
+					width: 34px;
+					height: 34px;
+				}
+
+				#onlineMini,
+				#notifBtn {
+					height: 28px;
+					font-size: 11px;
+					padding: 0 8px;
+				}
+
+				#mobileSideBtn {
+					width: 38px;
+					height: 38px;
+					bottom: 56px;
+					right: 8px;
+					font-size: 14px;
+				}
+
+				.searchRow {
+					gap: 4px;
+					margin-bottom: 6px;
+				}
+
+				.searchRow button {
+					padding: 0 8px;
+				}
+
+				.postTagChip {
+					padding: 4px 10px;
+					font-size: 11px;
+				}
+
+				.postFilterBar {
+					padding: 0 10px 8px 10px;
+				}
+
+				.pager {
+					padding-bottom: 70px;
+				}
+
+				#editorPage .card {
+					width: 94vw !important;
+					padding: 14px;
+				}
+
+				#editorPage textarea {
+					height: 110px;
+					font-size: 14px;
+				}
+
+				#editorPage .card button {
+					height: 36px;
+					font-size: 13px;
+				}
+
+				#customTag {
+					width: 160px !important;
+				}
+
+				#singlePost {
+					padding: 10px;
+				}
+
+				#postBackBtn,
+				#backBtn {
+					padding: 6px 12px;
+					font-size: 14px;
+				}
+
+				.modalBox {
+					width: min(300px, 90vw);
+					padding: 18px;
+				}
+
+				.shopItem {
+					flex-wrap: wrap;
+					padding: 10px;
+				}
+
+				#pname {
+					font-size: 22px;
+				}
+
+				#levelProgress {
+					margin: 8px auto;
+				}
+
+				.profileBtnGrid {
+					grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+					gap: 8px;
+					padding: 0 10px;
+					margin: 10px auto 30px auto;
+				}
+
+				.profileBtnGrid .pbtn {
+					height: 40px;
+					font-size: 13px;
+				}
+
+				#userDescription {
+					width: 94%;
+					padding: 12px;
+					font-size: 14px;
+				}
+
+				.discoverGrid {
+					padding: 8px;
+					gap: 8px;
+				}
+
+				.discoverCard {
+					min-height: 0;
+					padding: 12px;
+					border-radius: 16px;
+					flex-direction: row;
+					align-items: center;
+					gap: 10px;
+				}
+
+				.discoverIcon {
+					font-size: 22px;
+					margin-bottom: 0;
+				}
+
+				.discoverIcon img {
+					width: 32px;
+					height: 32px;
+				}
+
+				.discoverCard h3 {
+					font-size: 15px;
+					margin: 0 0 2px 0;
+				}
+
+				.discoverCard p {
+					font-size: 12px;
+				}
+
+				#posts.denseLayout {
+					grid-template-columns: 1fr;
+					width: 100%;
+					padding: 0 6px 16px;
+				}
+
+				#posts.denseLayout .post {
+					padding: 10px;
+					font-size: 13px;
+				}
+
+				.rankAvatar {
+					width: 20px;
+					height: 20px;
+				}
+
+				.rankSearch {
+					width: 94%;
+					padding: 8px 12px;
+					font-size: 13px;
+				}
+
+				.emojiPickerPopup {
+					grid-template-columns: repeat(8, 1fr);
+					max-width: calc(100vw - 16px);
+					max-height: 180px;
+				}
+
+				.emojiPickerPopup img {
+					width: 24px;
+					height: 24px;
+				}
+
+				.musicIframe {
+					height: 90px;
+				}
+			}
+
+			html.watch #main,
+			html.watch #profilePage,
+			html.watch #userListPage,
+			html.watch #postPage {
+				height: auto !important;
+				min-height: 100vh;
+			}
+
+			html.watch #posts,
+			html.watch #userPosts {
+				overflow: visible !important;
+				flex: none !important;
+			}
+
+			html.watch #singlePost {
+				overflow: visible !important;
+				flex: none !important;
+				padding: 10px !important;
+			}
+
+			html.watch #main #logoRow,
+			html.watch #main #postFilterBar,
+			html.watch #notice,
+			html.watch #announceBar,
+			html.watch #fortuneBox,
+			html.watch #mobileSideBtn {
+				display: none !important;
+			}
+
+			html.watch .pager {
+				gap: 8px;
+				justify-content: center;
+				padding: 4px 0 8px 0;
+			}
+
+			html.watch .pager .navBtn {
+				min-width: 40px;
+				height: 34px;
+				font-size: 16px;
+				padding: 0 10px;
+			}
+
+			html.watch .pager .pageBtn,
+			html.watch .pager .ellipsis,
+			html.watch .pager .jumpInput,
+			html.watch .pager .jumpGo {
+				display: none !important;
+			}
+
+			html.watch .bottom {
+				height: 38px;
+				padding-bottom: env(safe-area-inset-bottom);
+			}
+
+			html.watch .bottom button {
+				font-size: 11px;
+				padding-bottom: 2px;
+			}
+
+			html.watch #logoRow {
+				padding: 4px 10px;
+			}
+
+			html.watch #editorPage #logoRow,
+			html.watch #editorPage #insertImgBtn,
+			html.watch #editorPage #insertMusicBtn,
+			html.watch #editorPage #editorEmojiBtn,
+			html.watch #editorPage #customTag,
+			html.watch #editorPage .sensitiveWrap,
+			html.watch #editorPage .postBgRow {
+				display: none !important;
+			}
+
+			html.watch body {
+				padding-bottom: 56px;
+			}
 		</style>
 	</head>
 	<body>
@@ -3171,6 +3542,47 @@
 					body: JSON.stringify(body)
 				});
 			}
+
+			let gestureWatch = false;
+			let secretTapCount = 0;
+			let secretTapTimer = null;
+			const watchMQL = matchMedia("(max-width: 430px) and (max-height: 430px)");
+			function isWatchMode() {
+				return gestureWatch || watchMQL.matches;
+			}
+			function syncWatchMode() {
+				document.documentElement.classList.toggle("watch", isWatchMode());
+			}
+			function reRenderPagerSafe() {
+				if (typeof renderPager === "function") {
+					try { renderPager(); } catch (e) {}
+				}
+			}
+			document.addEventListener("click", (e) => {
+				if (e.target.closest("#logo, #welcomePage .big")) {
+					secretTapCount++;
+					clearTimeout(secretTapTimer);
+					secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1500);
+					if (secretTapCount >= 5) {
+						secretTapCount = 0;
+						gestureWatch = true;
+						syncWatchMode();
+					}
+				}
+			});
+			window.addEventListener("resize", () => {
+				syncWatchMode();
+				reRenderPagerSafe();
+			});
+			if (watchMQL.addEventListener) watchMQL.addEventListener("change", () => {
+				syncWatchMode();
+				reRenderPagerSafe();
+			});
+			else watchMQL.addListener(() => {
+				syncWatchMode();
+				reRenderPagerSafe();
+			});
+			syncWatchMode();
 		</script>
 		<script>
 			const TRANSLATIONS = {
@@ -6594,6 +7006,11 @@
 						}
 						return b;
 					};
+					if (isWatchMode()) {
+						pager.appendChild(makeBtn("‹", postPage - 1, "navBtn", postPage <= 1));
+						pager.appendChild(makeBtn("›", postPage + 1, "navBtn", postPage >= maxPage));
+						return;
+					}
 					const addEllipsis = () => {
 						const s = document.createElement("span");
 						s.className = "ellipsis";
