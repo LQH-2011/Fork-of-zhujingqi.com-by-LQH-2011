@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 		<title>Jacky 论坛 - Zhujingqi</title>
 		<link rel="icon" type="image/png" href="icon.svg">
 		<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
@@ -163,7 +165,7 @@
 				background: var(--card);
 				padding: 28px 32px;
 				border-radius: 24px;
-				box-shadow: 0 8px 30px rgba(0,0,0,.1);
+				box-shadow: 0 8px 30px rgba(0, 0, 0, .1);
 				width: 80%;
 				max-width: 700px;
 				margin: 70px auto 16px auto;
@@ -248,7 +250,7 @@
 				font-size: 15px;
 				color: var(--text);
 				word-wrap: break-word;
-				box-shadow: 0 4px 16px rgba(0,0,0,.06);
+				box-shadow: 0 4px 16px rgba(0, 0, 0, .06);
 				line-height: 1.6;
 			}
 
@@ -315,7 +317,7 @@
 				font-size: 15px;
 				font-weight: 600;
 				transition: .2s;
-				box-shadow: 0 2px 8px rgba(0,0,0,.06);
+				box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 				user-select: none;
 			}
 
@@ -345,40 +347,51 @@
 					padding: 24px 20px;
 					margin-top: 60px;
 				}
+
 				#profileNameRow {
 					justify-content: center;
 				}
+
 				#profileNameRow #logoutBtn {
 					margin-left: 0;
 				}
+
 				#profileActions {
 					flex-direction: column;
 				}
+
 				#profileActions .profileBtn {
 					height: 50px;
 					flex: none;
 				}
+
 				#profileMeta {
 					text-align: center;
 				}
+
 				#profileMeta .metaRow {
 					justify-content: center;
 				}
+
 				#profileLeft .avatar.big {
 					width: 88px;
 					height: 88px;
 				}
+
 				#profileStats {
 					justify-content: center;
 				}
+
 				.modalBox {
 					padding: 20px;
 				}
 			}
+
 			#userItems {
 				width: 100%;
 				max-width: 500px;
 			}
+
 			.rankToggleWrap {
 				display: flex;
 				gap: 6px;
@@ -386,6 +399,7 @@
 				width: 100%;
 				max-width: 500px;
 			}
+
 			.rankToggleBtn {
 				flex: 1;
 				padding: 6px 12px;
@@ -398,6 +412,7 @@
 				text-align: center;
 				transition: .2s;
 			}
+
 			.rankToggleBtn.active {
 				background: var(--green);
 				color: #fff;
@@ -799,7 +814,7 @@
 				column-gap: 6px;
 			}
 
-			.comment + .comment {
+			.comment+.comment {
 				margin-top: 3px;
 			}
 
@@ -807,7 +822,7 @@
 				color: var(--green);
 			}
 
-			.comment > button {
+			.comment>button {
 				flex-shrink: 0;
 			}
 
@@ -1385,10 +1400,19 @@
 				max-height: 90vh;
 				overflow-y: auto;
 			}
+
 			@keyframes captchaPulse {
-				0%, 100% { opacity: 1; }
-				50% { opacity: .4; }
+
+				0%,
+				100% {
+					opacity: 1;
+				}
+
+				50% {
+					opacity: .4;
+				}
 			}
+
 			#captchaTarget {
 				animation: captchaPulse 1.2s ease-in-out infinite;
 			}
@@ -1398,6 +1422,7 @@
 					padding: 4px 8px;
 					font-size: 14px;
 				}
+
 				#lotteryModal .lotteryBox {
 					padding: 16px;
 				}
@@ -1565,28 +1590,33 @@
 				max-height: 320px;
 				overflow-y: auto;
 			}
+
 			#announceBar .annTitle {
 				font-weight: 700;
 				font-size: 15px;
 				margin-bottom: 10px;
 				color: var(--green);
 			}
+
 			.annItem {
 				padding: 8px 0;
 				font-size: 14px;
 				cursor: pointer;
-				border-bottom: 1px solid rgba(0,0,0,.06);
+				border-bottom: 1px solid rgba(0, 0, 0, .06);
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				transition: .15s;
 			}
+
 			.annItem:last-child {
 				border-bottom: none;
 			}
+
 			.annItem:hover {
 				color: var(--green);
 			}
+
 			#fortuneBox {
 				text-align: center;
 				position: absolute;
@@ -2237,24 +2267,50 @@
 				border-radius: 12px;
 				padding: 10px 12px;
 			}
+
 			.settingsLabel {
 				font-size: 13px;
 				color: var(--sub);
 				margin-bottom: 4px;
 			}
+
 			.settingsThemeBtn {
-				flex:1;padding:7px;border-radius:20px;border:1px solid var(--bg);background:var(--card);color:var(--text);cursor:pointer;font-size:13px;font-weight:600;transition:.2s;
+				flex: 1;
+				padding: 7px;
+				border-radius: 20px;
+				border: 1px solid var(--bg);
+				background: var(--card);
+				color: var(--text);
+				cursor: pointer;
+				font-size: 13px;
+				font-weight: 600;
+				transition: .2s;
 			}
+
 			.settingsThemeBtn.active {
 				background: var(--green);
 				color: #fff;
 				border-color: var(--green);
 			}
+
 			.settingsLinkBtn {
-				display:block;width:100%;padding:8px 12px;border:none;background:var(--card);color:var(--green);font-size:14px;cursor:pointer;text-align:center;border-radius:20px;font-weight:600;transition:.2s;
+				display: block;
+				width: 100%;
+				padding: 8px 12px;
+				border: none;
+				background: var(--card);
+				color: var(--green);
+				font-size: 14px;
+				cursor: pointer;
+				text-align: center;
+				border-radius: 20px;
+				font-weight: 600;
+				transition: .2s;
 			}
+
 			.settingsLinkBtn:hover {
-				background:var(--green);color:#fff;
+				background: var(--green);
+				color: #fff;
 			}
 
 			@keyframes postFadeIn {
@@ -2270,29 +2326,58 @@
 			}
 
 			@keyframes slideInRight {
-				from { transform: translateX(100%); opacity: .6; }
-				to { transform: translateX(0); opacity: 1; }
+				from {
+					transform: translateX(100%);
+					opacity: .6;
+				}
+
+				to {
+					transform: translateX(0);
+					opacity: 1;
+				}
 			}
+
 			@keyframes slideInLeft {
-				from { transform: translateX(-100%); opacity: .6; }
-				to { transform: translateX(0); opacity: 1; }
+				from {
+					transform: translateX(-100%);
+					opacity: .6;
+				}
+
+				to {
+					transform: translateX(0);
+					opacity: 1;
+				}
 			}
+
 			.page-slide-right,
 			.page-slide-left {
-				position: fixed !important; top:0; left:0;
-				width:100%; height:100vh; z-index:10;
+				position: fixed !important;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100vh;
+				z-index: 10;
 				will-change: transform, opacity;
 			}
+
 			.page-slide-right {
 				animation: slideInRight .28s ease-out both;
 			}
+
 			.page-slide-left {
 				animation: slideInLeft .28s ease-out both;
 			}
+
 			@keyframes fadeOut {
-				from { opacity: 1; }
-				to { opacity: 0; }
+				from {
+					opacity: 1;
+				}
+
+				to {
+					opacity: 0;
+				}
 			}
+
 			.page-fade-out {
 				animation: fadeOut .28s ease-out both;
 				will-change: opacity;
@@ -2365,6 +2450,7 @@
 				#fortuneToggleBtn {
 					display: none !important;
 				}
+
 				#announceBar {
 					display: none !important;
 				}
@@ -2649,27 +2735,33 @@
 				#layoutBtn {
 					display: none;
 				}
+
 				.replyInputWrap input {
 					height: 32px;
 					font-size: 14px;
 				}
+
 				.replyInputWrap button {
 					height: 32px;
 					font-size: 12px;
 					padding: 0 10px;
 				}
+
 				.replyInputWrap .emojiBtn {
 					width: 32px;
 					height: 32px;
 				}
+
 				.settingsCard {
 					padding: 8px 10px;
 					border-radius: 10px;
 				}
+
 				.settingsLinkBtn {
 					padding: 6px 10px;
 					font-size: 13px;
 				}
+
 				.settingsThemeBtn {
 					padding: 5px;
 					font-size: 12px;
@@ -2749,6 +2841,7 @@
 				margin: 0 4px;
 				flex-shrink: 0;
 			}
+
 			.replyBtn {
 				font-size: 12px;
 				color: var(--sub);
@@ -2759,31 +2852,38 @@
 				flex-shrink: 0;
 				white-space: nowrap;
 			}
+
 			.replyBtn:hover {
 				color: var(--green);
 			}
+
 			.replyToTag {
 				font-size: 12px;
 				color: var(--sub);
 				margin-right: 4px;
 				cursor: default;
 			}
+
 			.replyToTag b {
 				color: var(--green);
 				font-weight: 600;
 			}
+
 			.commentChildren {
 				width: 100%;
 			}
+
 			.commentChildren:empty {
 				display: none;
 			}
+
 			.replyInputWrap {
 				display: flex;
 				gap: 6px;
 				align-items: center;
 				width: 100%;
 			}
+
 			.replyInputWrap input {
 				flex: 1;
 				height: 34px;
@@ -2797,9 +2897,11 @@
 				margin: 0;
 				outline: none;
 			}
+
 			.replyInputWrap input:focus {
 				border-color: var(--green);
 			}
+
 			.replyInputWrap button {
 				flex-shrink: 0;
 				height: 34px;
@@ -2807,6 +2909,7 @@
 				padding: 0 12px;
 				border-radius: 16px;
 			}
+
 			.replyInputWrap .emojiBtn {
 				width: 34px;
 				height: 34px;
@@ -2814,14 +2917,16 @@
 				font-size: 16px;
 				margin: 0;
 			}
-		@media (min-width: 801px) {
-			.comment .replyBtn {
-				display: none;
+
+			@media (min-width: 801px) {
+				.comment .replyBtn {
+					display: none;
+				}
+
+				.comment:hover>.commentActions>.replyBtn {
+					display: inline;
+				}
 			}
-			.comment:hover > .commentActions > .replyBtn {
-				display: inline;
-			}
-		}
 
 			html.watch {
 				font-size: 14px;
@@ -3317,7 +3422,8 @@
 				</div>
 				<div class="tagBarContainer"
 					style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;margin-top:8px;">
-					<div class="tagBar" id="tagBar" style="display:flex;gap:6px;flex-shrink:1;overflow-x:auto;flex-wrap:nowrap;"></div>
+					<div class="tagBar" id="tagBar"
+						style="display:flex;gap:6px;flex-shrink:1;overflow-x:auto;flex-wrap:nowrap;"></div>
 					<input id="customTag" placeholder="自定义标签（可不填）"
 						style="height:36px;font-size:14px;flex-shrink:0;width:300px;" maxlength="10">
 				</div>
@@ -3338,7 +3444,8 @@
 			</div>
 		</div>
 		<div id="userListPage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
-			<div style="padding:20px;flex:1;overflow-y:auto;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;">
+			<div
+				style="padding:20px;flex:1;overflow-y:auto;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;">
 				<div id="logoRow">
 					<div id="logo">
 						<img src="icon.svg">
@@ -3435,11 +3542,17 @@
 			<div class="modalBox" style="width:380px;text-align:center;">
 				<div id="captchaTitle" style="font-weight:bold;margin-bottom:10px;">人机验证 — 拖到闪烁虚线框中</div>
 				<div style="position:relative;display:inline-block;">
-					<canvas id="captchaCanvas" width="320" height="160" style="border-radius:8px;display:block;"></canvas>
-					<div id="captchaTarget" style="position:absolute;top:0;left:0;width:48px;height:160px;border:2px dashed rgba(255,255,255,.8);border-radius:4px;pointer-events:none;box-sizing:border-box;background:rgba(0,200,0,.12);"></div>
+					<canvas id="captchaCanvas" width="320" height="160"
+						style="border-radius:8px;display:block;"></canvas>
+					<div id="captchaTarget"
+						style="position:absolute;top:0;left:0;width:48px;height:160px;border:2px dashed rgba(255,255,255,.8);border-radius:4px;pointer-events:none;box-sizing:border-box;background:rgba(0,200,0,.12);">
+					</div>
 				</div>
-				<div id="captchaTrack" style="position:relative;width:320px;height:36px;margin:10px auto 0;background:var(--bg);border-radius:18px;touch-action:none;user-select:none;">
-					<div id="captchaThumb" style="position:absolute;top:2px;left:0;width:44px;height:32px;background:var(--green);border-radius:16px;cursor:grab;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:2;">→</div>
+				<div id="captchaTrack"
+					style="position:relative;width:320px;height:36px;margin:10px auto 0;background:var(--bg);border-radius:18px;touch-action:none;user-select:none;">
+					<div id="captchaThumb"
+						style="position:absolute;top:2px;left:0;width:44px;height:32px;background:var(--green);border-radius:16px;cursor:grab;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:2;">
+						→</div>
 				</div>
 				<div id="captchaHint" style="margin-top:8px;font-size:12px;color:var(--sub);">← 拖动滑块完成拼图 →</div>
 				<div style="margin-top:10px"><button id="captchaCloseBtn">关闭</button></div>
@@ -3452,9 +3565,9 @@
 		<div id="viewer" onclick="closeViewer()">
 			<img id="viewerImg">
 		</div>
+		<script src="https://zhujingqi.com/js/egg.js"></script>
 		<script>
 			const API_BASE = "https://hxlhrrllhvvazyhiuhvb.supabase.co/functions/v1";
-
 			async function api(path, options = {}) {
 				const headers = {
 					"Content-Type": "application/json",
@@ -3473,7 +3586,7 @@
 						const j = JSON.parse(text);
 						if (j.error) msg = j.error;
 					} catch {}
-					if (res.status === 401 || /jwt|expir|unauthorized/i.test(msg)) {
+					if (/jwt|expir|unauthorized/i.test(msg)) {
 						localStorage.removeItem("token");
 						localStorage.removeItem("loginUser");
 						setTimeout(() => {
@@ -3482,7 +3595,9 @@
 							if (mt && me) {
 								const errMsg = typeof t === "function" ? t("jwt_expired") : "登录已过期，请重新登录";
 								const btnText = typeof t === "function" ? t("jwt_login_btn") : "去登录";
-								mt.innerHTML = errMsg + '<br><br><button onclick="document.getElementById(\'modal\').classList.add(\'hidden\');show(\'welcomePage\')" style="background:var(--green);color:#fff;padding:10px 30px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' + btnText + '</button>';
+								mt.innerHTML = errMsg +
+									'<br><br><button onclick="document.getElementById(\'modal\').classList.add(\'hidden\');show(\'welcomePage\')" style="background:var(--green);color:#fff;padding:10px 30px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' +
+									btnText + '</button>';
 								me.classList.remove("hidden");
 							}
 						}, 0);
@@ -3521,9 +3636,11 @@
 			let gestureWatch = false;
 			let secretTapCount = 0;
 			let secretTapTimer = null;
+
 			function isWatchMode() {
 				return gestureWatch;
 			}
+
 			function syncWatchMode() {
 				document.documentElement.classList.toggle("watch", isWatchMode());
 			}
@@ -3531,7 +3648,9 @@
 				if (e.target.closest("#logo, #welcomePage .big")) {
 					secretTapCount++;
 					clearTimeout(secretTapTimer);
-					secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1500);
+					secretTapTimer = setTimeout(() => {
+						secretTapCount = 0;
+					}, 1500);
 					if (secretTapCount >= 5) {
 						secretTapCount = 0;
 						gestureWatch = true;
@@ -3823,20 +3942,20 @@
 					de: "Vermeiden",
 					"zh-TW": "忌"
 				},
-			random_post_btn: {
-				zh: "随机帖子",
-				en: "Random Post",
-				es: "Publicación aleatoria",
-				de: "Zufälliger Beitrag",
-				"zh-TW": "隨機帖子"
-			},
-			announcement_btn: {
-				zh: "最新公告",
-				en: "Announcement",
-				es: "Anuncio",
-				de: "Ankündigung",
-				"zh-TW": "最新公告"
-			},
+				random_post_btn: {
+					zh: "随机帖子",
+					en: "Random Post",
+					es: "Publicación aleatoria",
+					de: "Zufälliger Beitrag",
+					"zh-TW": "隨機帖子"
+				},
+				announcement_btn: {
+					zh: "最新公告",
+					en: "Announcement",
+					es: "Anuncio",
+					de: "Ankündigung",
+					"zh-TW": "最新公告"
+				},
 				editor_custom_tag_ph: {
 					zh: "自定义标签（你也可以不选择任何标签）",
 					en: "Custom tag (optional)",
@@ -5427,7 +5546,10 @@
 					}
 				}
 
-				const PAGE_ORDER = ["welcomePage","registerPage","main","editorPage","userListPage","discoverPage","profilePage","postPage"];
+				const PAGE_ORDER = ["welcomePage", "registerPage", "main", "editorPage", "userListPage", "discoverPage",
+					"profilePage", "postPage"
+				];
+
 				function show(p) {
 					const prev = currentPage;
 					currentPage = p;
@@ -5442,10 +5564,11 @@
 						if (id === p) {
 							el.classList.remove("hidden");
 							if (slide) {
-								el.classList.remove("page-slide-right","page-slide-left");
+								el.classList.remove("page-slide-right", "page-slide-left");
 								void el.offsetWidth;
 								el.classList.add(slide);
-								setTimeout(() => el.classList.remove("page-slide-right","page-slide-left"), 300);
+								setTimeout(() => el.classList.remove("page-slide-right", "page-slide-left"),
+									300);
 							}
 						} else if (id === prev && slide) {
 							el.classList.remove("page-fade-out");
@@ -5462,11 +5585,12 @@
 						}, 280);
 					}
 					if (p !== "profilePage" && p !== "postPage") {
-						history.replaceState(null, "", location.pathname);
-					}
+					history.replaceState(null, "", location.pathname);
 				}
+			}
+			window.show = show;
 
-				function refreshUILanguage(skipReload = false) {
+			function refreshUILanguage(skipReload = false) {
 					document.title = PAGE_TITLE_TRANS[currentLang] || PAGE_TITLE_TRANS.zh;
 					const setT = (id, val) => {
 						const el = document.getElementById(id);
@@ -5600,15 +5724,18 @@
 				let captchaPassed = false;
 				let captchaOffset = 0;
 				let captchaCleanup = null;
+
 				function openCaptchaModal() {
 					$("captchaModal").classList.remove("hidden");
 					const canvas = $("captchaCanvas");
 					const ctx = canvas.getContext("2d");
-					const W = 320, H = 160;
+					const W = 320,
+						H = 160;
 					const pieceW = 48;
 					const seed = Math.floor(Math.random() * 1000000);
 					captchaOffset = 30 + Math.floor(Math.random() * (W - pieceW - 60));
 					captchaPassed = false;
+
 					function seededRand(s) {
 						let x = Math.sin(s * 9301 + 49297) * 49297;
 						return x - Math.floor(x);
@@ -5649,7 +5776,10 @@
 					thumb.textContent = "→";
 					thumb.style.background = "var(--green)";
 					thumb.style.cursor = "grab";
-					let dragging = false, startX = 0, thumbOff = 0;
+					let dragging = false,
+						startX = 0,
+						thumbOff = 0;
+
 					function onMove(clientX) {
 						if (!dragging) return;
 						let dx = clientX - startX + thumbOff;
@@ -5664,6 +5794,7 @@
 							thumb.textContent = "→";
 						}
 					}
+
 					function onEnd() {
 						if (!dragging) return;
 						dragging = false;
@@ -5678,39 +5809,68 @@
 							$("registerBtn").disabled = false;
 							$("registerBtn").style.opacity = "1";
 							$("registerBtn").style.cursor = "pointer";
-							setTimeout(() => { $("captchaModal").classList.add("hidden"); cleanup(); }, 600);
+							setTimeout(() => {
+								$("captchaModal").classList.add("hidden");
+								cleanup();
+							}, 600);
 						} else {
 							thumb.style.left = "0px";
 							thumb.textContent = "→";
 							thumb.style.background = "var(--green)";
 						}
 					}
+
 					function onDown(clientX) {
 						dragging = true;
 						startX = clientX;
 						thumbOff = parseInt(thumb.style.left) || 0;
 						thumb.style.cursor = "grabbing";
 					}
-					function onMouseMove(e) { onMove(e.clientX); }
-					function onMouseUp() { onEnd(); }
-					function onTouchMove(e) { onMove(e.touches[0].clientX); }
-					function onTouchEnd() { onEnd(); }
+
+					function onMouseMove(e) {
+						onMove(e.clientX);
+					}
+
+					function onMouseUp() {
+						onEnd();
+					}
+
+					function onTouchMove(e) {
+						onMove(e.touches[0].clientX);
+					}
+
+					function onTouchEnd() {
+						onEnd();
+					}
+
 					function cleanup() {
 						document.removeEventListener("mousemove", onMouseMove);
 						document.removeEventListener("mouseup", onMouseUp);
 						document.removeEventListener("touchmove", onTouchMove);
 						document.removeEventListener("touchend", onTouchEnd);
 					}
-					thumb.onmousedown = (e) => { onDown(e.clientX); e.preventDefault(); };
-					thumb.ontouchstart = (e) => { onDown(e.touches[0].clientX); e.preventDefault(); };
+					thumb.onmousedown = (e) => {
+						onDown(e.clientX);
+						e.preventDefault();
+					};
+					thumb.ontouchstart = (e) => {
+						onDown(e.touches[0].clientX);
+						e.preventDefault();
+					};
 					document.addEventListener("mousemove", onMouseMove);
 					document.addEventListener("mouseup", onMouseUp);
-					document.addEventListener("touchmove", onTouchMove, { passive: false });
+					document.addEventListener("touchmove", onTouchMove, {
+						passive: false
+					});
 					document.addEventListener("touchend", onTouchEnd);
 					captchaCleanup = cleanup;
 					document.querySelector("#captchaModal .modalBox").style.width = "";
 				}
-				$("captchaCloseBtn").onclick = () => { $("captchaModal").classList.add("hidden"); if (captchaCleanup) captchaCleanup(); };
+				$("captchaCloseBtn").onclick = () => {
+					$("captchaModal").classList.add("hidden");
+					if (captchaCleanup) captchaCleanup();
+				};
+
 				function resetCaptcha() {
 					captchaPassed = false;
 					$("captchaStatus").textContent = "";
@@ -5949,32 +6109,41 @@
 					"haha",
 					"sad",
 					"cry",
+					"sob",
 					"scared",
-					"love",
+					
 					"hmm",
 					"sweat",
+					"love",
+					"amazed",
 					"cool",
-					"updown",
-					"strange",
 					"pirate",
-					"angry",
-					"ask",
-					"blank",
-					"dead",
-					"alien",
-					"bot",
-					"good",
-					"bad",
+					
+					
+					"eyeroll",
+					"updown",
 					"right",
 					"wrong",
 					"ok",
-					"jesus",
-					"maga",
-					"14",
-					"sob",
-					"saka",
+					"ke",
+					
+					"angry",
+					"dead",
+					"alien",
+					"bot",
+					"ask",
+					"blank",
+					
+					"good",
+					"bad",
 					"doge",
-					"chill"
+					"chill",
+					"strange",
+					"maga",
+					
+					"jesus",
+					"14",
+					"saka",
 				];
 
 				function renderEmojis(root) {
@@ -6113,7 +6282,10 @@
 					setActive("homeBtn");
 					loadAnnouncements();
 				};
-				$("goRegister").onclick = () => { resetCaptcha(); show("registerPage"); };
+				$("goRegister").onclick = () => {
+					resetCaptcha();
+					show("registerPage");
+				};
 				$("backLogin").onclick = () => show("welcomePage");
 				$("termsBtn").onclick = () => {
 					document.querySelector(".modalBox").style.width = "800px";
@@ -6422,10 +6594,10 @@
 							author: currentUser.id,
 							tag: tag
 						});
-				} catch (e) {
-					if (e.message === "JWT_EXPIRED") return;
-					return modal(t("post_fail", e.message));
-				}
+					} catch (e) {
+						if (e.message === "JWT_EXPIRED") return;
+						return modal(t("post_fail", e.message));
+					}
 					await notifyMentions(finalContent, postId, null);
 					$("text").value = "";
 					$("customTag").value = "";
@@ -6450,7 +6622,8 @@
 					type
 				}) {
 					if (!targetId || !actorId || targetId === actorId) return;
-					if (type !== "comment" && type !== "mention" && type !== "gift" && type !== "follow" && type !== "reply") return;
+					if (type !== "comment" && type !== "mention" && type !== "gift" && type !== "follow" && type !==
+						"reply") return;
 					try {
 						const body = {
 							target_id: targetId,
@@ -6512,7 +6685,8 @@
 				function buildPostQuery(page, perPage) {
 					let q = `?page=${page}&perPage=${perPage}`;
 					if (currentUser) q += "&userId=" + currentUser.id;
-					if (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" && activePostTag !== "关注") q += "&tag=" + encodeURIComponent(activePostTag);
+					if (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" && activePostTag !== "关注") q +=
+						"&tag=" + encodeURIComponent(activePostTag);
 					if (postSearch) q += "&search=" + encodeURIComponent(postSearch);
 					return q;
 				}
@@ -7162,7 +7336,10 @@
 						if (followedIds.size) {
 							authorsParam = "&authors=" + [...followedIds].join(",");
 						} else {
-							return { posts: [], count: 0 };
+							return {
+								posts: [],
+								count: 0
+							};
 						}
 					}
 					const q = buildPostQuery(page, perPage);
@@ -7175,7 +7352,8 @@
 						};
 						try {
 							result = await apiGet("/api/posts?search=" + encodeURIComponent(postSearch) + "&page=" +
-								page + "&perPage=" + perPage + (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" && activePostTag !== "关注" ?
+								page + "&perPage=" + perPage + (activePostTag && activePostTag !== "全部" &&
+									activePostTag !== "其它" && activePostTag !== "关注" ?
 									"&tag=" + encodeURIComponent(activePostTag) : "") + (currentUser ?
 									"&userId=" + currentUser.id : "") + authorsParam);
 						} catch {
@@ -7199,7 +7377,8 @@
 					const now = Date.now();
 					if (followedIdsCache && now - followedIdsCacheTime < FOLLOWED_IDS_TTL) return followedIdsCache;
 					try {
-						const data = await apiGet("/api/follows/list?user_id=" + currentUser.id + "&type=following&requester_id=" + currentUser.id);
+						const data = await apiGet("/api/follows/list?user_id=" + currentUser.id +
+							"&type=following&requester_id=" + currentUser.id);
 						followedIdsCache = new Set((data || []).map(f => f.followee_id).filter(id => id));
 						followedIdsCacheTime = now;
 					} catch {
@@ -7451,13 +7630,21 @@
 						modal(t("modal_load_fail") + "：" + e.message);
 					}
 				}
+
 				function parseCommentContent(content) {
 					const match = String(content || "").match(/^\[reply:(\d+)\]\s*/);
 					if (match) {
-						return { parentId: parseInt(match[1]), text: content.slice(match[0].length) };
+						return {
+							parentId: parseInt(match[1]),
+							text: content.slice(match[0].length)
+						};
 					}
-					return { parentId: null, text: content || "" };
+					return {
+						parentId: null,
+						text: content || ""
+					};
 				}
+
 				function buildCommentTree(comments) {
 					const map = {};
 					for (const c of comments) {
@@ -7505,9 +7692,9 @@
 							div.className = "comment";
 							div.style.paddingLeft = (depth * indent) + "px";
 							const avatar = getAvatar(c.users);
-							const delBtn = currentUser && c.author === currentUser.id
-								? `<button class="commentDel" data-cdel="${c.id}">${t("post_delete")}</button>`
-								: "";
+							const delBtn = currentUser && c.author === currentUser.id ?
+								`<button class="commentDel" data-cdel="${c.id}">${t("post_delete")}</button>` :
+								"";
 							div.innerHTML =
 								`<span class="userLink userLinkWithAvatar" data-user="${c.author}">
 									<img class="avatar" src="${avatar}" onerror="this.onerror=null;this.src='head.svg'">
@@ -7545,7 +7732,10 @@
 							replyBtn.onclick = (e) => {
 								e.stopPropagation();
 								const existing = div.querySelector(".replyInputWrap");
-								if (existing) { existing.remove(); return; }
+								if (existing) {
+									existing.remove();
+									return;
+								}
 								const w = document.createElement("div");
 								w.className = "replyInputWrap";
 								const placeholder = c.users?.name ? t("reply_ph", c.users.name) : t("reply");
@@ -7629,7 +7819,8 @@
 							commentId: commentId,
 							type: "comment"
 						});
-						const postDiv = $("singlePost")?.querySelector(`.post[data-post-id="${postId}"]`) || document.querySelector(`.post[data-post-id="${postId}"]`);
+						const postDiv = $("singlePost")?.querySelector(`.post[data-post-id="${postId}"]`) || document
+							.querySelector(`.post[data-post-id="${postId}"]`);
 						if (postDiv) {
 							const input = postDiv.querySelector("[data-input]");
 							if (input) {
@@ -7677,7 +7868,8 @@
 								type: "reply"
 							});
 						}
-						const postDiv = $("singlePost")?.querySelector(`.post[data-post-id="${postId}"]`) || document.querySelector(`.post[data-post-id="${postId}"]`);
+						const postDiv = $("singlePost")?.querySelector(`.post[data-post-id="${postId}"]`) || document
+							.querySelector(`.post[data-post-id="${postId}"]`);
 						if (postDiv) {
 							const list = postDiv.querySelector(".commentList");
 							if (list) await renderComments(postId, list);
@@ -7723,7 +7915,8 @@
 							liker: currentUser.id,
 							type: hasLike ? 0 : 1
 						});
-						if (postDiv.dataset.authorId != currentUser.id) changeCoins(currentUser.id, hasLike ? -1 : (hasDislike ? 2 : 1));
+						if (postDiv.dataset.authorId != currentUser.id) changeCoins(currentUser.id, hasLike ? -1 : (
+							hasDislike ? 2 : 1));
 					} catch (e) {
 						console.error(e);
 						likeNumEl.textContent = prevLikeCount;
@@ -7765,7 +7958,8 @@
 							liker: currentUser.id,
 							type: hasDislike ? 0 : -1
 						});
-						if (postDiv.dataset.authorId != currentUser.id) changeCoins(currentUser.id, hasDislike ? 1 : (hasLike ? -2 : -1));
+						if (postDiv.dataset.authorId != currentUser.id) changeCoins(currentUser.id, hasDislike ? 1 :
+							(hasLike ? -2 : -1));
 					} catch (e) {
 						console.error(e);
 						likeNumEl.textContent = prevLikeCount;
@@ -7850,37 +8044,39 @@
 						.replace(/</g, "&lt;")
 						.replace(/>/g, "&gt;");
 				}
-			let rankMode = "coins";
-			function setupRankToggle() {
-				const coinsBtn = $("rankToggleCoins");
-				const followersBtn = $("rankToggleFollowers");
-				if (!coinsBtn || coinsBtn._setup) return;
-				coinsBtn._setup = true;
-				coinsBtn.onclick = () => {
-					if (rankMode === "coins") return;
-					rankMode = "coins";
-					coinsBtn.classList.add("active");
-					followersBtn.classList.remove("active");
-					const colVal = $("rankColValue");
-					if (colVal) colVal.textContent = t("rankings_col_coins");
-					loadUserList();
-				};
-				followersBtn.onclick = () => {
-					if (rankMode === "followers") return;
-					rankMode = "followers";
-					followersBtn.classList.add("active");
-					coinsBtn.classList.remove("active");
-					const colVal = $("rankColValue");
-					if (colVal) colVal.textContent = t("followers");
-					loadUserList();
-				};
-			}
+				let rankMode = "coins";
+
+				function setupRankToggle() {
+					const coinsBtn = $("rankToggleCoins");
+					const followersBtn = $("rankToggleFollowers");
+					if (!coinsBtn || coinsBtn._setup) return;
+					coinsBtn._setup = true;
+					coinsBtn.onclick = () => {
+						if (rankMode === "coins") return;
+						rankMode = "coins";
+						coinsBtn.classList.add("active");
+						followersBtn.classList.remove("active");
+						const colVal = $("rankColValue");
+						if (colVal) colVal.textContent = t("rankings_col_coins");
+						loadUserList();
+					};
+					followersBtn.onclick = () => {
+						if (rankMode === "followers") return;
+						rankMode = "followers";
+						followersBtn.classList.add("active");
+						coinsBtn.classList.remove("active");
+						const colVal = $("rankColValue");
+						if (colVal) colVal.textContent = t("followers");
+						loadUserList();
+					};
+				}
 				async function loadUserList() {
 					let box = $("userItems");
 					box.innerHTML = "<p style='text-align:center;color:var(--sub);margin-top:20px;'>Loading...</p>";
 					let data = [];
 					try {
-						data = await apiGet("/api/users" + (rankMode === "followers" ? "?includeFollowers=true" : ""));
+						data = await apiGet("/api/users" + (rankMode === "followers" ? "?includeFollowers=true" :
+							""));
 					} catch {
 						data = [];
 					}
@@ -7952,6 +8148,7 @@
 						};
 					}
 				}
+
 				function openProfileSettings(user) {
 					const box = document.querySelector(".modalBox");
 					box.style.width = "440px";
@@ -7990,11 +8187,15 @@
 							const t = btn.dataset.theme;
 							if (t === "dark") document.body.classList.add("dark");
 							else document.body.classList.remove("dark");
-							box.querySelectorAll(".settingsThemeBtn").forEach(b => b.classList.remove("active"));
+							box.querySelectorAll(".settingsThemeBtn").forEach(b => b.classList.remove(
+								"active"));
 							btn.classList.add("active");
 						};
 					});
-					$("setAvatarBtn").onclick = () => { $("modal").classList.add("hidden"); openAvatarEditor(); };
+					$("setAvatarBtn").onclick = () => {
+						$("modal").classList.add("hidden");
+						openAvatarEditor();
+					};
 					$("setBioBtn").onclick = () => {
 						$("modal").classList.add("hidden");
 						box.style.width = "400px";
@@ -8007,24 +8208,33 @@
 						$("saveDescBtn").onclick = async () => {
 							const newDesc = $("descTextarea").value.trim();
 							try {
-								await apiPut("/api/users/" + currentUser.id, { description: newDesc });
+								await apiPut("/api/users/" + currentUser.id, {
+									description: newDesc
+								});
 							} catch (e) {
 								return modal(t("save_fail", e.message));
 							}
 							currentUser.description = newDesc;
 							const bio = document.getElementById("profileBio");
-							if (bio) bio.innerHTML = (newDesc || t("profile_no_desc")) + '<button class="bioEditBtn">' + t("profile_edit") + '</button>';
+							if (bio) bio.innerHTML = (newDesc || t("profile_no_desc")) +
+								'<button class="bioEditBtn">' + t("profile_edit") + '</button>';
 							$("modal").classList.add("hidden");
 						};
 					};
 					$("settingsFollowPublic").onchange = async () => {
 						try {
-							await apiPut("/api/users/" + currentUser.id, { follow_public: $("settingsFollowPublic").checked });
-						} catch { $("settingsFollowPublic").checked = !$("settingsFollowPublic").checked; }
+							await apiPut("/api/users/" + currentUser.id, {
+								follow_public: $("settingsFollowPublic").checked
+							});
+						} catch {
+							$("settingsFollowPublic").checked = !$("settingsFollowPublic").checked;
+						}
 					};
 					$("setAboutBtn").onclick = () => {
 						box.style.width = "800px";
-						modal(`<h2>${t("about_title")}</h2><div style="text-align:left;">${t("about_content")}</div><h6><a href="#">${t("login_title")}</a> · <a href="https://zhujingqi.com">Zhujingqi</a></h6><h6>© Jacky Forum. All rights reserved.</h6>`);
+						modal(
+							`<h2>${t("about_title")}</h2><div style="text-align:left;">${t("about_content")}</div><h6><a href="#">${t("login_title")}</a> · <a href="https://zhujingqi.com">Zhujingqi</a></h6><h6>© Jacky Forum. All rights reserved.</h6>`
+						);
 					};
 					$("setSponsorBtn").onclick = () => {
 						modal(`<h2>${t("sponsor_title")}</h2>${t("sponsor_content")}`);
@@ -8049,14 +8259,23 @@
 					try {
 						user = await apiGet("/api/users/" + uid + (currentUser ? "?userId=" + currentUser.id : ""));
 					} catch {
-						user = { id: uid, name: "?", coins: 0, avatar: null, description: "", time: "", role: [] };
+						user = {
+							id: uid,
+							name: "?",
+							coins: 0,
+							avatar: null,
+							description: "",
+							time: "",
+							role: []
+						};
 					}
 					const avatarUrl = getAvatar(user);
 					$("profileAvatar").src = avatarUrl;
 					$("profileAvatar").onclick = () => openViewer(avatarUrl);
 					history.pushState(null, "", "?uid=" + uid);
 					const isSelf = currentUser && uid === currentUser.id;
-					$("pname").innerHTML = user.name + `<span class="userLevel">${getUserLevel(user.coins)}</span>` + getRoleBadge(user);
+					$("pname").innerHTML = user.name + `<span class="userLevel">${getUserLevel(user.coins)}</span>` +
+						getRoleBadge(user);
 					$("profileMeta").innerHTML = `
 						<div class="metaRow">${t("profile_reg_time")}：${new Date(user.time).toLocaleString()}</div>
 						<div class="metaRow">${t("profile_coins")}：${user.coins || 0}</div>
@@ -8080,12 +8299,15 @@
 							$("saveDescBtn").onclick = async () => {
 								const newDesc = $("descTextarea").value.trim();
 								try {
-									await apiPut("/api/users/" + currentUser.id, { description: newDesc });
+									await apiPut("/api/users/" + currentUser.id, {
+										description: newDesc
+									});
 								} catch (e) {
 									return modal(t("save_fail", e.message));
 								}
 								currentUser.description = newDesc;
-								bio.innerHTML = (newDesc || t("profile_no_desc")) + '<button class="bioEditBtn">' + t("profile_edit") + '</button>';
+								bio.innerHTML = (newDesc || t("profile_no_desc")) +
+									'<button class="bioEditBtn">' + t("profile_edit") + '</button>';
 								bio.querySelector(".bioEditBtn").onclick = editBio.onclick;
 								$("modal").classList.add("hidden");
 							};
@@ -8102,7 +8324,8 @@
 					actions.innerHTML = "";
 					const viewPostsBtn = document.createElement("button");
 					viewPostsBtn.className = "profileBtn";
-					viewPostsBtn.textContent = isSelf ? t("profile_view_my_posts") : t("profile_view_posts", user.name);
+					viewPostsBtn.textContent = isSelf ? t("profile_view_my_posts") : t("profile_view_posts", user
+						.name);
 					viewPostsBtn.onclick = () => {
 						show("main");
 						$("postSearch").value = "@" + user.name;
@@ -8145,15 +8368,27 @@
 							const origW = box.style.width;
 							box.style.width = "320px";
 							modal(
-								'<h3 style="margin:0 0 16px;text-align:center;">' + t("unfollow_confirm") + '</h3>' +
+								'<h3 style="margin:0 0 16px;text-align:center;">' + t(
+									"unfollow_confirm") + '</h3>' +
 								'<div style="text-align:center">' +
-								'<button id="unfConfirm" style="background:#e74c3c;color:#fff;padding:10px 40px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' + t("confirm_btn") + '</button>' +
+								'<button id="unfConfirm" style="background:#e74c3c;color:#fff;padding:10px 40px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' +
+								t("confirm_btn") + '</button>' +
 								'</div>'
 							);
-							$("unfConfirm").onclick = () => { $("modal").classList.add("hidden"); box.style.width = origW; resolve(true); };
-							const closeModalHandler = () => { $("modal").classList.add("hidden"); box.style.width = origW; resolve(false); };
+							$("unfConfirm").onclick = () => {
+								$("modal").classList.add("hidden");
+								box.style.width = origW;
+								resolve(true);
+							};
+							const closeModalHandler = () => {
+								$("modal").classList.add("hidden");
+								box.style.width = origW;
+								resolve(false);
+							};
 							$("modalClose").onclick = closeModalHandler;
-							$("modal").onclick = e => { if (e.target === $("modal")) closeModalHandler(); };
+							$("modal").onclick = e => {
+								if (e.target === $("modal")) closeModalHandler();
+							};
 						});
 						if (!confirmed) return;
 					}
@@ -8166,7 +8401,8 @@
 						});
 						const fc = document.querySelector(".followerCount");
 						if (fc) {
-							fc.textContent = Math.max(0, parseInt(fc.textContent) + (res.action === "followed" ? 1 : -1));
+							fc.textContent = Math.max(0, parseInt(fc.textContent) + (res.action === "followed" ? 1 :
+								-1));
 						}
 						if (res.action === "followed") {
 							await createNotification({
@@ -8185,11 +8421,14 @@
 
 				async function openFollowList(userId, type) {
 					document.querySelector(".modalBox").style.width = "360px";
-					modal(`<h3>${type === "followers" ? t("followers") : t("following")}</h3>
-						<div style="max-height:320px;overflow:auto;text-align:left;"><p style="text-align:center;color:var(--sub);">Loading...</p></div>`);
+					modal(
+						`<h3>${type === "followers" ? t("followers") : t("following")}</h3>
+						<div style="max-height:320px;overflow:auto;text-align:left;"><p style="text-align:center;color:var(--sub);">Loading...</p></div>`
+					);
 					let data;
 					try {
-						data = await apiGet("/api/follows/list?user_id=" + userId + "&type=" + type + (currentUser ? "&requester_id=" + currentUser.id : ""));
+						data = await apiGet("/api/follows/list?user_id=" + userId + "&type=" + type + (currentUser ?
+							"&requester_id=" + currentUser.id : ""));
 					} catch {
 						modal(t("read_fail", ""));
 						return;
@@ -8199,8 +8438,8 @@
 						return;
 					}
 					const rows = data || [];
-					const content = rows.length
-						? rows.map(x => {
+					const content = rows.length ?
+						rows.map(x => {
 							const u = x.users;
 							return `<div class="onlineUser voteUser" data-user="${u?.id}" style="display:flex;align-items:center;gap:8px;">
 								<img class="avatar onlineAvatar" src="${getAvatar(u)}" onerror="this.onerror=null;this.src='head.svg'">
@@ -8208,8 +8447,8 @@
 								<span class="userLevel">${getUserLevel(u?.coins || 0)}</span>
 								${getRoleBadge(u)}
 							</div>`;
-						}).join("")
-						: `<div style="color:var(--sub);padding:8px 0;">${t("vote_none")}</div>`;
+						}).join("") :
+						`<div style="color:var(--sub);padding:8px 0;">${t("vote_none")}</div>`;
 					const listDiv = document.querySelector(".modalBox")?.querySelector("div div");
 					if (listDiv) {
 						listDiv.innerHTML = content;
@@ -9147,15 +9386,17 @@
 						modal(t("post_no_posts"));
 					}
 				};
+
 				function stripInternalCodes(txt) {
 					const meta = getPostMeta(txt);
 					return meta.content.replace(/\[\[.*?\]\]|\[.*?\]/g, "").trim();
 				}
+
 				function renderAnnouncementEmojis(snippet) {
 					return snippet.replace(/:([a-zA-Z0-9_-]+):/g, (m, name) =>
-						EMOJI_MAP.includes(name.toLowerCase())
-							? `<img src="emojis/${name.toLowerCase()}.svg" class="emojiInPost" alt=":${name}:" style="width:1.1em;height:1.1em;vertical-align:middle;display:inline;">`
-							: m
+						EMOJI_MAP.includes(name.toLowerCase()) ?
+						`<img src="emojis/${name.toLowerCase()}.svg" class="emojiInPost" alt=":${name}:" style="width:1.1em;height:1.1em;vertical-align:middle;display:inline;">` :
+						m
 					);
 				}
 				async function loadAnnouncements() {
@@ -9164,13 +9405,18 @@
 					try {
 						const res = await apiGet("/api/posts?tag=公告&perPage=3");
 						const posts = res?.posts || [];
-						if (!posts.length) { bar.innerHTML = ""; return; }
+						if (!posts.length) {
+							bar.innerHTML = "";
+							return;
+						}
 						bar.innerHTML =
 							'<div class="annTitle">' + t("announcement_btn") + '</div>' +
 							posts.map(p => {
-								const text = stripInternalCodes(p.content || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+								const text = stripInternalCodes(p.content || "").replace(/<[^>]*>/g, "").replace(
+									/\s+/g, " ").trim();
 								const snippet = text.length > 50 ? text.slice(0, 50) + "…" : text;
-								return '<div class="annItem" data-pid="' + p.id + '">' + renderAnnouncementEmojis(snippet) + '</div>';
+								return '<div class="annItem" data-pid="' + p.id + '">' +
+									renderAnnouncementEmojis(snippet) + '</div>';
 							}).join("");
 						bar.querySelectorAll(".annItem").forEach(el => {
 							el.onclick = () => {
@@ -9181,7 +9427,9 @@
 								}
 							};
 						});
-					} catch { bar.innerHTML = ""; }
+					} catch {
+						bar.innerHTML = "";
+					}
 				}
 				$("announcementBtn").onclick = async () => {
 					try {
