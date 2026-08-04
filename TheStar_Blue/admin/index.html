@@ -296,6 +296,7 @@ tr:last-child td { border-bottom: none; }
     <button class="active" onclick="switchTab('shop')">商品</button>
     <button onclick="switchTab('roster')">角色</button>
     <button onclick="switchTab('about')">关于</button>
+    <button onclick="switchTab('comments')">评论</button>
   </div>
 
   <div class="panel open" id="panelShop">
@@ -339,6 +340,15 @@ tr:last-child td { border-bottom: none; }
       <button onclick="execEdit('removeFormat')">&times;</button>
     </div>
     <div class="editor-area" id="aboutEditor" contenteditable="true"></div>
+  </div>
+
+  <div class="panel" id="panelComments">
+    <div class="table-wrap">
+      <table><thead><tr>
+        <th style="width:120px">昵称</th><th>内容</th><th style="width:130px">时间</th><th style="width:60px">操作</th>
+      </tr></thead><tbody id="commentsBody"></tbody></table>
+    </div>
+    <div class="empty-list" id="commentsEmpty">暂无评论</div>
   </div>
 
   <div class="form-card" id="formCard">
@@ -391,9 +401,11 @@ tr:last-child td { border-bottom: none; }
 
 <script>
 var TEXTDB_KEY = 'TheStarBlue_ProdData';
+var COMMENTS_KEY = 'TheStarBlue_Comments_v1';
 var ADMIN_PW_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
 var shopProducts = [];
 var rosterProducts = [];
+var commentList = [];
 var dirty = false;
 var aboutDirty = false;
 
@@ -508,6 +520,7 @@ function switchTab(name) {
 }
 
 function loadData() {
+  loadComments();
   document.getElementById('metaInfo').textContent = '读取中...';
   fetch('https://textdb.online/' + TEXTDB_KEY)
     .then(function(r) { return r.text(); })
@@ -610,6 +623,49 @@ function toggleProduct(type, id) {
   var list = type === 'shop' ? shopProducts : rosterProducts;
   var p = list.find(function(x) { return x.id === id; });
   if (p) { p.enabled = !p.enabled; dirty = true; renderAll(); updateSaveInfo(); }
+}
+
+function loadComments() {
+  fetch('https://textdb.online/' + COMMENTS_KEY)
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      if (text) {
+        try { commentList = JSON.parse(text) || []; } catch(e) { commentList = []; }
+      } else { commentList = []; }
+      if (!Array.isArray(commentList)) commentList = [];
+      renderComments();
+    })
+    .catch(function() { commentList = []; renderComments(); });
+}
+
+function renderComments() {
+  var tbody = document.getElementById('commentsBody');
+  var empty = document.getElementById('commentsEmpty');
+  if (commentList.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  var sorted = commentList.slice().sort(function(a, b) { return (b.time || '').localeCompare(a.time || ''); });
+  tbody.innerHTML = sorted.map(function(c) {
+    return '<tr><td>' + esc(c.name || '游客') + '</td><td>' + esc(c.content || '') + '</td><td>' + esc(c.time || '') + '</td>' +
+      '<td><div class="actions"><button class="btn btn-dan btn-sm" onclick="deleteComment(' + c.id + ')">删除</button></div></td></tr>';
+  }).join('');
+}
+
+async function deleteComment(id) {
+  if (!await showConfirm('确定删除这条评论？')) return;
+  var idx = commentList.findIndex(function(c) { return c.id === id; });
+  if (idx !== -1) commentList.splice(idx, 1);
+  renderComments();
+  saveCommentsToServer();
+}
+
+function saveCommentsToServer() {
+  fetch('https://textdb.online/update/?key=' + encodeURIComponent(COMMENTS_KEY) + '&value=' + encodeURIComponent(JSON.stringify(commentList)))
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.status === 1) { toast('已删除'); }
+      else { toast('保存失败！', true); }
+    })
+    .catch(function() { toast('网络错误！', true); });
 }
 
 function renderAll() {
