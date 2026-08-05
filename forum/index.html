@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -3363,9 +3362,8 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span id="noticeUpdatesContent">
-							· 全新用户主页<br>
-							· 平滑切页效果<br>
-							· 统一进设置页<br>
+							· Bug修复<br>
+							· 新增彩蛋<br>
 						</span>
 					</details>
 				</div>
@@ -6258,6 +6256,7 @@
 				$("logoutBtn").onclick = () => {
 					stopPresence();
 					localStorage.removeItem("loginUser");
+					localStorage.removeItem("token");
 					currentUser = null;
 					guestMode = false;
 					$("postFilterBar").style.display = "";
@@ -9637,7 +9636,7 @@
 					`;
 					document.body.appendChild(mask);
 					try {
-						if (autoId) {
+						if (autoId && localStorage.getItem("token")) {
 							let data;
 							try {
 								data = await apiGet("/api/users/" + autoId);
@@ -9670,6 +9669,8 @@
 						}
 						const guestPid = getUrlParam("pid");
 						const guestUid = getUrlParam("uid");
+						localStorage.removeItem("loginUser");
+						localStorage.removeItem("token");
 						if (guestPid || guestUid) {
 							guestMode = true;
 							show("main");
