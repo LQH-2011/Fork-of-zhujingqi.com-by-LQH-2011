@@ -2188,6 +2188,13 @@
 				cursor: pointer;
 			}
 
+			.postLink {
+				color: var(--green);
+				text-decoration: underline;
+				cursor: pointer;
+				word-break: break-all;
+			}
+
 			.mentionBox {
 				position: fixed;
 				z-index: 100000;
@@ -3361,9 +3368,9 @@
 				<div class="noticeItem">
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
-						<span id="noticeUpdatesContent">
+						<span>
 							· Bug修复<br>
-							· 新增彩蛋<br>
+							· 自动识别链接<br>
 						</span>
 					</details>
 				</div>
@@ -3855,13 +3862,6 @@
 					es: '🎉 Bienvenido al <b>Foro Jacky</b> :)',
 					de: '🎉 Willkommen im <b>Jacky Forum</b> :)',
 					"zh-TW": '🎉歡迎來到 <b>Jacky 論壇</b> :)'
-				},
-				notice_updates: {
-					zh: "近期更新",
-					en: "Recent Updates",
-					es: "Actualizaciones recientes",
-					de: "Neueste Updates",
-					"zh-TW": "近期更新"
 				},
 				stats_title: {
 					zh: "全站统计",
@@ -5325,13 +5325,6 @@
 					es: "Completa la verificación primero",
 					de: "Bitte zuerst die Verifizierung abschließen",
 					"zh-TW": "請先完成人機驗證"
-				},
-				notice_updates_content: {
-					zh: "· 全新用户主页<br>· 平滑切页效果<br>· 统一进设置页<br>",
-					en: "· Brand-new profile page<br>· Smooth page transitions<br>· Unified settings page<br>",
-					es: "· Nueva página de perfil<br>· Transiciones suaves<br>· Página de ajustes unificada<br>",
-					de: "· Neue Profilseite<br>· Sanfte Seitenübergänge<br>· Einheitliche Einstellungsseite<br>",
-					"zh-TW": "· 全新用戶主頁<br>· 平滑切頁效果<br>· 統一進設置頁<br>"
 				}
 			};
 			const PAGE_TITLE_TRANS = {
@@ -5685,7 +5678,6 @@
 					setT("captchaTitle", t("captcha_modal_title"));
 					setT("captchaHint", t("captcha_slider_hint"));
 					setT("captchaCloseBtn", t("modal_close"));
-					setH("noticeUpdatesContent", t("notice_updates_content"));
 					setT("rankToggleCoins", t("profile_coins"));
 					setT("rankToggleFollowers", t("followers"));
 					const nb = document.getElementById("notifBtn");
@@ -6097,12 +6089,51 @@
 							}
 							last = m.index + full.length;
 						}
-						const tail = text.slice(last);
-						if (tail) frag.appendChild(document.createTextNode(tail));
-						node.parentNode.replaceChild(frag, node);
-					}
+					const tail = text.slice(last);
+					if (tail) frag.appendChild(document.createTextNode(tail));
+					node.parentNode.replaceChild(frag, node);
 				}
-				const EMOJI_MAP = [
+			}
+			function linkifyUrls(root) {
+				if (!root) return;
+				const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+				const nodes = [];
+				while (walker.nextNode()) nodes.push(walker.currentNode);
+				for (const node of nodes) {
+					if (!node.parentElement) continue;
+					if (node.parentElement.closest(".mentionLink,.emojiInPost,script,style,a")) continue;
+					const text = node.nodeValue;
+					if (!text) continue;
+					const reg = /(^|[\s(])((?:https?:\/\/)?(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(?::\d+)?(?:\/[^\s<>"']*)?)/gi;
+					let m;
+					let hit = false;
+					while ((m = reg.exec(text))) { hit = true; }
+					if (!hit) continue;
+					reg.lastIndex = 0;
+					const frag = document.createDocumentFragment();
+					let last = 0;
+					while ((m = reg.exec(text))) {
+						const prefix = m[1] || "";
+						const url = m[2];
+						const before = text.slice(last, m.index);
+						if (before) frag.appendChild(document.createTextNode(before));
+						if (prefix) frag.appendChild(document.createTextNode(prefix));
+						const href = /^https?:\/\//i.test(url) ? url : "https://" + url;
+						const a = document.createElement("a");
+						a.href = href;
+						a.target = "_blank";
+						a.rel = "noopener noreferrer";
+						a.className = "postLink";
+						a.textContent = url;
+						frag.appendChild(a);
+						last = m.index + m[0].length;
+					}
+					const tail = text.slice(last);
+					if (tail) frag.appendChild(document.createTextNode(tail));
+					node.parentNode.replaceChild(frag, node);
+				}
+			}
+			const EMOJI_MAP = [
 					"happy",
 					"haha",
 					"sad",
@@ -6428,6 +6459,7 @@
 					await ensureAllUsersCache();
 					linkifyMentions(box);
 					renderEmojis(box);
+					linkifyUrls(box);
 					const loadBtn = box.querySelector(".loadImgBtn");
 					if (loadBtn) {
 						loadBtn.onclick = () => {
@@ -6445,6 +6477,7 @@
 							if (l) l.innerHTML = e ? meta.content : foldedText;
 							linkifyMentions(box);
 							renderEmojis(box);
+							linkifyUrls(box);
 							toggleBtn.textContent = e ? t("post_collapse") : t("post_expand");
 						};
 					}
@@ -7711,6 +7744,7 @@
 							parentEl.appendChild(div);
 							linkifyMentions(div);
 							renderEmojis(div);
+							linkifyUrls(div);
 							const userLink = div.querySelector(".userLink");
 							if (userLink) {
 								userLink.onclick = () => viewUser(c.author);
