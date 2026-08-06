@@ -15,7 +15,7 @@
 				border-radius: 999px;
 				background: var(--card);
 				color: var(--text);
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				font-size: 14px;
 				cursor: pointer;
 				outline: none;
@@ -34,6 +34,7 @@
 				--green: #0a0;
 				--grad: #0a0;
 				--active: #0a0;
+				--border: #ccc;
 				font-size: 18px;
 			}
 
@@ -42,6 +43,7 @@
 				--card: #222;
 				--text: #eee;
 				--sub: #aaa;
+				--border: #3a3a3a;
 				--lottery-bg: #3a3020;
 				--lottery-btn-bg: #2a2518;
 				--lottery-btn-text: #d4a017;
@@ -98,7 +100,7 @@
 				padding: 12px;
 				margin: 6px 0;
 				border-radius: 20px;
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				background: var(--card);
 				color: var(--text);
 				box-sizing: border-box;
@@ -161,7 +163,7 @@
 			#profileCard {
 				display: flex;
 				gap: 24px;
-				background: var(--card);
+				background: #e9e9e9;
 				padding: 28px 32px;
 				border-radius: 24px;
 				box-shadow: 0 8px 30px rgba(0, 0, 0, .1);
@@ -170,6 +172,97 @@
 				margin: 70px auto 16px auto;
 				box-sizing: border-box;
 				align-items: flex-start;
+				position: relative;
+			}
+
+			.card-bg-edit-btn {
+				position: absolute;
+				bottom: 16px;
+				right: 16px;
+				padding: 6px 14px;
+				border-radius: 999px;
+				border: none;
+				background: rgba(0, 0, 0, .55);
+				color: #fff;
+				font-size: 13px;
+				cursor: pointer;
+				opacity: 0;
+				transition: opacity .25s;
+				user-select: none;
+				z-index: 3;
+			}
+
+			#profileCard:hover .card-bg-edit-btn {
+				opacity: 1;
+			}
+
+			#profileLeft {
+				position: relative;
+			}
+
+			#profileLeft .avatar-edit-overlay {
+				position: absolute;
+				inset: 0;
+				border-radius: 50%;
+				border: none;
+				padding: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(0, 0, 0, .5);
+				color: #fff;
+				font-size: 13px;
+				cursor: pointer;
+				opacity: 0;
+				transition: opacity .25s;
+				user-select: none;
+				z-index: 2;
+				pointer-events: none;
+			}
+
+			#profileLeft:hover .avatar-edit-overlay {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			body.dark #profileCard {
+				background: var(--card);
+			}
+
+			#profilePage #profileCard.has-card-bg {
+				color: #fff;
+				overflow: hidden;
+				text-shadow: 0 1px 3px rgba(0, 0, 0, .7);
+			}
+
+			#profilePage #profileCard.has-card-bg::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				border-radius: 24px;
+				background: linear-gradient(rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)), var(--card-bg-img) center/cover no-repeat;
+				filter: blur(4px);
+				transform: scale(1.08);
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			#profilePage #profileCard.has-card-bg > #profileLeft,
+			#profilePage #profileCard.has-card-bg > #profileRight {
+				position: relative;
+				z-index: 1;
+			}
+
+			#profilePage #profileCard.has-card-bg #profileMeta {
+				color: rgba(255, 255, 255, .92);
+			}
+
+			#profilePage #profileCard.has-card-bg #profileStats a {
+				color: #fff;
+			}
+
+			#profilePage #profileCard.has-card-bg #profileStats a:hover {
+				color: var(--green);
 			}
 
 			#profileLeft {
@@ -259,7 +352,7 @@
 				height: 32px;
 				padding: 0 14px;
 				border-radius: 999px;
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				background: var(--card);
 				color: var(--sub);
 				cursor: pointer;
@@ -335,10 +428,24 @@
 			}
 
 			#profilePage #levelProgress {
-				width: 100%;
+				width: 80%;
+				max-width: 700px;
+				background: var(--card);
+				border-radius: 20px;
+				padding: 18px 22px;
+				margin: 0 auto 12px auto;
+				box-sizing: border-box;
+				box-shadow: 0 4px 16px rgba(0, 0, 0, .06);
 			}
 
 			@media (max-width: 600px) {
+				.roleBadge {
+					width: 12px;
+					height: 12px;
+					font-size: 8px;
+					margin-left: 3px;
+				}
+
 				#profileCard {
 					flex-direction: column;
 					align-items: center;
@@ -545,6 +652,9 @@
 				font-size: 18px;
 				border-radius: 0;
 				border-top: 3px solid transparent;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
 			}
 
 			.bottom button.active {
@@ -553,14 +663,44 @@
 				border-top-color: var(--green);
 			}
 
+			.navIcon {
+				width: 20px;
+				height: 20px;
+				display: block;
+				margin: 0 4px;
+				opacity: 0.6;
+			}
+
+			body.dark .navIcon {
+				filter: brightness(0) invert(1);
+				opacity: 0.78;
+			}
+
+			.bottom button.active .navIcon {
+				filter: brightness(0) invert(1);
+				opacity: 1;
+			}
+
 			.modal {
 				position: fixed;
 				inset: 0;
 				background: rgba(0, 0, 0, .4);
+				backdrop-filter: blur(8px);
+				-webkit-backdrop-filter: blur(8px);
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				z-index: 99999;
+				opacity: 1;
+				transition: opacity .2s ease, visibility 0s;
+			}
+
+			.modal.hidden {
+				display: flex !important;
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+				transition: opacity .2s ease, visibility 0s .2s;
 			}
 
 			.modalBox {
@@ -570,6 +710,14 @@
 				width: 300px;
 				max-width: calc(100vw - 40px);
 				text-align: center;
+				opacity: 1;
+				transform: scale(1);
+				transition: opacity .2s ease, transform .2s ease;
+			}
+
+			.modal.hidden .modalBox {
+				opacity: 0;
+				transform: scale(.94);
 			}
 
 			.userLink {
@@ -631,7 +779,7 @@
 				background: var(--bg);
 				cursor: pointer;
 				font-size: 14px;
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				transition: .2s;
 			}
 
@@ -893,7 +1041,7 @@
 				display: flex;
 				justify-content: space-between;
 				padding: 8px 0;
-				border-bottom: 1px solid #ccc;
+				border-bottom: 1px solid var(--border);
 				cursor: pointer;
 			}
 
@@ -998,11 +1146,12 @@
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
-				height: 16px;
-				padding: 0 6px;
+				width: 15px;
+				height: 15px;
+				padding: 0;
 				margin-left: 4px;
-				border-radius: 999px;
-				font-size: 10px;
+				border-radius: 50%;
+				font-size: 9px;
 				font-weight: 700;
 				border: none;
 				vertical-align: middle;
@@ -1022,11 +1171,6 @@
 			.roleBadge.admin {
 				background-color: #ff8a80;
 				color: #fff;
-				border-radius: 50%;
-				width: 18px;
-				height: 18px;
-				padding: 0;
-				font-size: 10px;
 			}
 
 			.roleBadge.admin::before {
@@ -1841,7 +1985,7 @@
 				margin: 0 0 10px 0;
 				height: 42px;
 				border-radius: 20px;
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				padding: 0 14px;
 				background: var(--card);
 				color: var(--text);
@@ -1867,7 +2011,7 @@
 				padding: 6px 14px;
 				border-radius: 999px;
 				background: var(--card);
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				cursor: pointer;
 				user-select: none;
 				white-space: nowrap;
@@ -1887,19 +2031,323 @@
 				border-color: var(--green);
 			}
 
-			.searchRow {
+			#postTimeline {
+				display: none;
+				align-items: center;
+				gap: 12px;
+				margin: 10px auto 2px auto;
+				width: 100%;
+				max-width: 700px;
+				box-sizing: border-box;
+				padding: 2px 4px;
+				overflow-x: auto;
+				scrollbar-width: none;
+				-ms-overflow-style: none;
+				scroll-snap-type: x proximity;
+			}
+
+			#postTimeline::-webkit-scrollbar {
+				display: none;
+			}
+
+			#postTimeline.show {
+				display: flex;
+			}
+
+			.timelineAll {
+				flex-shrink: 0;
+				height: 30px;
+				padding: 0 16px;
+				border-radius: 999px;
+				border: 1px solid var(--border);
+				background: var(--card);
+				color: var(--sub);
+				font-size: 13px;
+				cursor: pointer;
+				transition: .2s;
+				scroll-snap-align: start;
+			}
+
+			.timelineAll:hover {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+
+			.timelineAll.active {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+
+			.timelineLine {
+				position: relative;
+				flex: 1;
+				min-width: 430px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 6px 6px 2px 6px;
+			}
+
+			.timelineLine::before {
+				content: "";
+				position: absolute;
+				left: 6px;
+				right: 6px;
+				top: 15px;
+				height: 2px;
+				border-radius: 2px;
+				background: linear-gradient(90deg, var(--green), rgba(0, 0, 0, .1));
+			}
+
+			body.dark .timelineLine::before {
+				background: linear-gradient(90deg, var(--green), rgba(255, 255, 255, .15));
+			}
+
+			.timelineNode {
+				position: relative;
+				z-index: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				cursor: pointer;
+				background: none;
+				border: none;
+				padding: 0;
+				transition: transform .2s;
+				scroll-snap-align: center;
+			}
+
+			.timelineNode:hover {
+				transform: translateY(-2px);
+			}
+
+			.timelineNode .tl-dot {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: var(--card);
+				border: 2px solid var(--green);
+				box-shadow: 0 0 0 3px var(--bg);
+				transition: .2s;
+			}
+
+			.timelineNode:hover .tl-dot {
+				transform: scale(1.3);
+			}
+
+			.timelineNode.empty .tl-dot {
+				border-color: rgba(0, 0, 0, .15);
+				background: rgba(0, 0, 0, .06);
+			}
+
+			body.dark .timelineNode.empty .tl-dot {
+				border-color: rgba(255, 255, 255, .2);
+				background: rgba(255, 255, 255, .08);
+			}
+
+			.timelineNode.active .tl-dot {
+				background: var(--green);
+				border-color: var(--green);
+				box-shadow: 0 0 0 3px var(--bg), 0 0 0 6px rgba(0, 170, 0, .25);
+			}
+
+			.timelineNode .tl-label {
+				font-size: 10px;
+				color: var(--sub);
+				white-space: nowrap;
+				line-height: 1;
+			}
+
+			.timelineNode.active .tl-label {
+				color: var(--green);
+				font-weight: 700;
+			}
+
+			.timelineNode.empty .tl-label {
+				color: rgba(0, 0, 0, .25);
+			}
+
+			body.dark .timelineNode.empty .tl-label {
+				color: rgba(255, 255, 255, .25);
+			}
+
+			#searchBall {
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				padding: 0;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				background: var(--card);
+				border: 1px solid var(--border);
+				cursor: pointer;
+				flex-shrink: 0;
+				transition: .2s;
+			}
+
+			#searchBall img {
+				width: 18px;
+				height: 18px;
+			}
+
+			#searchBall:hover {
+				background: var(--green);
+				border-color: var(--green);
+			}
+
+			#searchBall:hover img {
+				filter: brightness(0) invert(1);
+			}
+
+			body.dark #searchBall img {
+				filter: brightness(0) invert(1);
+			}
+
+			#layoutBtn {
+				height: 36px;
+				padding: 0 14px;
+				border-radius: 999px;
+				background: var(--card);
+				color: var(--text);
+				border: 1px solid var(--border);
+				font-size: 14px;
+				white-space: nowrap;
+				flex-shrink: 0;
+			}
+
+			#layoutBtn:hover {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+
+			#searchOverlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, .55);
+				backdrop-filter: blur(12px);
+				-webkit-backdrop-filter: blur(12px);
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+				z-index: 99999;
+				cursor: pointer;
+				opacity: 1;
+				transition: opacity .2s ease, visibility 0s;
+			}
+
+			#searchOverlay.hidden {
+				display: flex !important;
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+				transition: opacity .2s ease, visibility 0s .2s;
+			}
+
+			#searchOverlay:not(.hidden) {
+				animation: searchFadeIn .25s ease;
+			}
+
+			#searchOverlay:not(.hidden) #searchSheet {
+				animation: islandDrop .38s cubic-bezier(.32, .72, .34, 1);
+			}
+
+			@keyframes searchFadeIn {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			@keyframes islandDrop {
+				from {
+					opacity: 0;
+					transform: translateY(-28px) scale(.92);
+				}
+				to {
+					opacity: 1;
+					transform: none;
+				}
+			}
+
+			#searchSheet {
+				width: min(720px, 94vw);
+				margin-top: 12px;
+				min-height: 38vh;
+				background: var(--card);
+				border: 1px solid rgba(255, 255, 255, .12);
+				border-radius: 36px;
+				padding: 28px 22px;
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: column;
+				align-items: stretch;
+				justify-content: center;
+				gap: 16px;
+				box-shadow: 0 24px 70px rgba(0, 0, 0, .45);
+				cursor: default;
+			}
+
+			#searchSheet #postTimeline {
+				width: 100%;
+				max-width: none;
+				margin: 0;
+				padding: 2px 0;
+				align-self: center;
+			}
+
+			#searchSheet #randomPostBtn {
+				margin-top: 2px;
+				background: var(--bg);
+				color: var(--text);
+				border: 1px solid var(--border);
+				border-radius: 999px;
+				height: 38px;
+			}
+
+			#searchSheet #randomPostBtn:hover {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+
+			.searchRowInner {
 				display: flex;
 				gap: 10px;
-				margin-bottom: 10px;
+				align-items: center;
+				width: 100%;
 			}
 
-			.searchRow .postSearch {
+			.searchRowInner .postSearch {
 				flex: 1;
 				margin: 0;
+				height: 44px;
+				border-radius: 999px;
+				font-size: 15px;
+				background: var(--bg);
 			}
 
-			.searchRow button {
+			.searchRowInner #searchBtn {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				padding: 0;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
 				flex-shrink: 0;
+			}
+
+			.searchRowInner #searchBtn img {
+				width: 20px;
+				height: 20px;
+				filter: brightness(0) invert(1);
 			}
 
 			.toggleLongPost.inline {
@@ -1944,7 +2392,7 @@
 				align-items: center;
 				justify-content: space-between;
 				gap: 10px;
-				flex-wrap: wrap;
+				flex-wrap: nowrap;
 			}
 
 			#logo {
@@ -1969,7 +2417,7 @@
 				border-radius: 999px;
 				background: var(--card);
 				color: var(--text);
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				font-size: 14px;
 				white-space: nowrap;
 			}
@@ -2157,7 +2605,7 @@
 				border-radius: 999px;
 				background: var(--card);
 				color: var(--text);
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				font-size: 14px;
 				white-space: nowrap;
 			}
@@ -2420,7 +2868,7 @@
 
 				.bottom button {
 					height: 100%;
-					padding-bottom: 40px;
+					padding-bottom: 0;
 				}
 
 				#pname {
@@ -2544,7 +2992,6 @@
 					display: none;
 				}
 
-				#postTagBar,
 				#tagBar {
 					display: none !important;
 				}
@@ -2621,20 +3068,32 @@
 					border-radius: 10px;
 				}
 
-				.searchRow {
-					gap: 6px;
+				#searchBall {
+					width: 32px;
+					height: 32px;
 				}
 
-				.searchRow .postSearch {
-					height: 34px;
+				#searchBall img {
+					width: 15px;
+					height: 15px;
+				}
+
+				#searchSheet {
+					margin-top: 6px;
+					min-height: 26vh;
+					border-radius: 26px;
+					padding: 22px 16px;
+					gap: 12px;
+				}
+
+				.searchRowInner .postSearch {
+					height: 38px;
 					font-size: 14px;
-					padding: 0 10px;
 				}
 
-				.searchRow button {
-					height: 34px;
-					padding: 0 10px;
-					font-size: 12px;
+				.searchRowInner #searchBtn {
+					width: 38px;
+					height: 38px;
 				}
 
 				.postSearch {
@@ -2650,7 +3109,7 @@
 				}
 
 				#logo {
-					font-size: 30px;
+					font-size: 20px;
 				}
 
 				#logo img {
@@ -2780,7 +3239,7 @@
 				padding: 0;
 				border-radius: 50%;
 				background: var(--card);
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				cursor: pointer;
 				font-size: 18px;
 				line-height: 1;
@@ -2801,7 +3260,7 @@
 				position: fixed;
 				z-index: 99999;
 				background: var(--card);
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				border-radius: 16px;
 				padding: 10px;
 				box-shadow: 0 8px 30px rgba(0, 0, 0, .15);
@@ -2896,7 +3355,7 @@
 				font-size: 14px;
 				padding: 0 10px;
 				border-radius: 16px;
-				border: 1px solid #ccc;
+				border: 1px solid var(--border);
 				background: var(--card);
 				color: var(--text);
 				box-sizing: border-box;
@@ -3046,15 +3505,6 @@
 				padding: 0 8px;
 			}
 
-			html.watch .searchRow {
-				gap: 4px;
-				margin-bottom: 6px;
-			}
-
-			html.watch .searchRow button {
-				padding: 0 8px;
-			}
-
 			html.watch .postTagChip {
 				padding: 4px 10px;
 				font-size: 11px;
@@ -3109,10 +3559,6 @@
 
 			html.watch #pname {
 				font-size: 22px;
-			}
-
-			html.watch #levelProgress {
-				margin: 8px auto;
 			}
 
 			html.watch .profileBtnGrid {
@@ -3283,11 +3729,11 @@
 	</head>
 	<body>
 		<div class="bottom hidden" id="nav">
-			<button id="homeBtn">首页</button>
-			<button id="editorBtn">发布</button>
-			<button id="showUsersBtn">排行</button>
-			<button id="discoverBtn">探索</button>
-			<button id="profileBtn">我的</button>
+			<button id="homeBtn" title="首页"><img class="navIcon" src="icon/home.svg" alt="首页"></button>
+			<button id="editorBtn" title="发布"><img class="navIcon" src="icon/editor.svg" alt="发布"></button>
+			<button id="showUsersBtn" title="排行"><img class="navIcon" src="icon/rank.svg" alt="排行"></button>
+			<button id="discoverBtn" title="探索"><img class="navIcon" src="icon/discover.svg" alt="探索"></button>
+			<button id="profileBtn" title="我的"><img class="navIcon" src="icon/user.svg" alt="我的"></button>
 		</div>
 		<div id="welcomePage" class="center">
 			<div class="big">
@@ -3343,18 +3789,16 @@
 					<img src="icon.svg" />
 					<span id="mainLogoText">Jacky 论坛</span>
 				</div>
-				<select id="langSelectMain" class="langSelect"></select>
+				<button id="searchBall" type="button" title="搜索">
+					<img src="icon/search.svg" alt="搜索" onerror="this.style.display='none'">
+				</button>
+				<button id="layoutBtn" type="button">信息流</button>
 				<button id="onlineMini" type="button">在线 0</button>
 				<button id="notifBtn" type="button">
 					通知 <span id="notifBadge" hidden>0</span>
 				</button>
 			</div>
 			<div id="postFilterBar" class="postFilterBar">
-				<div class="searchRow">
-					<input id="postSearch" class="postSearch" placeholder="搜索帖子内容或标签，或输入 @用户名">
-					<button id="searchBtn">搜索</button>
-					<button id="layoutBtn" type="button">信息流</button>
-				</div>
 				<div id="postTagBar" class="postTagBar"></div>
 			</div>
 			<div id="notice">
@@ -3369,8 +3813,11 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span>
-							· Bug修复<br>
-							· 自动识别链接<br>
+							· 全新搜索中心<br>
+							· 全新底栏图标<br>
+							· 帖子的时间线<br>
+							· 多处界面美化<br>
+							· 修复部分漏洞<br>
 						</span>
 					</details>
 				</div>
@@ -3402,8 +3849,6 @@
 						<b id="fortuneBadLabel">忌：</b><span id="fortuneBad"></span>
 					</div>
 				</div>
-				<button id="randomPostBtn" style="margin-top:8px;width:100%;font-size:14px;">随机帖子</button>
-				<button id="announcementBtn" style="margin-top:6px;width:100%;font-size:14px;">最新公告</button>
 			</div>
 			<div id="mobileSideBtn">☰</div>
 			<div id="posts"></div>
@@ -3463,7 +3908,7 @@
 				</div>
 				<input id="rankSearch" class="rankSearch" placeholder="搜索用户名..." autocomplete="off">
 				<div
-					style="display:flex;font-weight:bold;padding:8px 0;border-bottom:1px solid #ccc;width:100%;max-width:500px;">
+					style="display:flex;font-weight:bold;padding:8px 0;border-bottom:1px solid var(--border);width:100%;max-width:500px;">
 					<div style="flex:1;" id="rankColName">用户名</div>
 					<div style="width:150px;text-align:right;" id="rankColValue">金币数</div>
 				</div>
@@ -3483,10 +3928,10 @@
 						<button id="logoutBtn">登出</button>
 					</div>
 					<div id="profileMeta"></div>
-					<div id="levelProgress"></div>
 					<div id="profileStats"></div>
 				</div>
 			</div>
+			<div id="levelProgress"></div>
 			<div id="profileBio"></div>
 			<div id="profileActions"></div>
 			<div id="userPosts"></div>
@@ -3541,6 +3986,18 @@
 			<div class="modalBox">
 				<div id="modalText"></div>
 				<div style="margin-top:20px"><button id="closeModal">关闭</button></div>
+			</div>
+		</div>
+		<div id="searchOverlay" class="hidden">
+			<div id="searchSheet">
+				<div class="searchRowInner">
+					<input id="postSearch" class="postSearch" placeholder="搜索帖子内容或标签，或输入 @用户名">
+					<button id="searchBtn" type="button" title="搜索">
+						<img src="icon/search.svg" alt="搜索" onerror="this.style.display='none'">
+					</button>
+				</div>
+				<div id="postTimeline"></div>
+				<button id="randomPostBtn" style="width:100%;font-size:14px;">随机帖子</button>
 			</div>
 		</div>
 		<div id="captchaModal" class="modal hidden">
@@ -3667,41 +4124,6 @@
 		</script>
 		<script>
 			const TRANSLATIONS = {
-				nav_home: {
-					zh: "首页",
-					en: "Home",
-					es: "Inicio",
-					de: "Startseite",
-					"zh-TW": "首頁"
-				},
-				nav_post: {
-					zh: "发布",
-					en: "Post",
-					es: "Publicar",
-					de: "Posten",
-					"zh-TW": "發佈"
-				},
-				nav_rankings: {
-					zh: "排行",
-					en: "Rankings",
-					es: "Clasificación",
-					de: "Rangliste",
-					"zh-TW": "排行"
-				},
-				nav_discover: {
-					zh: "探索",
-					en: "Discover",
-					es: "Explorar",
-					de: "Entdecken",
-					"zh-TW": "探索"
-				},
-				nav_profile: {
-					zh: "我的",
-					en: "My Profile",
-					es: "Mi Perfil",
-					de: "Mein Profil",
-					"zh-TW": "我的"
-				},
 				login_title: {
 					zh: "Jacky 论坛",
 					en: "Jacky Forum",
@@ -4878,6 +5300,55 @@
 					de: "Avatar-URL muss mit http:// oder https:// beginnen",
 					"zh-TW": "頭像鏈接必須以 http:// 或 https:// 開頭"
 				},
+				card_bg_title: {
+					zh: "修改背景图",
+					en: "Edit Background",
+					es: "Editar fondo",
+					de: "Hintergrund bearbeiten",
+					"zh-TW": "修改背景圖"
+				},
+				card_bg_url_ph: {
+					zh: "背景图链接（http/https）",
+					en: "Background URL (http/https)",
+					es: "URL del fondo (http/https)",
+					de: "Hintergrund-URL (http/https)",
+					"zh-TW": "背景圖鏈接（http/https）"
+				},
+				card_bg_invalid: {
+					zh: "链接必须以 http:// 或 https:// 开头",
+					en: "URL must start with http:// or https://",
+					es: "La URL debe comenzar con http:// o https://",
+					de: "URL muss mit http:// oder https:// beginnen",
+					"zh-TW": "鏈接必須以 http:// 或 https:// 開頭"
+				},
+				card_bg_remove: {
+					zh: "移除背景",
+					en: "Remove Background",
+					es: "Quitar fondo",
+					de: "Hintergrund entfernen",
+					"zh-TW": "移除背景"
+				},
+				timeline_today: {
+					zh: "今天",
+					en: "Today",
+					es: "Hoy",
+					de: "Heute",
+					"zh-TW": "今天"
+				},
+				settings_lang: {
+					zh: "语言",
+					en: "Language",
+					es: "Idioma",
+					de: "Sprache",
+					"zh-TW": "語言"
+				},
+				timeline_posts: {
+					zh: "{0} 帖",
+					en: "{0} posts",
+					es: "{0} publicaciones",
+					de: "{0} Beiträge",
+					"zh-TW": "{0} 帖"
+				},
 				bg_picker_title: {
 					zh: "背景",
 					en: "Background",
@@ -5386,8 +5857,6 @@
 				if (s) s.value = lang;
 				const r = document.getElementById("langSelectReg");
 				if (r) r.value = lang;
-				const m = document.getElementById("langSelectMain");
-				if (m) m.value = lang;
 				if (typeof refreshUILanguage === "function") refreshUILanguage();
 			}
 
@@ -5424,7 +5893,6 @@
 				}
 				renderLangSelect(document.getElementById("langSelect"));
 				renderLangSelect(document.getElementById("langSelectReg"));
-				renderLangSelect(document.getElementById("langSelectMain"));
 				document.title = PAGE_TITLE_TRANS[currentLang] || PAGE_TITLE_TRANS.zh;
 
 				function getPostsPerPage() {
@@ -5456,8 +5924,9 @@
 					"#f9eaff"
 				];
 				let selectedPostBg = "";
-				let postSearch = "";
-				let activePostTag = "全部";
+	let postSearch = "";
+	let activePostTag = "全部";
+	let activePostDay = "";
 				const filterTags = [
 					"全部",
 					"关注",
@@ -5595,13 +6064,7 @@
 						const el = document.getElementById(id);
 						if (el) el.innerHTML = val;
 					};
-					setT("homeBtn", t("nav_home"));
-					setT("editorBtn", t("nav_post"));
-					setT("showUsersBtn", t("nav_rankings"));
-					setT("discoverBtn", t("nav_discover"));
-					setT("profileBtn", t("nav_profile"));
-					setT("logoutBtn", t("profile_logout"));
-					setT("welcomeTitle", t("login_title"));
+				setT("welcomeTitle", t("login_title"));
 					setPH("loginUser", t("login_username"));
 					setPH("loginPass", t("login_password"));
 					setT("loginBtn", t("login_btn"));
@@ -5621,7 +6084,10 @@
 					setT("mainLogoText", t("login_title"));
 					setT("editorLogoText", t("editor_send"));
 					setPH("postSearch", t("home_search_ph"));
-					setT("searchBtn", t("home_search_btn"));
+					const sb = $("searchBtn");
+					if (sb) sb.title = t("home_search_btn");
+					const sball = $("searchBall");
+					if (sball) sball.title = t("home_search_btn");
 					syncLayoutBtn();
 					setPH("text", t("editor_ph"));
 					setT("insertImgBtn", t("editor_insert_img"));
@@ -5629,7 +6095,6 @@
 					setPH("customTag", t("editor_custom_tag_ph"));
 					setT("sendBtn", t("editor_send"));
 					setT("randomPostBtn", t("random_post_btn"));
-					setT("announcementBtn", t("announcement_btn"));
 					setT("fortuneBtn", t("fortune_btn"));
 					setT("fortuneTitle", t("fortune_title"));
 					setT("fortuneGoodLabel", t("fortune_good") + "：");
@@ -5642,7 +6107,6 @@
 					setT("discoverLogoText", t("discover_title"));
 					setT("noticeTitle", t("notice_title"));
 					setH("noticeWelcome", t("notice_welcome"));
-					setT("noticeUpdates", t("notice_updates"));
 					setT("statsTitle", t("stats_title"));
 					const ss = document.getElementById("statsBox");
 					if (ss) {
@@ -5671,9 +6135,9 @@
 						if (typeof refreshNotificationBadge === "function" && currentUser) refreshNotificationBadge();
 					}
 					renderLangSelect(document.getElementById("langSelect"));
-					renderLangSelect(document.getElementById("langSelectReg"));
-					renderLangSelect(document.getElementById("langSelectMain"));
-					setT("closeModal", t("modal_close"));
+				renderLangSelect(document.getElementById("langSelect"));
+				renderLangSelect(document.getElementById("langSelectReg"));
+				setT("closeModal", t("modal_close"));
 					setT("captchaBtn", t("captcha_btn"));
 					setT("captchaTitle", t("captcha_modal_title"));
 					setT("captchaHint", t("captcha_slider_hint"));
@@ -6135,41 +6599,41 @@
 			}
 			const EMOJI_MAP = [
 					"happy",
-					"haha",
+					"hmm",
+					"sweat",
 					"sad",
 					"cry",
 					"sob",
-					"scared",
 					
-					"hmm",
-					"sweat",
-					"love",
-					"amazed",
+					"haha",
 					"cool",
 					"pirate",
+					"eat",
+					"love",
+					"amazed",
 					
-					
+					"scared",
 					"eyeroll",
 					"updown",
+					"blank",
+					"angry",
+					"dead",
+					
 					"right",
 					"wrong",
 					"ok",
 					"ke",
+					"good",
+					"bad",
 					
-					"angry",
-					"dead",
 					"alien",
 					"bot",
 					"ask",
-					"blank",
-					
-					"good",
-					"bad",
 					"doge",
 					"chill",
 					"strange",
-					"maga",
 					
+					"maga",
 					"jesus",
 					"14",
 					"saka",
@@ -6241,6 +6705,7 @@
 
 					activePostTag = "全部";
 					postSearch = "";
+					activePostDay = "";
 					const search = $("postSearch");
 					if (search) search.value = "";
 					renderPostFilters();
@@ -6266,6 +6731,23 @@
 					setActive("showUsersBtn");
 				};
 				$("notifBtn").onclick = openNotifications;
+				$("searchBall").onclick = () => {
+					$("searchOverlay").classList.remove("hidden");
+					const input = $("postSearch");
+					input.value = postSearch;
+					input.focus();
+					input.select();
+					if (typeof renderPostTimeline === "function") renderPostTimeline();
+				};
+				function closeSearchSheet() {
+					$("searchOverlay").classList.add("hidden");
+				}
+				$("searchOverlay").onclick = e => {
+					if (e.target === $("searchOverlay")) closeSearchSheet();
+				};
+				document.addEventListener("keydown", e => {
+					if (e.key === "Escape" && !$("searchOverlay").classList.contains("hidden")) closeSearchSheet();
+				});
 				$("layoutBtn").onclick = () => {
 					postLayout = postLayout === "list" ? "dense" : "list";
 					localStorage.setItem("postLayout", postLayout);
@@ -6631,6 +7113,11 @@
 						return modal(t("post_fail", e.message));
 					}
 					await notifyMentions(finalContent, postId, null);
+					try {
+						for (const k of Object.keys(sessionStorage)) {
+							if (k.startsWith("tlDays_")) sessionStorage.removeItem(k);
+						}
+					} catch {}
 					$("text").value = "";
 					$("customTag").value = "";
 					selectedTags = [];
@@ -6720,6 +7207,7 @@
 					if (activePostTag && activePostTag !== "全部" && activePostTag !== "其它" && activePostTag !== "关注") q +=
 						"&tag=" + encodeURIComponent(activePostTag);
 					if (postSearch) q += "&search=" + encodeURIComponent(postSearch);
+					if (activePostDay) q += "&day=" + activePostDay + "&tz=" + (-new Date().getTimezoneOffset());
 					return q;
 				}
 				async function openNotificationPost(postId) {
@@ -7320,7 +7808,7 @@
 					for (const d of defaultTags) tagDisplayMap[d] = t(defaultTagKeys[d]) || d;
 					search.value = postSearch;
 					tagBar.innerHTML = "";
-					const mobileOnlyTags = ["全部", "关注"];
+					const mobileOnlyTags = ["全部", "关注", "公告"];
 					for (const tag of filterTags) {
 						if (isMobile && !mobileOnlyTags.includes(tag)) continue;
 						const chip = document.createElement("span");
@@ -7329,6 +7817,7 @@
 						chip.onclick = () => {
 							activePostTag = tag;
 							postSearch = "";
+							activePostDay = "";
 							$("postSearch").value = "";
 							renderPostFilters();
 							loadStats();
@@ -7338,6 +7827,7 @@
 					}
 					$("searchBtn").onclick = () => {
 						postSearch = search.value.trim();
+						activePostDay = "";
 						const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
 						if (matchedTag) {
 							activePostTag = matchedTag;
@@ -7346,10 +7836,12 @@
 						}
 						loadStats();
 						loadPosts(1);
+						closeSearchSheet();
 					};
 					search.onkeydown = e => {
 						if (e.key === "Enter") {
 							postSearch = search.value.trim();
+							activePostDay = "";
 							const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
 							if (matchedTag) {
 								activePostTag = matchedTag;
@@ -7358,8 +7850,86 @@
 							}
 							loadStats();
 							loadPosts(1);
+							closeSearchSheet();
 						}
 					};
+					if (typeof renderPostTimeline === "function") renderPostTimeline();
+				}
+				async function renderPostTimeline() {
+					const el = $("postTimeline");
+					if (!el) return;
+					try {
+						const tz = -new Date().getTimezoneOffset();
+						const cacheKey = "tlDays_" + tz;
+						let cached = null;
+						try {
+							const raw = sessionStorage.getItem(cacheKey);
+							if (raw) {
+								cached = JSON.parse(raw);
+								if (Date.now() - cached.ts > 5 * 60 * 1000) cached = null;
+							}
+						} catch {}
+						let days = cached ? cached.data : null;
+						if (!days) {
+							days = await apiGet("/api/posts/days?days=7&tz=" + tz);
+							try {
+								sessionStorage.setItem(cacheKey, JSON.stringify({
+									ts: Date.now(),
+									data: days
+								}));
+							} catch {}
+						}
+						if (!Array.isArray(days) || !days.length) {
+							el.classList.remove("show");
+							return;
+						}
+						const todayLocal = new Date(Date.now() + tz * 60000).toISOString().slice(0, 10);
+						el.innerHTML = "";
+						el.classList.add("show");
+						const allBtn = document.createElement("button");
+						allBtn.type = "button";
+						allBtn.className = "timelineAll" + (activePostDay ? "" : " active");
+						allBtn.textContent = t("filter_all");
+						allBtn.onclick = () => {
+							if (!activePostDay) return;
+							activePostDay = "";
+							renderPostFilters();
+							loadStats();
+							loadPosts(1);
+							closeSearchSheet();
+						};
+						el.appendChild(allBtn);
+						const line = document.createElement("div");
+						line.className = "timelineLine";
+						for (const d of days) {
+							const isActive = activePostDay === d.day;
+							const node = document.createElement("button");
+							node.type = "button";
+							node.className = "timelineNode" + (d.count ? "" : " empty") + (isActive ? " active" : "");
+							const label = d.day === todayLocal ? t("timeline_today") : d.day.slice(5).replace("-", "/");
+							node.title = t("timeline_posts", d.count) + " · " + d.day;
+							node.innerHTML = `<span class="tl-dot"></span><span class="tl-label">${label}</span>`;
+							node.onclick = () => {
+								if (activePostDay === d.day) {
+									activePostDay = "";
+								} else {
+									activePostDay = d.day;
+									activePostTag = "全部";
+									postSearch = "";
+									const s = $("postSearch");
+									if (s) s.value = "";
+								}
+							renderPostFilters();
+							loadStats();
+							loadPosts(1);
+							closeSearchSheet();
+						};
+						line.appendChild(node);
+						}
+						el.appendChild(line);
+					} catch {
+						el.classList.remove("show");
+					}
 				}
 				async function fetchPostPage(page = 1, perPage = getPostsPerPage()) {
 					let authorsParam = "";
@@ -8197,6 +8767,10 @@
 									<button class="settingsThemeBtn" data-theme="dark">${t("profile_theme_dark")}</button>
 								</div>
 							</div>
+							<div class="settingsCard">
+								<div class="settingsLabel">${t("settings_lang")}</div>
+								<select id="settingsLangSelect" class="langSelect" style="width:100%;margin-top:6px;"></select>
+							</div>
 							<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
 								<button class="settingsLinkBtn" id="setAvatarBtn">${t("profile_edit_avatar")}</button>
 								<button class="settingsLinkBtn" id="setBioBtn">${t("profile_edit_desc")}</button>
@@ -8208,12 +8782,18 @@
 								</div>
 							</div>
 							<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
+								<button class="settingsLinkBtn" id="setCardBgBtn">${t("card_bg_title")}</button>
+								<button class="settingsLinkBtn" id="setCardBgClearBtn">${t("card_bg_remove")}</button>
+							</div>
+							<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
 								<button class="settingsLinkBtn" id="setAboutBtn">${t("profile_about")}</button>
 								<button class="settingsLinkBtn" id="setSponsorBtn">${t("profile_sponsor")}</button>
 							</div>
 							<button class="settingsLinkBtn" id="setDownloadBtn" style="margin-top:6px;">${t("profile_download")}</button>
 						</div>
 					`);
+					const langSel = box.querySelector("#settingsLangSelect");
+					if (langSel) renderLangSelect(langSel);
 					box.querySelectorAll(".settingsThemeBtn").forEach(btn => {
 						btn.classList.toggle("active", btn.dataset.theme === themeClass);
 						btn.onclick = () => {
@@ -8263,6 +8843,25 @@
 							$("settingsFollowPublic").checked = !$("settingsFollowPublic").checked;
 						}
 					};
+					$("setCardBgBtn").onclick = () => {
+						$("modal").classList.add("hidden");
+						openCardBgEditor(user);
+					};
+					$("setCardBgClearBtn").onclick = async () => {
+						try {
+							await apiPut("/api/users/" + currentUser.id, {
+								card_bg: null
+							});
+						} catch (e) {
+							return modal(t("save_fail", e.message));
+						}
+						currentUser.card_bg = null;
+						if (user) user.card_bg = null;
+						const card = $("profileCard");
+						card.classList.remove("has-card-bg");
+						card.style.removeProperty("--card-bg-img");
+						$("modal").classList.add("hidden");
+					};
 					$("setAboutBtn").onclick = () => {
 						box.style.width = "800px";
 						modal(
@@ -8288,6 +8887,10 @@
 					$("profileStats").innerHTML = "";
 					document.getElementById("profileActions").innerHTML = "";
 					$("logoutBtn").style.display = "none";
+					const profileCardEl = $("profileCard");
+					profileCardEl.classList.remove("has-card-bg");
+					profileCardEl.style.removeProperty("--card-bg-img");
+					document.querySelectorAll("#profileLeft .avatar-edit-overlay, .card-bg-edit-btn").forEach(el => el.remove());
 					let user;
 					try {
 						user = await apiGet("/api/users/" + uid + (currentUser ? "?userId=" + currentUser.id : ""));
@@ -8305,8 +8908,39 @@
 					const avatarUrl = getAvatar(user);
 					$("profileAvatar").src = avatarUrl;
 					$("profileAvatar").onclick = () => openViewer(avatarUrl);
+					const cardBg = user.card_bg ? String(user.card_bg).trim() : "";
+					if (cardBg && /^https?:\/\//i.test(cardBg)) {
+						const probe = new Image();
+						probe.onload = () => {
+							profileCardEl.style.setProperty("--card-bg-img", 'url("' + cardBg.replace(/["\\]/g, "") + '")');
+							profileCardEl.classList.add("has-card-bg");
+						};
+						probe.onerror = () => {
+							profileCardEl.classList.remove("has-card-bg");
+							profileCardEl.style.removeProperty("--card-bg-img");
+						};
+						probe.src = cardBg;
+					} else {
+						profileCardEl.classList.remove("has-card-bg");
+						profileCardEl.style.removeProperty("--card-bg-img");
+					}
 					history.pushState(null, "", "?uid=" + uid);
 					const isSelf = currentUser && uid === currentUser.id;
+					if (isSelf) {
+						const avOverlay = document.createElement("button");
+						avOverlay.className = "avatar-edit-overlay";
+						avOverlay.textContent = t("profile_edit_avatar");
+						avOverlay.onclick = () => {
+							$("modal").classList.add("hidden");
+							openAvatarEditor();
+						};
+						document.getElementById("profileLeft").appendChild(avOverlay);
+						const bgBtn = document.createElement("button");
+						bgBtn.className = "card-bg-edit-btn";
+						bgBtn.textContent = t("card_bg_title");
+						bgBtn.onclick = () => openCardBgEditor(user);
+						profileCardEl.appendChild(bgBtn);
+					}
 					$("pname").innerHTML = user.name + `<span class="userLevel">${getUserLevel(user.coins)}</span>` +
 						getRoleBadge(user);
 					$("profileMeta").innerHTML = `
@@ -8363,6 +8997,7 @@
 						show("main");
 						$("postSearch").value = "@" + user.name;
 						postSearch = "@" + user.name;
+						activePostDay = "";
 						loadAnnouncements();
 						activePostTag = "全部";
 						renderPostFilters();
@@ -9173,6 +9808,51 @@
 						viewUser(currentUser.id);
 					};
 				}
+				function openCardBgEditor(user) {
+					const oldUrl = (user && user.card_bg) ? String(user.card_bg) : (currentUser && currentUser.card_bg ? String(currentUser.card_bg) : "");
+					document.querySelector(".modalBox").style.width = "440px";
+					modal(`
+						<h3>` + t("card_bg_title") + `</h3>
+						<div id="cardBgPreview" style="height:130px;border-radius:16px;background:#e9e9e9;background-size:cover;background-position:center;margin:0 auto 12px auto;border:1px solid var(--bg);"></div>
+						<input id="cardBgUrlInput" placeholder="` + t("card_bg_url_ph") + `" value="${escapeAttr(oldUrl)}">
+						<div style="display:flex;gap:8px;margin-top:14px;">
+							<button id="cardBgSaveBtn">` + t("avatar_save") + `</button>
+							<button id="cardBgCancelBtn">` + t("avatar_cancel") + `</button>
+						</div>
+					`);
+					const input = $("cardBgUrlInput");
+					const preview = $("cardBgPreview");
+					const updatePreview = () => {
+						const v = input.value.trim();
+						if (v && /^https?:\/\//i.test(v)) {
+							preview.style.backgroundImage = 'url("' + v.replace(/["\\]/g, "") + '")';
+						} else {
+							preview.style.backgroundImage = "none";
+							preview.style.backgroundColor = "#e9e9e9";
+						}
+					};
+					input.oninput = updatePreview;
+					updatePreview();
+					$("cardBgCancelBtn").onclick = () => {
+						$("modal").classList.add("hidden");
+					};
+					$("cardBgSaveBtn").onclick = async () => {
+						const url = input.value.trim();
+						if (url && !/^https?:\/\//i.test(url)) {
+							return modal(t("card_bg_invalid"));
+						}
+						try {
+							await apiPut("/api/users/" + currentUser.id, {
+								card_bg: url || null
+							});
+						} catch (e) {
+							return modal(t("save_fail", e.message));
+						}
+						currentUser.card_bg = url || null;
+						$("modal").classList.add("hidden");
+						viewUser(currentUser.id);
+					};
+				}
 				async function changeCoins(uid, amount) {
 					try {
 						const result = await apiPut("/api/users/" + uid + "/coins", {
@@ -9464,20 +10144,6 @@
 						bar.innerHTML = "";
 					}
 				}
-				$("announcementBtn").onclick = async () => {
-					try {
-						const res = await apiGet("/api/posts?tag=公告&perPage=1");
-						const post = res?.posts?.[0];
-						if (post && post.id) {
-							history.replaceState(null, "", "?pid=" + post.id);
-							openSinglePost(post.id);
-						} else {
-							modal(t("post_no_posts"));
-						}
-					} catch {
-						modal(t("post_no_posts"));
-					}
-				};
 
 				document.getElementById("fortuneBtn").onclick = function() {
 					const username = currentUser.name;
