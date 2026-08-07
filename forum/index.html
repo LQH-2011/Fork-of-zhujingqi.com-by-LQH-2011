@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -158,6 +157,7 @@
 				align-items: center;
 				width: 100%;
 				height: 100vh;
+				height: 100dvh;
 				overflow-x: hidden;
 				overflow-y: hidden;
 			}
@@ -658,6 +658,7 @@
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
+				color: var(--sub);
 			}
 
 			.bottom button.active {
@@ -667,21 +668,47 @@
 			}
 
 			.navIcon {
-				width: 20px;
-				height: 20px;
+				width: 22px;
+				height: 22px;
 				display: block;
 				margin: 0 4px;
-				opacity: 0.6;
-			}
-
-			body.dark .navIcon {
-				filter: brightness(0) invert(1);
-				opacity: 0.78;
+				background-color: currentColor;
+				opacity: 0.7;
+				-webkit-mask-repeat: no-repeat;
+				mask-repeat: no-repeat;
+				-webkit-mask-size: contain;
+				mask-size: contain;
+				-webkit-mask-position: center;
+				mask-position: center;
 			}
 
 			.bottom button.active .navIcon {
-				filter: brightness(0) invert(1);
 				opacity: 1;
+			}
+
+			.navIcon[data-icon="home"] {
+				-webkit-mask-image: url(icon/home.svg);
+				mask-image: url(icon/home.svg);
+			}
+
+			.navIcon[data-icon="editor"] {
+				-webkit-mask-image: url(icon/editor.svg);
+				mask-image: url(icon/editor.svg);
+			}
+
+			.navIcon[data-icon="rank"] {
+				-webkit-mask-image: url(icon/rank.svg);
+				mask-image: url(icon/rank.svg);
+			}
+
+			.navIcon[data-icon="discover"] {
+				-webkit-mask-image: url(icon/discover.svg);
+				mask-image: url(icon/discover.svg);
+			}
+
+			.navIcon[data-icon="user"] {
+				-webkit-mask-image: url(icon/user.svg);
+				mask-image: url(icon/user.svg);
 			}
 
 			.modal {
@@ -1054,6 +1081,14 @@
 
 			.newUserItem:hover {
 				color: var(--green);
+			}
+
+			#sidePanels {
+				display: contents;
+			}
+
+			#sideBackdrop {
+				display: none;
 			}
 
 			#notice {
@@ -2891,20 +2926,41 @@
 			}
 
 			@media (max-width: 800px) {
+				html,
+				body {
+					overflow: hidden;
+					height: 100%;
+				}
 				.bottom {
 					bottom: 0;
-					height: 64px;
+					height: 58px;
 					padding-bottom: env(safe-area-inset-bottom, 16px);
 					align-items: flex-start;
 					background: var(--card);
 				}
 
 				.bottom button {
-					height: 48px;
+					height: 44px;
 					align-self: flex-start;
 					padding-bottom: 0;
 					align-items: flex-start;
-					padding-top: 8px;
+					padding-top: 6px;
+				}
+
+				.bottom button.active {
+					background: transparent;
+					color: var(--green);
+				}
+
+				.bottom button:hover,
+				.bottom button:active,
+				.bottom button:focus,
+				.bottom button.active:hover {
+					background: transparent;
+				}
+
+				.bottom button.active:hover .navIcon {
+					opacity: 1;
 				}
 
 				#pname {
@@ -2949,7 +3005,7 @@
 					display: flex;
 					position: fixed;
 					right: 12px;
-					bottom: 72px;
+					bottom: calc(122px + env(safe-area-inset-bottom, 0px));
 					width: 46px;
 					height: 46px;
 					border-radius: 50%;
@@ -2961,46 +3017,92 @@
 					font-size: 18px;
 				}
 
-				#notice,
-				#fortuneBox {
-					display: block;
+				#posts {
+					padding-bottom: 110px;
+				}
+
+				#sideBackdrop {
 					position: fixed;
-					top: 70px;
-					z-index: 3000;
-					transition: transform .28s ease, opacity .28s ease;
-					will-change: transform, opacity;
+					inset: 0;
+					z-index: 2900;
+					background: rgba(0, 0, 0, .35);
+					backdrop-filter: blur(6px);
+					-webkit-backdrop-filter: blur(6px);
 					opacity: 0;
 					pointer-events: none;
+					transition: opacity .28s ease;
 				}
 
-				#notice {
-					left: 0;
-					width: min(72vw, 280px);
-					max-height: calc(100vh - 140px);
-					overflow: auto;
-					border-radius: 0 18px 18px 0;
-					padding: 14px 12px;
-					transform: translateX(calc(-100% + 16px));
-				}
-
-				#fortuneBox {
-					right: 0;
-					width: min(50vw, 100px);
-					max-height: 140px;
-					overflow: hidden;
-					border-radius: 18px 0 0 18px;
-					padding: 10px 10px 12px 10px;
-					text-align: left;
-					transform: translateX(calc(100% - 16px));
-					bottom: auto;
-				}
-
-				#notice.mobile-open,
-				#fortuneBox.mobile-open {
+				#sideBackdrop.show {
 					opacity: 1;
 					pointer-events: auto;
-					transform: translateX(0);
-					font-size: 14px;
+				}
+
+				#sidePanels {
+					display: block;
+					position: fixed;
+					top: 76px;
+					left: 50%;
+					transform: translateX(-50%) translateY(-14px) scale(.94);
+					width: min(420px, 90vw);
+					max-height: calc(100vh - 160px);
+					overflow-y: auto;
+					z-index: 3000;
+					background: var(--card);
+					border: 1px solid var(--border);
+					border-radius: 32px;
+					padding: 18px 20px 16px;
+					box-sizing: border-box;
+					color: var(--text);
+					box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+					opacity: 0;
+					pointer-events: none;
+					transition: opacity .26s ease, transform .34s cubic-bezier(.32, .72, .34, 1);
+					will-change: transform, opacity;
+				}
+
+				#sidePanels.mobile-open {
+					opacity: 1;
+					pointer-events: auto;
+					transform: translateX(-50%) translateY(0) scale(1);
+				}
+
+				#sidePanels #notice {
+					position: static;
+					width: auto;
+					max-height: none;
+					overflow: visible;
+					border-radius: 0;
+					padding: 0 0 12px 0;
+					transform: none;
+					background: transparent;
+					box-shadow: none;
+					border-bottom: 1px solid var(--border);
+					margin-bottom: 12px;
+				}
+
+				#sidePanels #noticeTitle {
+					margin: 0 0 8px 0;
+					font-size: 15px;
+				}
+
+				#sidePanels #toggleNoticeBtn {
+					display: none !important;
+				}
+
+				#sidePanels #fortuneBox {
+					position: static;
+					right: auto;
+					width: auto;
+					max-height: none;
+					overflow: visible;
+					border-radius: 0;
+					padding: 0;
+					text-align: left;
+					transform: none;
+					bottom: auto;
+					background: transparent;
+					box-shadow: none;
 				}
 
 				#fortuneBtn {
@@ -3051,15 +3153,22 @@
 				}
 
 				.pager {
+					position: fixed;
+					left: 0;
+					right: 0;
+					bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+					z-index: 1500;
 					gap: 3px;
-					padding-bottom: 56px;
-					margin: 4px auto 10px auto;
+					padding: 8px 10px;
+					margin: 0 auto;
 					flex-wrap: nowrap;
 					justify-content: flex-start;
-					padding-left: 8px;
-					padding-right: 8px;
 					overflow-x: auto;
 					-webkit-overflow-scrolling: touch;
+					background: var(--card);
+					border-top: 1px solid var(--border);
+					box-shadow: 0 -4px 12px rgba(0, 0, 0, .06);
+					box-sizing: border-box;
 				}
 
 				.pager .pageBtn,
@@ -3784,11 +3893,11 @@
 	</head>
 	<body>
 		<div class="bottom hidden" id="nav">
-			<button id="homeBtn" title="首页"><img class="navIcon" src="icon/home.svg" alt="首页"></button>
-			<button id="editorBtn" title="发布"><img class="navIcon" src="icon/editor.svg" alt="发布"></button>
-			<button id="showUsersBtn" title="排行"><img class="navIcon" src="icon/rank.svg" alt="排行"></button>
-			<button id="discoverBtn" title="探索"><img class="navIcon" src="icon/discover.svg" alt="探索"></button>
-			<button id="profileBtn" title="我的"><img class="navIcon" src="icon/user.svg" alt="我的"></button>
+			<button id="homeBtn" title="首页"><span class="navIcon" data-icon="home"></span></button>
+			<button id="editorBtn" title="发布"><span class="navIcon" data-icon="editor"></span></button>
+			<button id="showUsersBtn" title="排行"><span class="navIcon" data-icon="rank"></span></button>
+			<button id="discoverBtn" title="探索"><span class="navIcon" data-icon="discover"></span></button>
+			<button id="profileBtn" title="我的"><span class="navIcon" data-icon="user"></span></button>
 		</div>
 		<div id="welcomePage" class="center">
 			<div class="big">
@@ -3854,6 +3963,7 @@
 			<div id="postFilterBar" class="postFilterBar">
 				<div id="postTagBar" class="postTagBar"></div>
 			</div>
+			<div id="sidePanels">
 			<div id="notice">
 				<button id="toggleNoticeBtn" class="helpBtn"
 					style="position:absolute; right:8px; top:8px; font-size:16px; width:24px; height:24px; line-height:20px;">
@@ -3866,11 +3976,7 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span>
-							· 全新搜索中心<br>
-							· 全新底栏图标<br>
-							· 帖子的时间线<br>
-							· 多处界面美化<br>
-							· 修复部分漏洞<br>
+							· 大改移动端UI<br>
 						</span>
 					</details>
 				</div>
@@ -3903,6 +4009,8 @@
 					</div>
 				</div>
 			</div>
+			</div>
+			<div id="sideBackdrop"></div>
 			<div id="mobileSideBtn">☰</div>
 			<div id="posts"></div>
 			<div id="postPager" class="pager"></div>
@@ -8052,27 +8160,33 @@
 					};
 				}
 				const mobileSideBtn = $("mobileSideBtn");
+				const sidePanels = $("sidePanels");
+				const sideBackdrop = $("sideBackdrop");
 
 				function syncMobilePanels() {
 					const isMobile = window.innerWidth <= 800;
 					const dense = postLayout === "dense";
 					if (isMobile) {
 						if (mobileSideBtn) mobileSideBtn.style.display = "flex";
-						notice.classList.remove("mobile-open");
-						$("fortuneBox")?.classList.remove("mobile-open");
 					} else {
 						if (mobileSideBtn) mobileSideBtn.style.display = "none";
-						notice.classList.remove("mobile-open");
-						$("fortuneBox")?.classList.remove("mobile-open");
 					}
+					sidePanels?.classList.remove("mobile-open");
+					sideBackdrop?.classList.remove("show");
 					document.body.classList.toggle("denseFeed", dense);
 					const tagBar = $("postTagBar");
 					if (tagBar) tagBar.style.display = dense ? "none" : "";
 				}
 				if (mobileSideBtn) {
 					mobileSideBtn.onclick = () => {
-						const noticeOpen = notice.classList.toggle("mobile-open");
-						$("fortuneBox")?.classList.toggle("mobile-open", noticeOpen);
+						const open = sidePanels?.classList.toggle("mobile-open");
+						sideBackdrop?.classList.toggle("show", !!open);
+					};
+				}
+				if (sideBackdrop) {
+					sideBackdrop.onclick = () => {
+						sidePanels?.classList.remove("mobile-open");
+						sideBackdrop.classList.remove("show");
 					};
 				}
 				window.addEventListener("resize", syncMobilePanels);
