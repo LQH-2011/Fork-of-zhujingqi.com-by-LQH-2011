@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -158,6 +159,7 @@
 				width: 100%;
 				height: 100vh;
 				overflow-x: hidden;
+				overflow-y: hidden;
 			}
 
 			#profileCard {
@@ -531,8 +533,9 @@
 				max-width: 800px;
 				overflow-y: auto;
 				overflow-x: hidden;
-				flex: 1;
-				padding-bottom: 20px;
+				flex: 1 1 0;
+				min-height: 0;
+				padding-bottom: 10px;
 			}
 
 			#pname {
@@ -1790,7 +1793,7 @@
 			.pager {
 				width: 100%;
 				max-width: 800px;
-				margin: 10px auto 20px auto;
+				margin: 6px auto 14px auto;
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -1975,9 +1978,9 @@
 			.postFilterBar {
 				width: 100%;
 				max-width: 800px;
-				padding: 0 20px 10px 20px;
+				padding: 0 20px 4px 20px;
 				box-sizing: border-box;
-				margin: 0 auto 10px auto;
+				margin: 0 auto 2px auto;
 			}
 
 			.postSearch {
@@ -2600,6 +2603,9 @@
 			}
 
 			#notifBtn {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
 				height: 36px;
 				padding: 0 14px;
 				border-radius: 999px;
@@ -2608,6 +2614,29 @@
 				border: 1px solid var(--border);
 				font-size: 14px;
 				white-space: nowrap;
+				max-width: 100%;
+				overflow: hidden;
+			}
+
+			#notifLabel {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.modalBox #notifListWrap {
+				overflow-x: hidden;
+			}
+
+			.notifItem,
+			.chatNotifItem {
+				overflow-wrap: anywhere;
+				word-break: break-word;
+			}
+
+			.notifItem div,
+			.chatNotifItem div {
+				min-width: 0;
 			}
 
 			#notifBtn:hover {
@@ -2619,6 +2648,7 @@
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
+				flex-shrink: 0;
 				min-width: 18px;
 				height: 18px;
 				padding: 0 5px;
@@ -2863,12 +2893,18 @@
 			@media (max-width: 800px) {
 				.bottom {
 					bottom: 0;
-					height: 60px;
+					height: 64px;
+					padding-bottom: env(safe-area-inset-bottom, 16px);
+					align-items: flex-start;
+					background: var(--card);
 				}
 
 				.bottom button {
-					height: 100%;
+					height: 48px;
+					align-self: flex-start;
 					padding-bottom: 0;
+					align-items: flex-start;
+					padding-top: 8px;
 				}
 
 				#pname {
@@ -3016,8 +3052,8 @@
 
 				.pager {
 					gap: 3px;
-					padding-bottom: 60px;
-					margin: 8px auto 14px auto;
+					padding-bottom: 56px;
+					margin: 4px auto 10px auto;
 					flex-wrap: nowrap;
 					justify-content: flex-start;
 					padding-left: 8px;
@@ -3106,15 +3142,27 @@
 
 				#logoRow {
 					padding: 16px 12px 6px 12px;
+					gap: 8px;
+					flex-wrap: nowrap;
 				}
 
 				#logo {
 					font-size: 20px;
+					min-width: 0;
+					flex-shrink: 1;
 				}
 
 				#logo img {
-					width: 50px;
-					height: 50px;
+					width: 40px;
+					height: 40px;
+					flex-shrink: 0;
+				}
+
+				#mainLogoText {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					flex-shrink: 1;
 				}
 
 				#onlineMini,
@@ -3122,17 +3170,24 @@
 					height: 32px;
 					font-size: 12px;
 					padding: 0 10px;
-				}
-
-				#notifBtn {
 					min-width: 0;
+					flex-shrink: 1;
 				}
 
-				#notifBtn span:first-child {
-					max-width: 56px;
+				#layoutBtn,
+				#searchBall {
+					flex-shrink: 0;
+				}
+
+				#onlineMini {
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
+					max-width: 90px;
+				}
+
+				#notifLabel {
+					max-width: 64px;
 				}
 
 				.onlineAvatar {
@@ -3511,7 +3566,7 @@
 			}
 
 			html.watch .postFilterBar {
-				padding: 0 10px 8px 10px;
+				padding: 0 10px 3px 10px;
 			}
 
 			html.watch .pager {
@@ -3794,9 +3849,7 @@
 				</button>
 				<button id="layoutBtn" type="button">信息流</button>
 				<button id="onlineMini" type="button">在线 0</button>
-				<button id="notifBtn" type="button">
-					通知 <span id="notifBadge" hidden>0</span>
-				</button>
+				<button id="notifBtn" type="button"><span id="notifLabel">通知</span><span id="notifBadge" hidden>0</span></button>
 			</div>
 			<div id="postFilterBar" class="postFilterBar">
 				<div id="postTagBar" class="postTagBar"></div>
@@ -6146,12 +6199,8 @@
 					setT("rankToggleFollowers", t("followers"));
 					const nb = document.getElementById("notifBtn");
 					if (nb) {
-						for (const c of nb.childNodes) {
-							if (c.nodeType === Node.TEXT_NODE) {
-								c.textContent = " " + t("notif_title") + " ";
-								break;
-							}
-						}
+						const nl = nb.querySelector("#notifLabel");
+						if (nl) nl.textContent = t("notif_title");
 					}
 					setT("discWebsiteDesc", t("discover_website"));
 					setT("discCommunityTitle", t("discover_community"));
@@ -10396,6 +10445,22 @@
 						setTimeout(() => mask.remove(), 300);
 					}
 				})();
+				const updateTopFade = el => {
+					if (!el) return;
+					const on = el.scrollTop > 8;
+					const mask = on ?
+						"linear-gradient(to bottom, transparent 0, #000 44px, #000 calc(100% - 44px), transparent 100%)" :
+						"linear-gradient(to bottom, #000 0, #000 calc(100% - 44px), transparent 100%)";
+					el.style.WebkitMaskImage = mask;
+					el.style.maskImage = mask;
+				};
+				const attachTopFade = el => {
+					if (!el) return;
+					el.addEventListener("scroll", () => updateTopFade(el), { passive: true });
+					updateTopFade(el);
+				};
+				attachTopFade($("posts"));
+				attachTopFade($("userPosts"));
 			});
 			document.addEventListener("contextmenu", e => e.preventDefault());
 		</script>
