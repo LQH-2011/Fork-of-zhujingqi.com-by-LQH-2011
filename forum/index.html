@@ -7983,34 +7983,30 @@
 						tagBar.appendChild(chip);
 					}
 					$("searchBtn").onclick = () => {
-						postSearch = search.value.trim();
-						activePostDay = "";
-						const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
-						if (matchedTag) {
-							activePostTag = matchedTag;
-							postSearch = "";
-							search.value = "";
-						}
+						applyQuery(search.value);
 						loadStats();
 						loadPosts(1);
 						closeSearchSheet();
 					};
 					search.onkeydown = e => {
 						if (e.key === "Enter") {
-							postSearch = search.value.trim();
-							activePostDay = "";
-							const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
-							if (matchedTag) {
-								activePostTag = matchedTag;
-								postSearch = "";
-								search.value = "";
-							}
+							applyQuery(search.value);
 							loadStats();
 							loadPosts(1);
 							closeSearchSheet();
 						}
 					};
 					if (typeof renderPostTimeline === "function") renderPostTimeline();
+				}
+				function applyQuery(raw, day) {
+					postSearch = (raw || "").trim();
+					activePostDay = /^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : "";
+					const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
+					if (matchedTag) {
+						activePostTag = matchedTag;
+						postSearch = "";
+					}
+					renderPostFilters();
 				}
 				async function renderPostTimeline() {
 					const el = $("postTimeline");
@@ -10511,13 +10507,24 @@
 								$("nav").classList.remove("hidden");
 								const initialPid = getUrlParam("pid");
 								const initialUid = getUrlParam("uid");
+								const initialQ = getUrlParam("q");
+								const initialD = getUrlParam("d");
 								if (initialPid) {
 									openSinglePost(Number(initialPid));
 								} else if (initialUid) {
 									viewUser(Number(initialUid));
 								} else {
 									show("main");
-									renderPostFilters();
+									const validD = /^\d{4}-\d{2}-\d{2}$/.test(initialD || "") ? initialD : "";
+									if (initialQ || validD) {
+										applyQuery(initialQ || "", validD);
+										let deepUrl = "";
+										if (initialQ) deepUrl += "?q=" + encodeURIComponent(initialQ);
+										if (validD) deepUrl += (deepUrl ? "&" : "?") + "d=" + encodeURIComponent(validD);
+										history.pushState(null, "", deepUrl);
+									} else {
+										renderPostFilters();
+									}
 									syncLayoutBtn();
 									syncLayoutMode();
 									loadStats();
@@ -10532,15 +10539,25 @@
 						}
 						const guestPid = getUrlParam("pid");
 						const guestUid = getUrlParam("uid");
+						const guestQ = getUrlParam("q");
+						const guestD = getUrlParam("d");
 						localStorage.removeItem("loginUser");
 						localStorage.removeItem("token");
-						if (guestPid || guestUid) {
+						if (guestPid || guestUid || guestQ || guestD) {
 							guestMode = true;
 							show("main");
 							$("nav").classList.add("hidden");
 							$("postFilterBar").style.display = "none";
 							$("logoRow").querySelector("#onlineMini").style.display = "none";
 							$("logoRow").querySelector("#notifBtn").style.display = "none";
+							const validD = /^\d{4}-\d{2}-\d{2}$/.test(guestD || "") ? guestD : "";
+							if ((guestQ || validD) && !guestPid && !guestUid) {
+								applyQuery(guestQ || "", validD);
+								let deepUrl = "";
+								if (guestQ) deepUrl += "?q=" + encodeURIComponent(guestQ);
+								if (validD) deepUrl += (deepUrl ? "&" : "?") + "d=" + encodeURIComponent(validD);
+								history.pushState(null, "", deepUrl);
+							}
 							loadStats();
 							loadAnnouncements();
 							loadPosts(1);
