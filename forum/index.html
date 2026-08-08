@@ -7998,9 +7998,9 @@
 					};
 					if (typeof renderPostTimeline === "function") renderPostTimeline();
 				}
-				function applyQuery(raw) {
+				function applyQuery(raw, day) {
 					postSearch = (raw || "").trim();
-					activePostDay = "";
+					activePostDay = /^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : "";
 					const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
 					if (matchedTag) {
 						activePostTag = matchedTag;
@@ -10508,16 +10508,20 @@
 								const initialPid = getUrlParam("pid");
 								const initialUid = getUrlParam("uid");
 								const initialQ = getUrlParam("q");
+								const initialD = getUrlParam("d");
 								if (initialPid) {
 									openSinglePost(Number(initialPid));
 								} else if (initialUid) {
 									viewUser(Number(initialUid));
 								} else {
 									show("main");
-									if (initialQ) {
-										applyQuery(initialQ);
-										$("searchOverlay").classList.remove("hidden");
-										history.pushState(null, "", "?q=" + encodeURIComponent(initialQ));
+									const validD = /^\d{4}-\d{2}-\d{2}$/.test(initialD || "") ? initialD : "";
+									if (initialQ || validD) {
+										applyQuery(initialQ || "", validD);
+										let deepUrl = "";
+										if (initialQ) deepUrl += "?q=" + encodeURIComponent(initialQ);
+										if (validD) deepUrl += (deepUrl ? "&" : "?") + "d=" + encodeURIComponent(validD);
+										history.pushState(null, "", deepUrl);
 									} else {
 										renderPostFilters();
 									}
@@ -10536,19 +10540,23 @@
 						const guestPid = getUrlParam("pid");
 						const guestUid = getUrlParam("uid");
 						const guestQ = getUrlParam("q");
+						const guestD = getUrlParam("d");
 						localStorage.removeItem("loginUser");
 						localStorage.removeItem("token");
-						if (guestPid || guestUid || guestQ) {
+						if (guestPid || guestUid || guestQ || guestD) {
 							guestMode = true;
 							show("main");
 							$("nav").classList.add("hidden");
 							$("postFilterBar").style.display = "none";
 							$("logoRow").querySelector("#onlineMini").style.display = "none";
 							$("logoRow").querySelector("#notifBtn").style.display = "none";
-							if (guestQ && !guestPid && !guestUid) {
-								applyQuery(guestQ);
-								$("searchOverlay").classList.remove("hidden");
-								history.pushState(null, "", "?q=" + encodeURIComponent(guestQ));
+							const validD = /^\d{4}-\d{2}-\d{2}$/.test(guestD || "") ? guestD : "";
+							if ((guestQ || validD) && !guestPid && !guestUid) {
+								applyQuery(guestQ || "", validD);
+								let deepUrl = "";
+								if (guestQ) deepUrl += "?q=" + encodeURIComponent(guestQ);
+								if (validD) deepUrl += (deepUrl ? "&" : "?") + "d=" + encodeURIComponent(validD);
+								history.pushState(null, "", deepUrl);
 							}
 							loadStats();
 							loadAnnouncements();
