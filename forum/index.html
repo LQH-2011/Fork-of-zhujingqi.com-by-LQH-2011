@@ -7983,34 +7983,30 @@
 						tagBar.appendChild(chip);
 					}
 					$("searchBtn").onclick = () => {
-						postSearch = search.value.trim();
-						activePostDay = "";
-						const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
-						if (matchedTag) {
-							activePostTag = matchedTag;
-							postSearch = "";
-							search.value = "";
-						}
+						applyQuery(search.value);
 						loadStats();
 						loadPosts(1);
 						closeSearchSheet();
 					};
 					search.onkeydown = e => {
 						if (e.key === "Enter") {
-							postSearch = search.value.trim();
-							activePostDay = "";
-							const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
-							if (matchedTag) {
-								activePostTag = matchedTag;
-								postSearch = "";
-								search.value = "";
-							}
+							applyQuery(search.value);
 							loadStats();
 							loadPosts(1);
 							closeSearchSheet();
 						}
 					};
 					if (typeof renderPostTimeline === "function") renderPostTimeline();
+				}
+				function applyQuery(raw) {
+					postSearch = (raw || "").trim();
+					activePostDay = "";
+					const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
+					if (matchedTag) {
+						activePostTag = matchedTag;
+						postSearch = "";
+					}
+					renderPostFilters();
 				}
 				async function renderPostTimeline() {
 					const el = $("postTimeline");
@@ -10511,13 +10507,20 @@
 								$("nav").classList.remove("hidden");
 								const initialPid = getUrlParam("pid");
 								const initialUid = getUrlParam("uid");
+								const initialQ = getUrlParam("q");
 								if (initialPid) {
 									openSinglePost(Number(initialPid));
 								} else if (initialUid) {
 									viewUser(Number(initialUid));
 								} else {
 									show("main");
-									renderPostFilters();
+									if (initialQ) {
+										applyQuery(initialQ);
+										$("searchOverlay").classList.remove("hidden");
+										history.pushState(null, "", "?q=" + encodeURIComponent(initialQ));
+									} else {
+										renderPostFilters();
+									}
 									syncLayoutBtn();
 									syncLayoutMode();
 									loadStats();
@@ -10532,15 +10535,21 @@
 						}
 						const guestPid = getUrlParam("pid");
 						const guestUid = getUrlParam("uid");
+						const guestQ = getUrlParam("q");
 						localStorage.removeItem("loginUser");
 						localStorage.removeItem("token");
-						if (guestPid || guestUid) {
+						if (guestPid || guestUid || guestQ) {
 							guestMode = true;
 							show("main");
 							$("nav").classList.add("hidden");
 							$("postFilterBar").style.display = "none";
 							$("logoRow").querySelector("#onlineMini").style.display = "none";
 							$("logoRow").querySelector("#notifBtn").style.display = "none";
+							if (guestQ && !guestPid && !guestUid) {
+								applyQuery(guestQ);
+								$("searchOverlay").classList.remove("hidden");
+								history.pushState(null, "", "?q=" + encodeURIComponent(guestQ));
+							}
 							loadStats();
 							loadAnnouncements();
 							loadPosts(1);
