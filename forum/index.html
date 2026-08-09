@@ -2018,6 +2018,43 @@
 				margin: 0 auto 2px auto;
 			}
 
+			.postFilterRow {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.postFilterRow .postTagBar {
+				flex: 1;
+				min-width: 0;
+			}
+
+			.rssBarLink {
+				display: inline-flex;
+				align-items: center;
+				flex-shrink: 0;
+				padding: 6px 14px;
+				border-radius: 10px;
+				border: 1px solid var(--green);
+				background: var(--card);
+				color: var(--green);
+				font-size: 14px;
+				font-weight: 700;
+				text-decoration: none;
+				white-space: nowrap;
+				transition: .2s;
+			}
+
+			.rssBarLink:hover {
+				background: var(--green);
+				color: #fff;
+				border-color: var(--green);
+			}
+
+			body.denseFeed .rssBarLink {
+				display: none;
+			}
+
 			.postSearch {
 				width: 100%;
 				margin: 0 0 10px 0;
@@ -3961,7 +3998,10 @@
 				<button id="notifBtn" type="button"><span id="notifLabel">通知</span><span id="notifBadge" hidden>0</span></button>
 			</div>
 			<div id="postFilterBar" class="postFilterBar">
-				<div id="postTagBar" class="postTagBar"></div>
+				<div class="postFilterRow">
+					<a id="rssBarLink" class="rssBarLink" href="rss.xml" target="_blank" rel="noopener" title="RSS">RSS</a>
+					<div id="postTagBar" class="postTagBar"></div>
+				</div>
 			</div>
 			<div id="sidePanels">
 			<div id="notice">
@@ -5502,6 +5542,13 @@
 					es: "Idioma",
 					de: "Sprache",
 					"zh-TW": "語言"
+				},
+				settings_rss: {
+					zh: "订阅 RSS",
+					en: "Subscribe to RSS",
+					es: "Suscribirse al RSS",
+					de: "RSS abonnieren",
+					"zh-TW": "訂閱 RSS"
 				},
 				timeline_posts: {
 					zh: "{0} 帖",
@@ -8949,6 +8996,7 @@
 								<button class="settingsLinkBtn" id="setSponsorBtn">${t("profile_sponsor")}</button>
 							</div>
 							<button class="settingsLinkBtn" id="setDownloadBtn" style="margin-top:6px;">${t("profile_download")}</button>
+							<a class="settingsLinkBtn" id="setRssBtn" href="rss.xml" target="_blank" rel="noopener" style="margin-top:6px;text-decoration:none;box-sizing:border-box;">${t("settings_rss")}</a>
 						</div>
 					`);
 					const langSel = box.querySelector("#settingsLangSelect");
