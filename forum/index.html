@@ -465,12 +465,18 @@
 				}
 
 				#profileActions {
-					flex-direction: column;
+					flex-direction: row;
+					flex-wrap: wrap;
+					width: 92%;
 				}
 
 				#profileActions .profileBtn {
-					height: 50px;
-					flex: none;
+					height: 48px;
+					flex: 1 1 100%;
+				}
+
+				#profileActions .profileBtn.half {
+					flex: 1 1 calc(50% - 5px);
 				}
 
 				#profileMeta {
@@ -662,9 +668,14 @@
 			}
 
 			.bottom button.active {
-				background: var(--active);
-				color: #fff;
-				border-top-color: var(--green);
+				background: var(--card);
+				color: var(--green);
+				border-top-color: transparent;
+			}
+
+			.bottom button:hover {
+				background: var(--card);
+				color: var(--green);
 			}
 
 			.navIcon {
@@ -1159,6 +1170,15 @@
 
 			.userLevel.lv11 {
 				background: linear-gradient(90deg, #4a30a0, #b088ff, #4a30a0);
+				background-size: 200% 100%;
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				animation: lvShimmer 4s ease-in-out infinite;
+			}
+
+			.userLevel.lv12 {
+				background: linear-gradient(90deg, #5a0000, #b03a2e, #d4a017, #b03a2e, #5a0000);
 				background-size: 200% 100%;
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
@@ -2018,43 +2038,6 @@
 				margin: 0 auto 2px auto;
 			}
 
-			.postFilterRow {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.postFilterRow .postTagBar {
-				flex: 1;
-				min-width: 0;
-			}
-
-			.rssBarLink {
-				display: inline-flex;
-				align-items: center;
-				flex-shrink: 0;
-				padding: 6px 14px;
-				border-radius: 10px;
-				border: 1px solid var(--green);
-				background: var(--card);
-				color: var(--green);
-				font-size: 14px;
-				font-weight: 700;
-				text-decoration: none;
-				white-space: nowrap;
-				transition: .2s;
-			}
-
-			.rssBarLink:hover {
-				background: var(--green);
-				color: #fff;
-				border-color: var(--green);
-			}
-
-			body.denseFeed .rssBarLink {
-				display: none;
-			}
-
 			.postSearch {
 				width: 100%;
 				margin: 0 0 10px 0;
@@ -2632,6 +2615,19 @@
 				margin-bottom: 14px;
 			}
 
+			.rssIcon {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 54px;
+				height: 54px;
+				border-radius: 50%;
+				background: var(--green);
+				color: #fff;
+				font-size: 26px;
+				font-weight: 700;
+			}
+
 			.discoverCard h3 {
 				margin: 0 0 8px 0;
 				font-size: 24px;
@@ -2970,18 +2966,18 @@
 				}
 				.bottom {
 					bottom: 0;
-					height: 58px;
+					height: 50px;
 					padding-bottom: env(safe-area-inset-bottom, 16px);
 					align-items: flex-start;
 					background: var(--card);
 				}
 
 				.bottom button {
-					height: 44px;
+					height: 38px;
 					align-self: flex-start;
 					padding-bottom: 0;
 					align-items: flex-start;
-					padding-top: 6px;
+					padding-top: 4px;
 				}
 
 				.bottom button.active {
@@ -2994,6 +2990,7 @@
 				.bottom button:focus,
 				.bottom button.active:hover {
 					background: transparent;
+					color: var(--green);
 				}
 
 				.bottom button.active:hover .navIcon {
@@ -3193,10 +3190,10 @@
 					position: fixed;
 					left: 0;
 					right: 0;
-					bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+					bottom: calc(50px + env(safe-area-inset-bottom, 0px));
 					z-index: 1500;
-					gap: 3px;
-					padding: 8px 10px;
+					gap: 2px;
+					padding: 5px 8px;
 					margin: 0 auto;
 					flex-wrap: nowrap;
 					justify-content: flex-start;
@@ -3210,11 +3207,11 @@
 
 				.pager .pageBtn,
 				.pager .navBtn {
-					min-width: 30px;
-					height: 30px;
-					padding: 0 8px;
-					border-radius: 10px;
-					font-size: 12px;
+					min-width: 26px;
+					height: 26px;
+					padding: 0 6px;
+					border-radius: 8px;
+					font-size: 11px;
 					flex-shrink: 0;
 				}
 
@@ -3376,21 +3373,38 @@
 				}
 
 				.discoverCard {
-					min-height: 140px;
-					padding: 22px;
+					flex-direction: row;
+					align-items: center;
+					min-height: 64px;
+					padding: 12px 16px;
+					border-radius: 14px;
+					gap: 12px;
 				}
 
 				.discoverCard h3 {
-					font-size: 22px;
+					font-size: 18px;
+					margin: 0 6px 0 0;
+				}
+
+				.discoverCard p {
+					font-size: 13px;
+					margin: 0;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					flex: 1;
+					min-width: 0;
 				}
 
 				.discoverIcon img {
-					width: 50px;
-					height: 50px;
+					width: 34px;
+					height: 34px;
 				}
 
 				.discoverIcon {
-					margin-bottom: -5px;
+					margin-bottom: 0;
+					font-size: 34px;
+					flex: 0 0 auto;
 				}
 
 				.rankAvatar {
@@ -3716,7 +3730,7 @@
 			}
 
 			html.watch .pager {
-				padding-bottom: 70px;
+				padding-bottom: 0;
 			}
 
 			html.watch #editorPage .card {
@@ -3862,6 +3876,7 @@
 			html.watch #userPosts {
 				overflow: visible !important;
 				flex: none !important;
+				padding-bottom: 64px;
 			}
 
 			html.watch #singlePost {
@@ -3880,9 +3895,20 @@
 			}
 
 			html.watch .pager {
+				position: fixed;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				width: auto;
+				max-width: none;
+				margin: 0;
+				z-index: 1500;
+				background: var(--card);
+				border-top: 1px solid var(--border);
+				box-shadow: none;
 				gap: 8px;
 				justify-content: center;
-				padding: 4px 0 8px 0;
+				padding: 8px 0;
 			}
 
 			html.watch .pager .navBtn {
@@ -3900,8 +3926,7 @@
 			}
 
 			html.watch .bottom {
-				height: 38px;
-				padding-bottom: env(safe-area-inset-bottom);
+				display: none;
 			}
 
 			html.watch .bottom button {
@@ -3924,7 +3949,7 @@
 			}
 
 			html.watch body {
-				padding-bottom: 56px;
+				padding-bottom: 0;
 			}
 		</style>
 	</head>
@@ -3998,10 +4023,7 @@
 				<button id="notifBtn" type="button"><span id="notifLabel">通知</span><span id="notifBadge" hidden>0</span></button>
 			</div>
 			<div id="postFilterBar" class="postFilterBar">
-				<div class="postFilterRow">
-					<a id="rssBarLink" class="rssBarLink" href="rss.xml" target="_blank" rel="noopener" title="RSS">RSS</a>
-					<div id="postTagBar" class="postTagBar"></div>
-				</div>
+				<div id="postTagBar" class="postTagBar"></div>
 			</div>
 			<div id="sidePanels">
 			<div id="notice">
@@ -4016,7 +4038,9 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span>
-							· 大改移动端UI<br>
+							· RSS订阅<br>
+							· 回复层级BUG修复<br>
+							· 移动端UI优化<br>
 						</span>
 					</details>
 				</div>
@@ -4175,6 +4199,11 @@
 					<h3>Jackypedia</h3>
 					<p id="discWikiDesc">杰基百科</p>
 				</a>
+				<a class="discoverCard" href="rss.xml" target="_blank" rel="noopener">
+					<div class="discoverIcon"><span class="rssIcon">R</span></div>
+					<h3>RSS</h3>
+					<p id="discRssDesc">订阅 RSS</p>
+				</a>
 			</div>
 		</div>
 		<div id="postPage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
@@ -4297,8 +4326,8 @@
 			}
 
 			let gestureWatch = false;
-			let secretTapCount = 0;
-			let secretTapTimer = null;
+			let watchSequence = [];
+			const WATCH_PATTERN = ["editorBtn", "discoverBtn", "editorBtn", "discoverBtn", "editorBtn"];
 
 			function isWatchMode() {
 				return gestureWatch;
@@ -4308,17 +4337,22 @@
 				document.documentElement.classList.toggle("watch", isWatchMode());
 			}
 			document.addEventListener("click", (e) => {
-				if (e.target.closest("#logo, #welcomePage .big")) {
-					secretTapCount++;
-					clearTimeout(secretTapTimer);
-					secretTapTimer = setTimeout(() => {
-						secretTapCount = 0;
-					}, 1500);
-					if (secretTapCount >= 5) {
-						secretTapCount = 0;
+				const btn = e.target.closest("#nav button[id]");
+				if (!btn) return;
+				const id = btn.id;
+				if (WATCH_PATTERN.includes(id)) {
+					watchSequence.push(id);
+					if (watchSequence.length > WATCH_PATTERN.length) {
+						watchSequence.shift();
+					}
+					if (watchSequence.join() === WATCH_PATTERN.join()) {
+						watchSequence = [];
 						gestureWatch = true;
 						syncWatchMode();
+						if (typeof show === "function") show("main");
 					}
+				} else {
+					watchSequence = [];
 				}
 			});
 			syncWatchMode();
@@ -5677,11 +5711,11 @@
 					"zh-TW": "禮物"
 				},
 				level_rules_content: {
-					zh: "1. 等级分为 LV0 - LV11 共 12 个等级<br>2. 不同等级会有不同颜色区分<br>3. 金币到达某数量后，自动升级<br>4. 获取金币并提升等级吧！",
-					en: "1. There are 12 levels: LV0 - LV11<br>2. Different levels have different colors<br>3. Auto-level-up when reaching coin thresholds<br>4. Earn coins and level up!",
-					es: "1. Hay 12 niveles: LV0 - LV11<br>2. Diferentes niveles tienen colores diferentes<br>3. Subida de nivel automática al alcanzar umbrales de monedas<br>4. ¡Gana monedas y sube de nivel!",
-					de: "1. Es gibt 12 Stufen: LV0 - LV11<br>2. Verschiedene Stufen haben verschiedene Farben<br>3. Automatischer Aufstieg beim Erreichen von Münz-Schwellenwerten<br>4. Verdiene Münzen und steige auf!",
-					"zh-TW": "1. 等級分為 LV0 - LV11 共 12 個等級<br>2. 不同等級會有不同顏色區分<br>3. 金幣到達某數量後，自動升級<br>4. 獲取金幣並提升等級吧！"
+					zh: "1. 等级分为 LV0 - LV12 共 13 个等级<br>2. 不同等级会有不同颜色区分<br>3. 金币到达某数量后，自动升级<br>4. 获取金币并提升等级吧！",
+					en: "1. There are 13 levels: LV0 - LV12<br>2. Different levels have different colors<br>3. Auto-level-up when reaching coin thresholds<br>4. Earn coins and level up!",
+					es: "1. Hay 13 niveles: LV0 - LV12<br>2. Diferentes niveles tienen colores diferentes<br>3. Subida de nivel automática al alcanzar umbrales de monedas<br>4. ¡Gana monedas y sube de nivel!",
+					de: "1. Es gibt 13 Stufen: LV0 - LV12<br>2. Verschiedene Stufen haben verschiedene Farben<br>3. Automatischer Aufstieg beim Erreichen von Münz-Schwellenwerten<br>4. Verdiene Münzen und steige auf!",
+					"zh-TW": "1. 等級分為 LV0 - LV12 共 13 個等級<br>2. 不同等級會有不同顏色區分<br>3. 金幣到達某數量後，自動升級<br>4. 獲取金幣並提升等級吧！"
 				},
 				coin_rules_content: {
 					zh: "1. 发布 +5 金币<br>2. 评论 +3 金币<br>3. 点赞 +1 金币<br>4. 踩 +(-1) 金币<br>5. 删除帖子、内容或取消点赞，减少对应数量金币<br>金币用途：提升等级；购买彩色帖子背景；商店中购买徽章、礼物；金币抽奖",
@@ -5852,11 +5886,11 @@
 					"zh-TW": "在線聊天網頁App"
 				},
 				discover_wiki_desc: {
-					zh: "杰基百科（即将推出）",
-					en: "Jackypedia (Coming Soon)",
-					es: "Jackypedia (Próximamente)",
-					de: "Jackypedia (Demnächst)",
-					"zh-TW": "傑基百科（即將推出）"
+					zh: "杰基百科",
+					en: "Jackypedia",
+					es: "Jackypedia",
+					de: "Jackypedia",
+					"zh-TW": "傑基百科"
 				},
 				tag_study: {
 					zh: "学习",
@@ -6343,7 +6377,6 @@
 						if (typeof refreshNotificationBadge === "function" && currentUser) refreshNotificationBadge();
 					}
 					renderLangSelect(document.getElementById("langSelect"));
-				renderLangSelect(document.getElementById("langSelect"));
 				renderLangSelect(document.getElementById("langSelectReg"));
 				setT("closeModal", t("modal_close"));
 					setT("captchaBtn", t("captcha_btn"));
@@ -6365,6 +6398,7 @@
 					setT("discToolTitle", t("discover_tool"));
 					setT("discChatDesc", t("discover_chat_desc"));
 					setT("discWikiDesc", t("discover_wiki_desc"));
+					setT("discRssDesc", t("settings_rss"));
 					const om = document.getElementById("onlineMini");
 					if (om && onlineUsersCache && onlineUsersCache.length >= 0) om.textContent = t(
 						"online_label_prefix") + onlineUsersCache.length;
@@ -7747,7 +7781,7 @@
 								return match;
 							}
 							if (closing) {
-								return ` < /${tagName}>`;
+								return `</${tagName}>`;
 							}
 							let allowedAttrs = "";
 							for (const attr of safeTags[tagName]) {
@@ -7827,7 +7861,7 @@
 					if (!pager) return;
 					if (guestMode) {
 						pager.innerHTML =
-							'<button class="navBtn" id="guestMoreBtn" style="min-width:120px;">${t("guest_more")}</button>';
+							`<button class="navBtn" id="guestMoreBtn" style="min-width:120px;">${t("guest_more")}</button>`;
 						$("guestMoreBtn").onclick = () => {
 							modal(t("guest_modal_title"));
 							const box = $("modalText");
@@ -7835,7 +7869,7 @@
 								const row = document.createElement("div");
 								row.style.cssText = "margin-top:14px;text-align:center;";
 								row.innerHTML =
-									'<button id="guestLoginRedirect" style="background:var(--green);color:#fff;">${t("guest_go_login")}</button>';
+									`<button id="guestLoginRedirect" style="background:var(--green);color:#fff;">${t("guest_go_login")}</button>`;
 								box.appendChild(row);
 								$("guestLoginRedirect").onclick = () => {
 									$("modal").classList.add("hidden");
@@ -8030,30 +8064,34 @@
 						tagBar.appendChild(chip);
 					}
 					$("searchBtn").onclick = () => {
-						applyQuery(search.value);
+						postSearch = search.value.trim();
+						activePostDay = "";
+						const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
+						if (matchedTag) {
+							activePostTag = matchedTag;
+							postSearch = "";
+							search.value = "";
+						}
 						loadStats();
 						loadPosts(1);
 						closeSearchSheet();
 					};
 					search.onkeydown = e => {
 						if (e.key === "Enter") {
-							applyQuery(search.value);
+							postSearch = search.value.trim();
+							activePostDay = "";
+							const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
+							if (matchedTag) {
+								activePostTag = matchedTag;
+								postSearch = "";
+								search.value = "";
+							}
 							loadStats();
 							loadPosts(1);
 							closeSearchSheet();
 						}
 					};
 					if (typeof renderPostTimeline === "function") renderPostTimeline();
-				}
-				function applyQuery(raw, day) {
-					postSearch = (raw || "").trim();
-					activePostDay = /^\d{4}-\d{2}-\d{2}$/.test(day || "") ? day : "";
-					const matchedTag = ["关注", ...defaultTags, "公告"].find(t => t === postSearch);
-					if (matchedTag) {
-						activePostTag = matchedTag;
-						postSearch = "";
-					}
-					renderPostFilters();
 				}
 				async function renderPostTimeline() {
 					const el = $("postTimeline");
@@ -8353,7 +8391,6 @@
 							postDiv.style.opacity = "0";
 							postDiv.classList.add("postEnter");
 							postDiv.style.animationDelay = `${i*45}ms`;
-							container.appendChild(postDiv);
 							requestAnimationFrame(() => postDiv.style.opacity = "1");
 							const bodyBox = postDiv.querySelector(".postContent");
 							if (meta.warn) {
@@ -8494,11 +8531,10 @@
 					const indent = window.innerWidth <= 800 ? 12 : 24;
 					const postAuthorId = Number(container.closest(".post")?.dataset.authorId) || null;
 					async function renderTree(parentEl, list, depth) {
-						if (depth > 2) return;
 						for (const c of list) {
 							const div = document.createElement("div");
 							div.className = "comment";
-							div.style.paddingLeft = (depth * indent) + "px";
+							div.style.paddingLeft = (Math.min(depth, 2) * indent) + "px";
 							const avatar = getAvatar(c.users);
 							const delBtn = currentUser && c.author === currentUser.id ?
 								`<button class="commentDel" data-cdel="${c.id}">${t("post_delete")}</button>` :
@@ -8528,10 +8564,18 @@
 							const del = div.querySelector("[data-cdel]");
 							if (del && currentUser) {
 								del.onclick = async () => {
-									try {
-										await apiDelete("/api/comments/" + c.id);
-									} catch (e) {
-										console.error(e);
+									const idsToDelete = [];
+									const collect = (node) => {
+										idsToDelete.push(node.id);
+										for (const ch of (node._children || [])) collect(ch);
+									};
+									collect(c);
+									for (const id of idsToDelete) {
+										try {
+											await apiDelete("/api/comments/" + id);
+										} catch (e) {
+											console.error(e);
+										}
 									}
 									renderComments(postId, container);
 									await changeCoins(currentUser.id, -3);
@@ -8566,8 +8610,12 @@
 								inp.addEventListener("keydown", e => e.key === "Enter" && send());
 							};
 							if (c._children.length > 0) {
-								const childContainer = div.querySelector(".commentChildren");
-								await renderTree(childContainer, c._children, depth + 1);
+								if (depth < 2) {
+									const childContainer = div.querySelector(".commentChildren");
+									await renderTree(childContainer, c._children, depth + 1);
+								} else {
+									await renderTree(parentEl, c._children, depth);
+								}
 							}
 						}
 					}
@@ -9214,12 +9262,12 @@
 					actions.appendChild(viewPostsBtn);
 					if (isSelf) {
 						const shopBtn = document.createElement("button");
-						shopBtn.className = "profileBtn";
+						shopBtn.className = "profileBtn half";
 						shopBtn.textContent = t("profile_shop");
 						shopBtn.onclick = () => openShop();
 						actions.appendChild(shopBtn);
 						const settingsBtn = document.createElement("button");
-						settingsBtn.className = "profileBtn";
+						settingsBtn.className = "profileBtn half";
 						settingsBtn.textContent = t("profile_settings");
 						settingsBtn.onclick = () => openProfileSettings(user);
 						actions.appendChild(settingsBtn);
@@ -9250,17 +9298,23 @@
 								t("confirm_btn") + '</button>' +
 								'</div>'
 							);
-							$("unfConfirm").onclick = () => {
-								$("modal").classList.add("hidden");
-								box.style.width = origW;
-								resolve(true);
+							const prevCloseHandler = $("closeModal").onclick;
+							const restoreCloseHandler = () => {
+								$("closeModal").onclick = prevCloseHandler;
 							};
 							const closeModalHandler = () => {
 								$("modal").classList.add("hidden");
 								box.style.width = origW;
+								restoreCloseHandler();
 								resolve(false);
 							};
-							$("modalClose").onclick = closeModalHandler;
+							$("unfConfirm").onclick = () => {
+								$("modal").classList.add("hidden");
+								box.style.width = origW;
+								restoreCloseHandler();
+								resolve(true);
+							};
+							$("closeModal").onclick = closeModalHandler;
 							$("modal").onclick = e => {
 								if (e.target === $("modal")) closeModalHandler();
 							};
@@ -10094,64 +10148,70 @@
 							color: "#888"
 						},
 						{
-							min: 1,
+							min: 0,
 							name: "LV1",
 							color: "#77bb00"
 						},
 						{
-							min: 21,
+							min: 20,
 							name: "LV2",
 							color: "#00aaff"
 						},
 						{
-							min: 41,
+							min: 40,
 							name: "LV3",
 							color: "#ffcc00"
 						},
 						{
-							min: 81,
+							min: 80,
 							name: "LV4",
 							color: "#ff9900"
 						},
 						{
-							min: 161,
+							min: 160,
 							name: "LV5",
 							color: "#ff5500"
 						},
 						{
-							min: 321,
+							min: 320,
 							name: "LV6",
 							color: "#d93131"
 						},
 						{
-							min: 641,
+							min: 640,
 							name: "LV7",
 							color: "#ff55ff"
 						},
 						{
-							min: 1281,
+							min: 1280,
 							name: "LV8",
 							color: "#9900ff"
 						},
 						{
-							min: 2561,
+							min: 2560,
 							name: "LV9",
 							color: "#55007f"
 						},
 						{
-							min: 5121,
+							min: 5120,
 							name: "LV10",
 							color: "#d4a017",
 							cssClass: "lv10"
 						},
 						{
-							min: 10241,
+							min: 10240,
 							name: "LV11",
 							color: "#ff4500",
 							cssClass: "lv11"
 						},
 						{
-							min: 20481,
+							min: 20480,
+							name: "LV12",
+							color: "#ffd700",
+							cssClass: "lv12"
+						},
+						{
+							min: 40960,
 							name: "MAX",
 							color: "#000000"
 						}
@@ -10555,24 +10615,13 @@
 								$("nav").classList.remove("hidden");
 								const initialPid = getUrlParam("pid");
 								const initialUid = getUrlParam("uid");
-								const initialQ = getUrlParam("q");
-								const initialD = getUrlParam("d");
 								if (initialPid) {
 									openSinglePost(Number(initialPid));
 								} else if (initialUid) {
 									viewUser(Number(initialUid));
 								} else {
 									show("main");
-									const validD = /^\d{4}-\d{2}-\d{2}$/.test(initialD || "") ? initialD : "";
-									if (initialQ || validD) {
-										applyQuery(initialQ || "", validD);
-										let deepUrl = "";
-										if (initialQ) deepUrl += "?q=" + encodeURIComponent(initialQ);
-										if (validD) deepUrl += (deepUrl ? "&" : "?") + "d=" + encodeURIComponent(validD);
-										history.pushState(null, "", deepUrl);
-									} else {
-										renderPostFilters();
-									}
+									renderPostFilters();
 									syncLayoutBtn();
 									syncLayoutMode();
 									loadStats();
@@ -10587,25 +10636,15 @@
 						}
 						const guestPid = getUrlParam("pid");
 						const guestUid = getUrlParam("uid");
-						const guestQ = getUrlParam("q");
-						const guestD = getUrlParam("d");
 						localStorage.removeItem("loginUser");
 						localStorage.removeItem("token");
-						if (guestPid || guestUid || guestQ || guestD) {
+						if (guestPid || guestUid) {
 							guestMode = true;
 							show("main");
 							$("nav").classList.add("hidden");
 							$("postFilterBar").style.display = "none";
 							$("logoRow").querySelector("#onlineMini").style.display = "none";
 							$("logoRow").querySelector("#notifBtn").style.display = "none";
-							const validD = /^\d{4}-\d{2}-\d{2}$/.test(guestD || "") ? guestD : "";
-							if ((guestQ || validD) && !guestPid && !guestUid) {
-								applyQuery(guestQ || "", validD);
-								let deepUrl = "";
-								if (guestQ) deepUrl += "?q=" + encodeURIComponent(guestQ);
-								if (validD) deepUrl += (deepUrl ? "&" : "?") + "d=" + encodeURIComponent(validD);
-								history.pushState(null, "", deepUrl);
-							}
 							loadStats();
 							loadAnnouncements();
 							loadPosts(1);
