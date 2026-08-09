@@ -59,6 +59,62 @@ const emojiNames = new Set(
     .map((f) => f.slice(0, -4).toLowerCase())
 );
 
+// Auto-linker mirroring the forum SPA's linkifyUrls() + linkifyMentions()
+// (forum/index.html). Same regexes, same rules:
+//   - bare domains get https:// prepended; full http(s) URLs link as-is
+//   - @mentions link ONLY when the mentioned user exists (name matched
+//     case-insensitively against GET /api/users), to ?uid=<id>
+//   - mentions are processed first, then URLs — so a URL never gets wrapped
+//     inside an existing anchor (SPA skips .mentionLink nodes in linkifyUrls)
+const URL_REG = /(^|[\s(])((?:https?:\/\/)?(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(?::\d+)?(?:\/[^\s<>"']*)?)/gi;
+const MENTION_REG = /(^|[\s(])@([\p{L}\p{N}_-]{1,32})/gu;
+
+const linkifyUrls = (text) => {
+  if (!text) return "";
+  URL_REG.lastIndex = 0;
+  let out = "";
+  let last = 0;
+  let m;
+  while ((m = URL_REG.exec(text))) {
+    out += text.slice(last, m.index);
+    const prefix = m[1] || "";
+    const url = m[2];
+    const href = /^https?:\/\//i.test(url) ? url : "https://" + url;
+    out += `${prefix}<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    last = m.index + m[0].length;
+  }
+  return out + text.slice(last);
+};
+
+const linkifyMentions = (text, userByName) => {
+  if (!text || !text.includes("@") || userByName.size === 0) return text;
+  MENTION_REG.lastIndex = 0;
+  let out = "";
+  let last = 0;
+  let m;
+  while ((m = MENTION_REG.exec(text))) {
+    out += text.slice(last, m.index);
+    const full = m[0];
+    const prefix = m[1] || "";
+    const uname = m[2];
+    const found = userByName.get(uname.toLowerCase());
+    if (found) {
+      out += `${prefix}<a class="mentionLink" href="${FORUM_URL}?uid=${found.id}" target="_blank" rel="noopener noreferrer">@${found.name}</a>`;
+    } else {
+      out += full;
+    }
+    last = m.index + full.length;
+  }
+  return out + text.slice(last);
+};
+
+const autoLink = (text, userByName) => {
+  // mentions first (exact SPA order); URL-link only the parts between
+  // mention anchors so ?uid= hrefs never get re-wrapped
+  const parts = linkifyMentions(text, userByName).split(/(<a class="mentionLink"[^>]*>.*?<\/a>)/g);
+  return parts.map((part, i) => (i % 2 === 1 ? part : linkifyUrls(part))).join("");
+};
+
 // Convert raw post/comment text to description HTML. Text is inserted RAW
 // (no escaping here) — the whole string is escaped exactly once when the
 // <description> element is emitted. Raw <br>/<small>/<img>/<b> child elements
@@ -69,13 +125,14 @@ const emojiNames = new Set(
 //   [img:URL]      -> inline <img> (the SPA shows only the first as a
 //                     click-to-load button; the feed renders all of them)
 //   [[music:ID]] / [[music:(netease|qq):ID]] -> plain link (readers strip iframes)
-const contentToHtml = (raw) => {
+// Plain text also passes through autoLink() (URLs + @mentions, as in the SPA).
+const contentToHtml = (raw, userByName = new Map()) => {
   const reg = /:([a-zA-Z0-9_-]+):|\[img:(.*?)\]|\[\[music:(netease|qq):(\d+)\]\]|\[\[music:(\d+)\]\]/g;
   let out = "";
   let last = 0;
   let m;
   while ((m = reg.exec(raw))) {
-    out += raw.slice(last, m.index);
+    out += autoLink(raw.slice(last, m.index), userByName);
     if (m[1] !== undefined) {
       const name = m[1].toLowerCase();
       if (emojiNames.has(name)) {
@@ -95,7 +152,7 @@ const contentToHtml = (raw) => {
     }
     last = m.index + m[0].length;
   }
-  out += raw.slice(last);
+  out += autoLink(raw.slice(last), userByName);
   return out.replace(/\n/g, "<br />");
 };
 
@@ -130,7 +187,7 @@ async function fetchComments(posts) {
   return byPost;
 }
 
-function commentsToHtml(comments) {
+function commentsToHtml(comments, userByName = new Map()) {
   if (!comments || !comments.length) return "";
   const nameById = new Map(comments.map((c) => [c.id, c.users?.name || null]));
   const lines = comments.map((c) => {
@@ -140,7 +197,7 @@ function commentsToHtml(comments) {
     const replyPrefix = parentName ? `回复 @${parentName} · ` : "";
     const when = String(c.time || "").replace("T", " ").replace(/\.\d+$/, "").slice(0, 16);
     const whenHtml = when ? ` <small style="color:#888">${when}</small>` : "";
-    return `${replyPrefix}<b>${author}</b>: ${contentToHtml(text)}${whenHtml}`;
+    return `${replyPrefix}<b>${author}</b>: ${contentToHtml(text, userByName)}${whenHtml}`;
   });
   return `<br /><br /><b>💬 评论 (${comments.length})</b><br />${lines.join("<br />")}`;
 }
@@ -155,7 +212,7 @@ const makeTitle = (post) => {
   return post.users?.name || `Post ${post.id}`;
 };
 
-function buildItem(post, comments) {
+function buildItem(post, comments, userByName = new Map()) {
   const permalink = `${FORUM_URL}?pid=${post.id}`;
   const author = post.users?.name || String(post.author);
   const meta = [
@@ -165,7 +222,7 @@ function buildItem(post, comments) {
   ]
     .filter(Boolean)
     .join(" · ");
-  const descHtml = `${contentToHtml(post.content || "")}${meta ? `<br /><br /><small>${meta}</small>` : ""}${commentsToHtml(comments)}`;
+  const descHtml = `${contentToHtml(post.content || "", userByName)}${meta ? `<br /><br /><small>${meta}</small>` : ""}${commentsToHtml(comments, userByName)}`;
   return `    <item>
       <title>${escapeXml(makeTitle(post))}</title>
       <link>${permalink}</link>
@@ -193,8 +250,28 @@ async function main() {
   }
   const commentCount = [...commentsByPost.values()].reduce((n, a) => n + a.length, 0);
 
+  // User list for @mention linking (same source the SPA's linkifyMentions uses).
+  // If it fails, mentions simply stay plain text — exactly like the forum when
+  // its user cache is empty.
+  let userByName = new Map();
+  try {
+    const usersRes = await fetch(`${API_BASE}/api/users`, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (usersRes.ok) {
+      const users = await usersRes.json();
+      if (Array.isArray(users)) {
+        for (const u of users) {
+          if (u && u.name) userByName.set(String(u.name).toLowerCase(), u);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn(`Warning: users fetch failed (${err.message}); @mentions will not be linked.`);
+  }
+
   const items = posts
-    .map((p) => buildItem(p, commentsByPost.get(p.id) || []))
+    .map((p) => buildItem(p, commentsByPost.get(p.id) || [], userByName))
     .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
