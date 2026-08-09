@@ -59,24 +59,27 @@ const emojiNames = new Set(
     .map((f) => f.slice(0, -4).toLowerCase())
 );
 
-// Convert raw post/comment text to safe description HTML: escape text, keep
-// line breaks, and turn :emoji: tokens into the same SVG images the forum renders.
+// Convert raw post/comment text to description HTML. Text is inserted RAW
+// (no escaping here) — the whole string is escaped exactly once when the
+// <description> element is emitted. Raw <br>/<small>/<img>/<b> child elements
+// inside <description> are invalid RSS 2.0 (description must be character
+// data) and cause strict parsers like NetNewsWire's RSParser to reject items.
 const contentToHtml = (raw) => {
   const reg = /:([a-zA-Z0-9_-]+):/g;
   let out = "";
   let last = 0;
   let m;
   while ((m = reg.exec(raw))) {
-    out += escapeXml(raw.slice(last, m.index));
+    out += raw.slice(last, m.index);
     const name = m[1].toLowerCase();
     if (emojiNames.has(name)) {
       out += `<img src="${FORUM_URL}emojis/${name}.svg" alt=":${name}:" width="18" height="18" />`;
     } else {
-      out += `:${escapeXml(m[1])}:`;
+      out += `:${m[1]}:`;
     }
     last = m.index + m[0].length;
   }
-  out += escapeXml(raw.slice(last));
+  out += raw.slice(last);
   return out.replace(/\n/g, "<br />");
 };
 
@@ -115,12 +118,12 @@ function commentsToHtml(comments) {
   if (!comments || !comments.length) return "";
   const nameById = new Map(comments.map((c) => [c.id, c.users?.name || null]));
   const lines = comments.map((c) => {
-    const author = c.users?.name ? escapeXml(c.users.name) : "?";
+    const author = c.users?.name || "?";
     const { parentId, text } = parseReply(c.content);
     const parentName = parentId ? nameById.get(parentId) : null;
-    const replyPrefix = parentName ? `回复 @${escapeXml(parentName)} · ` : "";
+    const replyPrefix = parentName ? `回复 @${parentName} · ` : "";
     const when = String(c.time || "").replace("T", " ").replace(/\.\d+$/, "").slice(0, 16);
-    const whenHtml = when ? ` <small style="color:#888">${escapeXml(when)}</small>` : "";
+    const whenHtml = when ? ` <small style="color:#888">${when}</small>` : "";
     return `${replyPrefix}<b>${author}</b>: ${contentToHtml(text)}${whenHtml}`;
   });
   return `<br /><br /><b>💬 评论 (${comments.length})</b><br />${lines.join("<br />")}`;
@@ -138,22 +141,22 @@ const makeTitle = (post) => {
 
 function buildItem(post, comments) {
   const permalink = `${FORUM_URL}?pid=${post.id}`;
-  const author = post.users?.name ? escapeXml(post.users.name) : "";
+  const author = post.users?.name || String(post.author);
   const meta = [
     author ? `作者: ${author}` : "",
-    post.tag ? `标签: ${escapeXml(post.tag)}` : "",
+    post.tag ? `标签: ${post.tag}` : "",
     `👍 ${post.likes ?? 0} / 👎 ${post.dislikes ?? 0}`,
   ]
     .filter(Boolean)
     .join(" · ");
-  const desc = `${contentToHtml(post.content || "")}${meta ? `<br /><br /><small>${meta}</small>` : ""}${commentsToHtml(comments)}`;
+  const descHtml = `${contentToHtml(post.content || "")}${meta ? `<br /><br /><small>${meta}</small>` : ""}${commentsToHtml(comments)}`;
   return `    <item>
       <title>${escapeXml(makeTitle(post))}</title>
       <link>${permalink}</link>
       <guid isPermaLink="true">${permalink}</guid>
       <pubDate>${toRfc2822(post.time)}</pubDate>
-      <dc:creator>${author || escapeXml(String(post.author))}</dc:creator>
-      <description>${desc}</description>
+      <dc:creator>${escapeXml(author)}</dc:creator>
+      <description>${escapeXml(descHtml)}</description>
     </item>`;
 }
 
