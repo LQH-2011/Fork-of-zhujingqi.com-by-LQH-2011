@@ -2408,9 +2408,9 @@
 						.from("messages")
 						.select("id", { count: "exact", head: true })
 						.or(`and(sender_id.eq.${me},receiver_id.eq.${other}),and(sender_id.eq.${other},receiver_id.eq.${me})`);
-					if (!countErr && count >= 100) {
+					if (!countErr && count >= 500) {
 						openModal("聊天记录已满", `
-							该对话已有 <b>${count}</b> 条消息，达到 100 条上限。<br><br>
+							该对话已有 <b>${count}</b> 条消息，达到 500 条上限。<br><br>
 							请先导出保存聊天记录，系统将自动清空以便继续聊天。
 							<div style="margin-top:12px;">
 								<button id="exportAndClearBtn" style="background:#0a0;color:#fff;width:100%;">导出并清空</button>
