@@ -4,9 +4,13 @@
  *
  * The forum is a static SPA; its posts live in Supabase and are served by an
  * edge function. RSS readers cannot execute JavaScript, so this script fetches
- * the latest posts from the same public API the SPA uses and writes a static
- * RSS 2.0 feed into forum/rss.xml. Run it whenever you want the feed refreshed
- * and commit the updated rss.xml (e.g. `node forum/rss.mjs && git add forum/rss.xml`).
+ * the latest posts (and their comments) from the same public APIs the SPA uses
+ * and writes a static RSS 2.0 feed into forum/rss.xml. Run it whenever you want
+ * the feed refreshed and commit the updated rss.xml (e.g.
+ * `node forum/rss.mjs && git add forum/rss.xml`).
+ *
+ * The repository ships a GitHub Actions workflow (.github/workflows/forum-rss.yml)
+ * that runs this script daily (16:00 UTC) and commits the refreshed feed.
  *
  * Usage:
  *   node forum/rss.mjs [--perPage 20] [--out forum/rss.xml] [--base https://zhujingqi.com]
@@ -17,9 +21,10 @@ import { readdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-// Same endpoint the forum SPA uses (see API_BASE in forum/index.html).
+// Same endpoints the forum SPA uses (see API_BASE in forum/index.html).
 const API_BASE = "https://hxlhrrllhvvazyhiuhvb.supabase.co/functions/v1";
 const API_POSTS = `${API_BASE}/api/posts`;
+const API_COMMENTS_BATCH = `${API_BASE}/api/comments/batch`;
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const EMOJI_DIR = path.join(SCRIPT_DIR, "emojis");
@@ -54,8 +59,8 @@ const emojiNames = new Set(
     .map((f) => f.slice(0, -4).toLowerCase())
 );
 
-// Convert raw post content to safe description HTML: escape text, keep line
-// breaks, and turn :emoji: tokens into the same SVG images the forum renders.
+// Convert raw post/comment text to safe description HTML: escape text, keep
+// line breaks, and turn :emoji: tokens into the same SVG images the forum renders.
 const contentToHtml = (raw) => {
   const reg = /:([a-zA-Z0-9_-]+):/g;
   let out = "";
@@ -75,6 +80,52 @@ const contentToHtml = (raw) => {
   return out.replace(/\n/g, "<br />");
 };
 
+// Comments may be replies; the content starts with "[reply:<parentId>] ".
+const parseReply = (content) => {
+  const m = String(content || "").match(/^\[reply:(\d+)\]\s*/);
+  return m
+    ? { parentId: Number(m[1]), text: content.slice(m[0].length) }
+    : { parentId: null, text: content || "" };
+};
+
+// Fetch comments for every post in one batch call (same endpoint the SPA uses),
+// grouped by post id and sorted chronologically. Reply targets are resolved
+// afterwards against each post's own comment list.
+async function fetchComments(posts) {
+  if (!posts.length) return new Map();
+  const res = await fetch(API_COMMENTS_BATCH, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ postIds: posts.map((p) => p.id) }),
+  });
+  if (!res.ok) throw new Error(`comments API returned ${res.status}: ${await res.text()}`);
+  const list = await res.json();
+  const byPost = new Map();
+  for (const c of Array.isArray(list) ? list : []) {
+    if (!byPost.has(c.postid)) byPost.set(c.postid, []);
+    byPost.get(c.postid).push(c);
+  }
+  for (const arr of byPost.values()) {
+    arr.sort((a, b) => new Date(a.time) - new Date(b.time));
+  }
+  return byPost;
+}
+
+function commentsToHtml(comments) {
+  if (!comments || !comments.length) return "";
+  const nameById = new Map(comments.map((c) => [c.id, c.users?.name || null]));
+  const lines = comments.map((c) => {
+    const author = c.users?.name ? escapeXml(c.users.name) : "?";
+    const { parentId, text } = parseReply(c.content);
+    const parentName = parentId ? nameById.get(parentId) : null;
+    const replyPrefix = parentName ? `回复 @${escapeXml(parentName)} · ` : "";
+    const when = String(c.time || "").replace("T", " ").replace(/\.\d+$/, "").slice(0, 16);
+    const whenHtml = when ? ` <small style="color:#888">${escapeXml(when)}</small>` : "";
+    return `${replyPrefix}<b>${author}</b>: ${contentToHtml(text)}${whenHtml}`;
+  });
+  return `<br /><br /><b>💬 评论 (${comments.length})</b><br />${lines.join("<br />")}`;
+}
+
 // Posts have no titles; derive one from the content (or the author's name).
 const makeTitle = (post) => {
   const text = String(post.content || "")
@@ -85,6 +136,27 @@ const makeTitle = (post) => {
   return post.users?.name || `Post ${post.id}`;
 };
 
+function buildItem(post, comments) {
+  const permalink = `${FORUM_URL}?pid=${post.id}`;
+  const author = post.users?.name ? escapeXml(post.users.name) : "";
+  const meta = [
+    author ? `作者: ${author}` : "",
+    post.tag ? `标签: ${escapeXml(post.tag)}` : "",
+    `👍 ${post.likes ?? 0} / 👎 ${post.dislikes ?? 0}`,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const desc = `${contentToHtml(post.content || "")}${meta ? `<br /><br /><small>${meta}</small>` : ""}${commentsToHtml(comments)}`;
+  return `    <item>
+      <title>${escapeXml(makeTitle(post))}</title>
+      <link>${permalink}</link>
+      <guid isPermaLink="true">${permalink}</guid>
+      <pubDate>${toRfc2822(post.time)}</pubDate>
+      <dc:creator>${author || escapeXml(String(post.author))}</dc:creator>
+      <description>${desc}</description>
+    </item>`;
+}
+
 async function main() {
   console.log(`Fetching ${API_POSTS}?page=1&perPage=${PER_PAGE} …`);
   const res = await fetch(`${API_POSTS}?page=1&perPage=${PER_PAGE}`, {
@@ -94,27 +166,16 @@ async function main() {
   const data = await res.json();
   const posts = Array.isArray(data.posts) ? data.posts : [];
 
+  let commentsByPost = new Map();
+  try {
+    commentsByPost = await fetchComments(posts);
+  } catch (err) {
+    console.warn(`Warning: comments fetch failed (${err.message}); feed will omit comments.`);
+  }
+  const commentCount = [...commentsByPost.values()].reduce((n, a) => n + a.length, 0);
+
   const items = posts
-    .map((p) => {
-      const permalink = `${FORUM_URL}?pid=${p.id}`;
-      const author = p.users?.name ? escapeXml(p.users.name) : "";
-      const meta = [
-        author ? `作者: ${author}` : "",
-        p.tag ? `标签: ${escapeXml(p.tag)}` : "",
-        `👍 ${p.likes ?? 0} / 👎 ${p.dislikes ?? 0}`,
-      ]
-        .filter(Boolean)
-        .join(" · ");
-      const desc = `${contentToHtml(p.content || "")}${meta ? `<br /><br /><small>${meta}</small>` : ""}`;
-      return `    <item>
-      <title>${escapeXml(makeTitle(p))}</title>
-      <link>${permalink}</link>
-      <guid isPermaLink="true">${permalink}</guid>
-      <pubDate>${toRfc2822(p.time)}</pubDate>
-      <dc:creator>${author || escapeXml(String(p.author))}</dc:creator>
-      <description>${desc}</description>
-    </item>`;
-    })
+    .map((p) => buildItem(p, commentsByPost.get(p.id) || []))
     .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -134,7 +195,9 @@ ${items}
 `;
 
   writeFileSync(OUT_FILE, xml, "utf8");
-  console.log(`Wrote ${OUT_FILE} (${posts.length} items, ${data.count ?? "?"} total posts).`);
+  console.log(
+    `Wrote ${OUT_FILE} (${posts.length} items, ${commentCount} comments, ${data.count ?? "?"} total posts).`
+  );
 }
 
 main().catch((err) => {
