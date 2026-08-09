@@ -64,18 +64,34 @@ const emojiNames = new Set(
 // <description> element is emitted. Raw <br>/<small>/<img>/<b> child elements
 // inside <description> are invalid RSS 2.0 (description must be character
 // data) and cause strict parsers like NetNewsWire's RSParser to reject items.
+// Forum content markers mirroring the SPA's getPostMeta():
+//   :emoji:        -> the forum's own SVG image
+//   [img:URL]      -> inline <img> (the SPA shows only the first as a
+//                     click-to-load button; the feed renders all of them)
+//   [[music:ID]] / [[music:(netease|qq):ID]] -> plain link (readers strip iframes)
 const contentToHtml = (raw) => {
-  const reg = /:([a-zA-Z0-9_-]+):/g;
+  const reg = /:([a-zA-Z0-9_-]+):|\[img:(.*?)\]|\[\[music:(netease|qq):(\d+)\]\]|\[\[music:(\d+)\]\]/g;
   let out = "";
   let last = 0;
   let m;
   while ((m = reg.exec(raw))) {
     out += raw.slice(last, m.index);
-    const name = m[1].toLowerCase();
-    if (emojiNames.has(name)) {
-      out += `<img src="${FORUM_URL}emojis/${name}.svg" alt=":${name}:" width="18" height="18" />`;
+    if (m[1] !== undefined) {
+      const name = m[1].toLowerCase();
+      if (emojiNames.has(name)) {
+        out += `<img src="${FORUM_URL}emojis/${name}.svg" alt=":${name}:" width="18" height="18" />`;
+      } else {
+        out += `:${m[1]}:`;
+      }
+    } else if (m[2] !== undefined) {
+      out += `<img src="${m[2]}" alt="image" />`;
     } else {
-      out += `:${m[1]}:`;
+      const id = m[4] || m[5];
+      const type = m[3] || "netease";
+      const url = type === "qq"
+        ? `https://y.qq.com/n/ryqq/songDetail/${id}`
+        : `https://music.163.com/#/song?id=${id}`;
+      out += `<a href="${url}">🎵 ${type === "qq" ? "QQ 音乐" : "网易云音乐"}</a>`;
     }
     last = m.index + m[0].length;
   }
