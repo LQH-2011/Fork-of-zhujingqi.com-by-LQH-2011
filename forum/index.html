@@ -8065,6 +8065,7 @@
 					}
 					$("searchBtn").onclick = () => {
 						applyQuery(search.value);
+						syncUrlFromQuery();
 						loadStats();
 						loadPosts(1);
 						closeSearchSheet();
@@ -8072,6 +8073,7 @@
 					search.onkeydown = e => {
 						if (e.key === "Enter") {
 							applyQuery(search.value);
+							syncUrlFromQuery();
 							loadStats();
 							loadPosts(1);
 							closeSearchSheet();
@@ -8088,6 +8090,13 @@
 						postSearch = "";
 					}
 					renderPostFilters();
+				}
+				function syncUrlFromQuery() {
+					const params = new URLSearchParams();
+					if (postSearch) params.set("q", postSearch);
+					if (activePostDay) params.set("d", activePostDay);
+					const qs = params.toString();
+					history.pushState(null, "", qs ? ("?" + qs) : window.location.pathname);
 				}
 				async function renderPostTimeline() {
 					const el = $("postTimeline");
@@ -8128,6 +8137,7 @@
 							if (!activePostDay) return;
 							activePostDay = "";
 							renderPostFilters();
+							syncUrlFromQuery();
 							loadStats();
 							loadPosts(1);
 							closeSearchSheet();
@@ -8154,6 +8164,7 @@
 									if (s) s.value = "";
 								}
 							renderPostFilters();
+							syncUrlFromQuery();
 							loadStats();
 							loadPosts(1);
 							closeSearchSheet();
@@ -10622,7 +10633,6 @@
 									if (initialQ) {
 										applyQuery(initialQ);
 										$("searchOverlay").classList.remove("hidden");
-										history.pushState(null, "", "?q=" + encodeURIComponent(initialQ));
 									} else {
 										renderPostFilters();
 									}
@@ -10630,6 +10640,7 @@
 										activePostDay = initialD;
 										renderPostFilters();
 									}
+									syncUrlFromQuery();
 									syncLayoutBtn();
 									syncLayoutMode();
 									loadStats();
@@ -10658,12 +10669,12 @@
 							if (guestQ && !guestPid && !guestUid) {
 								applyQuery(guestQ);
 								$("searchOverlay").classList.remove("hidden");
-								history.pushState(null, "", "?q=" + encodeURIComponent(guestQ));
 							}
 							if (guestD && !guestPid && !guestUid) {
 								activePostDay = guestD;
 								renderPostFilters();
 							}
+							syncUrlFromQuery();
 							loadStats();
 							loadAnnouncements();
 							loadPosts(1);
