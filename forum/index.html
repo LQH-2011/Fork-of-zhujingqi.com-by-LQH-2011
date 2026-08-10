@@ -10632,7 +10632,6 @@
 									show("main");
 									if (initialQ) {
 										applyQuery(initialQ);
-										$("searchOverlay").classList.remove("hidden");
 									} else {
 										renderPostFilters();
 									}
@@ -10668,7 +10667,6 @@
 							$("logoRow").querySelector("#notifBtn").style.display = "none";
 							if (guestQ && !guestPid && !guestUid) {
 								applyQuery(guestQ);
-								$("searchOverlay").classList.remove("hidden");
 							}
 							if (guestD && !guestPid && !guestUid) {
 								activePostDay = guestD;

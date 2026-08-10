@@ -1,6 +1,7 @@
-# Regenerates forum/rss.xml from the live Supabase forum API every day at
-# 16:00 UTC and commits the refreshed feed. Can also be triggered manually
-# via the "Run workflow" button (Actions → Update forum RSS).
+# Regenerates forum/rss.xml from the live Supabase forum API every 3 hours
+# (16:00, 19:00, 22:00, 01:00, 04:00, 07:00, 10:00, 13:00 UTC) and commits the
+# refreshed feed. Can also be triggered manually via the "Run workflow" button
+# (Actions → Update forum RSS).
 #
 # The generator (forum/rss.mjs) is zero-dependency Node and only rewrites the
 # file when it runs; this workflow skips committing when nothing changed.
@@ -8,7 +9,7 @@ name: Update forum RSS
 
 on:
   schedule:
-    - cron: "0 16 * * *" # daily at 16:00 UTC
+    - cron: "0 16,19,22,1,4,7,10,13 * * *" # every 3 hours, starting at 16:00 UTC
   workflow_dispatch: {} # manual trigger
 
 concurrency:
