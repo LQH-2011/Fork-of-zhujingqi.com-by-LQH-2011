@@ -114,6 +114,12 @@
 				resize: none;
 			}
 
+			input:focus,
+			textarea:focus {
+				outline: none;
+				border-color: var(--sub);
+			}
+
 			a {
 				color: var(--green);
 			}
@@ -413,6 +419,16 @@
 				transition: .2s;
 				box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
 				user-select: none;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 6px;
+			}
+
+			#profileActions .profileBtn .pbIcon {
+				width: 18px;
+				height: 18px;
+				flex-shrink: 0;
 			}
 
 			#profileActions .profileBtn:hover {
@@ -750,6 +766,8 @@
 				border-radius: 20px;
 				width: 300px;
 				max-width: calc(100vw - 40px);
+				max-height: calc(100dvh - 40px);
+				overflow-y: auto;
 				text-align: center;
 				opacity: 1;
 				transform: scale(1);
@@ -3954,6 +3972,19 @@
 		</style>
 	</head>
 	<body>
+		<script>
+			// Apply the saved theme before first paint to avoid a flash of the
+			// wrong theme. Preference: "sys" (follow OS) | "light" | "dark".
+			(function () {
+				try {
+					var t = localStorage.getItem("theme") || "sys";
+					if (t === "dark" || (t === "sys" && window.matchMedia && matchMedia(
+							"(prefers-color-scheme: dark)").matches)) {
+						document.body.classList.add("dark");
+					}
+				} catch (e) {}
+			})();
+		</script>
 		<div class="bottom hidden" id="nav">
 			<button id="homeBtn" title="首页"><span class="navIcon" data-icon="home"></span></button>
 			<button id="editorBtn" title="发布"><span class="navIcon" data-icon="editor"></span></button>
@@ -4021,6 +4052,8 @@
 				<button id="layoutBtn" type="button">信息流</button>
 				<button id="onlineMini" type="button">在线 0</button>
 				<button id="notifBtn" type="button"><span id="notifLabel">通知</span><span id="notifBadge" hidden>0</span></button>
+				<button id="loginTopBtn" type="button"
+					style="display:none;background:var(--green);color:#fff;font-weight:700;height:36px;padding:0 18px;border-radius:999px;flex-shrink:0;">登录</button>
 			</div>
 			<div id="postFilterBar" class="postFilterBar">
 				<div id="postTagBar" class="postTagBar"></div>
@@ -6117,6 +6150,50 @@
 				const $ = id => document.getElementById(id);
 				let currentUser = null;
 				let guestMode = false;
+				function hideLoggedFeatures() {
+					guestMode = true;
+					if ($("loginTopBtn")) $("loginTopBtn").style.display = "";
+					const lr = $("logoRow");
+					if (lr) {
+						const sb = lr.querySelector("#searchBall");
+						if (sb) sb.style.display = "none";
+						const om = lr.querySelector("#onlineMini");
+						if (om) om.style.display = "none";
+						const nb = lr.querySelector("#notifBtn");
+						if (nb) nb.style.display = "none";
+					}
+					if ($("notice")) $("notice").style.display = "none";
+					if ($("announceBar")) $("announceBar").style.display = "none";
+					if ($("fortuneBox")) $("fortuneBox").style.display = "none";
+					if ($("mobileSideBtn")) $("mobileSideBtn").style.display = "none";
+				}
+				function showLoggedFeatures() {
+					guestMode = false;
+					if ($("loginTopBtn")) $("loginTopBtn").style.display = "none";
+					const lr = $("logoRow");
+					if (lr) {
+						const sb = lr.querySelector("#searchBall");
+						if (sb) sb.style.display = "";
+						const om = lr.querySelector("#onlineMini");
+						if (om) om.style.display = "";
+						const nb = lr.querySelector("#notifBtn");
+						if (nb) nb.style.display = "";
+					}
+					if ($("notice")) $("notice").style.display = "";
+					if ($("announceBar")) $("announceBar").style.display = "";
+					if ($("fortuneBox")) $("fortuneBox").style.display = "";
+					if (typeof syncMobilePanels === "function") syncMobilePanels();
+				}
+				function enterGuestMode() {
+					hideLoggedFeatures();
+					$("nav").classList.remove("hidden");
+					show("main");
+					renderPostFilters();
+					syncLayoutMode();
+					syncLayoutBtn();
+					syncUrlFromQuery();
+					loadPosts(1);
+				}
 				let currentPage = "main";
 				const defaultTags = ["学习", "日常", "搞笑", "提问"];
 				const defaultTagKeys = {
@@ -6127,6 +6204,22 @@
 				};
 				let selectedTags = [];
 				let postLayout = localStorage.getItem("postLayout") || "list";
+
+				function getThemePref() {
+					const v = localStorage.getItem("theme");
+					return v === "dark" || v === "light" ? v : "sys";
+				}
+				function applyTheme(pref) {
+					const p = pref || getThemePref();
+					const dark = p === "dark" || (p === "sys" && window.matchMedia && matchMedia(
+						"(prefers-color-scheme: dark)").matches);
+					document.body.classList.toggle("dark", dark);
+				}
+				if (window.matchMedia) {
+					matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+						if (getThemePref() === "sys") document.body.classList.toggle("dark", e.matches);
+					});
+				}
 
 				function syncLayoutBtn() {
 					const btn = $("layoutBtn");
@@ -6969,6 +7062,9 @@
 					setActive("showUsersBtn");
 				};
 				$("notifBtn").onclick = openNotifications;
+				$("loginTopBtn").onclick = () => {
+					show("welcomePage");
+				};
 				$("searchBall").onclick = () => {
 					$("searchOverlay").classList.remove("hidden");
 					const input = $("postSearch");
@@ -7009,14 +7105,7 @@
 					localStorage.removeItem("loginUser");
 					localStorage.removeItem("token");
 					currentUser = null;
-					guestMode = false;
-					$("postFilterBar").style.display = "";
-					const mini = document.querySelector("#logoRow #onlineMini");
-					if (mini) mini.style.display = "";
-					const notif = document.querySelector("#logoRow #notifBtn");
-					if (notif) notif.style.display = "";
-					$("nav").classList.add("hidden");
-					show("welcomePage");
+					enterGuestMode();
 				};
 				$("backBtn").onclick = () => {
 					show("main");
@@ -7170,7 +7259,7 @@
 					}
 					if (meta.img) {
 						html +=
-							`<div style="margin:8px 0;"><button class="loadImgBtn" data-src="${escapeAttr(meta.img)}" style="width:100%;padding:12px;border-radius:20px;background:var(--card);color:var(--text);font-size:16px;cursor:pointer;border:1px solid #ccc;text-align:center;transition:.2s;" onmouseover="this.style.background='var(--grad)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color=''">${t("post_load_img")}</button></div>`;
+							`<div style="margin:8px 0;"><button class="loadImgBtn" data-src="${escapeAttr(meta.img)}" style="width:100%;padding:12px;border-radius:20px;background:var(--card);color:var(--text);font-size:16px;cursor:pointer;border:1px solid var(--border);text-align:center;transition:.2s;" onmouseover="this.style.background='var(--grad)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color=''">${t("post_load_img")}</button></div>`;
 					}
 					html += needFold ?
 						`<span class="longPostText">${foldedText}</span><button class="toggleLongPost inline">${t("post_expand")}</button>` :
@@ -7254,13 +7343,10 @@
 							pass: passHash
 						});
 						currentUser = data;
-						guestMode = false;
 						localStorage.setItem("loginUser", data.id);
 						if (data.token) localStorage.setItem("token", data.token);
+						showLoggedFeatures();
 						$("nav").classList.remove("hidden");
-						$("postFilterBar").style.display = "";
-						$("logoRow").querySelector("#onlineMini").style.display = "";
-						$("logoRow").querySelector("#notifBtn").style.display = "";
 						show("main");
 						renderPostFilters();
 						syncLayoutMode();
@@ -7280,15 +7366,7 @@
 					}
 				};
 				$("guestBtn").onclick = () => {
-					guestMode = true;
-					show("main");
-					$("nav").classList.add("hidden");
-					$("postFilterBar").style.display = "none";
-					$("logoRow").querySelector("#onlineMini").style.display = "none";
-					$("logoRow").querySelector("#notifBtn").style.display = "none";
-					loadPosts(1);
-					loadStats();
-					loadAnnouncements();
+					enterGuestMode();
 				};
 				document.addEventListener("click", e => {
 					if (!guestMode) return;
@@ -7296,11 +7374,13 @@
 					if (target.closest(".userLink") || target.closest("a") || target.closest("#viewer") || target
 						.closest(
 							".modal") || target.closest("#welcomePage") || target.closest("#registerPage") ||
+						target.closest("#loginTopBtn") ||
 						target.closest(
 							"#backBtn") || target.closest("#postBackBtn")) return;
 					if (target.closest("button") || target.closest("input") || target.closest("textarea") ||
 						target.closest(
-							"select") || target.closest(".postTag") || target.closest(".shareBtnWrapper")) {
+							"select") || target.closest(".postTag") || target.closest(".postTagChip") ||
+						target.closest(".shareBtnWrapper")) {
 						e.preventDefault();
 						e.stopPropagation();
 						modal(t("guest_modal_title"));
@@ -7314,10 +7394,6 @@
 							box.appendChild(row);
 							$("guestLoginRedirect").onclick = () => {
 								$("modal").classList.add("hidden");
-								guestMode = false;
-								$("postFilterBar").style.display = "";
-								$("logoRow").querySelector("#onlineMini").style.display = "";
-								$("logoRow").querySelector("#notifBtn").style.display = "";
 								show("welcomePage");
 							};
 						}
@@ -7860,27 +7936,7 @@
 					const pager = $("postPager");
 					if (!pager) return;
 					if (guestMode) {
-						pager.innerHTML =
-							`<button class="navBtn" id="guestMoreBtn" style="min-width:120px;">${t("guest_more")}</button>`;
-						$("guestMoreBtn").onclick = () => {
-							modal(t("guest_modal_title"));
-							const box = $("modalText");
-							if (!$("guestLoginRedirect")) {
-								const row = document.createElement("div");
-								row.style.cssText = "margin-top:14px;text-align:center;";
-								row.innerHTML =
-									`<button id="guestLoginRedirect" style="background:var(--green);color:#fff;">${t("guest_go_login")}</button>`;
-								box.appendChild(row);
-								$("guestLoginRedirect").onclick = () => {
-									$("modal").classList.add("hidden");
-									guestMode = false;
-									$("postFilterBar").style.display = "";
-									$("logoRow").querySelector("#onlineMini").style.display = "";
-									$("logoRow").querySelector("#notifBtn").style.display = "";
-									show("welcomePage");
-								};
-							}
-						};
+						pager.innerHTML = "";
 						return;
 					}
 					pager.innerHTML = "";
@@ -8254,7 +8310,7 @@
 				function syncMobilePanels() {
 					const isMobile = window.innerWidth <= 800;
 					const dense = postLayout === "dense";
-					if (isMobile) {
+					if (isMobile && !guestMode) {
 						if (mobileSideBtn) mobileSideBtn.style.display = "flex";
 					} else {
 						if (mobileSideBtn) mobileSideBtn.style.display = "none";
@@ -8294,7 +8350,7 @@
 				async function loadPosts(page = 1, container = $("posts")) {
 					if (guestMode) page = 1;
 					const token = ++currentLoadToken;
-					const perPage = getPostsPerPage();
+					const perPage = guestMode ? 4 : getPostsPerPage();
 					container.innerHTML =
 						"<p style='text-align:center;color:var(--sub);margin-top:20px;'>Loading...</p>";
 					try {
@@ -9016,7 +9072,7 @@
 				function openProfileSettings(user) {
 					const box = document.querySelector(".modalBox");
 					box.style.width = "440px";
-					const themeClass = document.body.classList.contains("dark") ? "dark" : "light";
+					const themeClass = getThemePref();
 					modal(`
 						<div style="text-align:left;">
 							<h3 style="margin:0 0 10px 0;text-align:center;">${t("profile_settings")}</h3>
@@ -9060,8 +9116,8 @@
 						btn.classList.toggle("active", btn.dataset.theme === themeClass);
 						btn.onclick = () => {
 							const t = btn.dataset.theme;
-							if (t === "dark") document.body.classList.add("dark");
-							else document.body.classList.remove("dark");
+							localStorage.setItem("theme", t);
+							applyTheme(t);
 							box.querySelectorAll(".settingsThemeBtn").forEach(b => b.classList.remove(
 								"active"));
 							btn.classList.add("active");
@@ -9275,7 +9331,7 @@
 						actions.appendChild(shopBtn);
 						const settingsBtn = document.createElement("button");
 						settingsBtn.className = "profileBtn half";
-						settingsBtn.textContent = t("profile_settings");
+						settingsBtn.innerHTML = '<svg class="pbIcon" viewBox="0 0 46.21739 46.21739" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g transform="translate(-216.8913,-156.8913)"><g fill="none" fill-rule="nonzero" stroke="currentColor" stroke-linejoin="miter" stroke-miterlimit="10"><path d="M229.30778,180c0,-5.90515 4.78707,-10.69222 10.69222,-10.69222c5.90515,0 10.69222,4.78707 10.69222,10.69222c0,5.90515 -4.78707,10.69222 -10.69222,10.69222c-5.90515,0 -10.69222,-4.78707 -10.69222,-10.69222z" stroke-width="7" stroke-linecap="butt"/><path d="M240,159.8913v8.31417" stroke-width="6" stroke-linecap="round"/><path d="M240,191.79453v8.31417" stroke-width="6" stroke-linecap="round"/><path d="M219.89131,180h8.31417" stroke-width="6" stroke-linecap="round"/><path d="M251.79453,180h8.31417" stroke-width="6" stroke-linecap="round"/><path d="M225.78101,165.78101l5.87901,5.87901" stroke-width="6" stroke-linecap="round"/><path d="M248.52518,188.33999l5.87901,5.87901" stroke-width="6" stroke-linecap="round"/><path d="M225.78101,194.219l5.87901,-5.87901" stroke-width="6" stroke-linecap="round"/><path d="M248.33999,171.66001l5.87901,-5.87901" stroke-width="6" stroke-linecap="round"/></g></g></svg>' + t("profile_settings");
 						settingsBtn.onclick = () => openProfileSettings(user);
 						actions.appendChild(settingsBtn);
 					}
@@ -10632,7 +10688,6 @@
 									show("main");
 									if (initialQ) {
 										applyQuery(initialQ);
-										$("searchOverlay").classList.remove("hidden");
 									} else {
 										renderPostFilters();
 									}
@@ -10659,34 +10714,20 @@
 						const guestD = getUrlParam("d");
 						localStorage.removeItem("loginUser");
 						localStorage.removeItem("token");
-						if (guestPid || guestUid || guestQ || guestD) {
-							guestMode = true;
-							show("main");
-							$("nav").classList.add("hidden");
-							$("postFilterBar").style.display = "none";
-							$("logoRow").querySelector("#onlineMini").style.display = "none";
-							$("logoRow").querySelector("#notifBtn").style.display = "none";
-							if (guestQ && !guestPid && !guestUid) {
-								applyQuery(guestQ);
-								$("searchOverlay").classList.remove("hidden");
-							}
-							if (guestD && !guestPid && !guestUid) {
-								activePostDay = guestD;
-								renderPostFilters();
-							}
-							syncUrlFromQuery();
-							loadStats();
-							loadAnnouncements();
-							loadPosts(1);
-							if (guestPid) {
-								const pid = Number(guestPid);
-								if (!isNaN(pid)) openSinglePost(pid);
-							} else if (guestUid) {
-								const userId = Number(guestUid);
-								if (!isNaN(userId)) viewUser(userId);
-							}
-						} else {
-							show("welcomePage");
+						hideLoggedFeatures();
+						$("nav").classList.remove("hidden");
+						show("main");
+						renderPostFilters();
+						syncLayoutMode();
+						syncLayoutBtn();
+						syncUrlFromQuery();
+						loadPosts(1);
+						if (guestPid) {
+							const pid = Number(guestPid);
+							if (!isNaN(pid)) openSinglePost(pid);
+						} else if (guestUid) {
+							const userId = Number(guestUid);
+							if (!isNaN(userId)) viewUser(userId);
 						}
 					} finally {
 						mask.classList.add("fadeOut");
