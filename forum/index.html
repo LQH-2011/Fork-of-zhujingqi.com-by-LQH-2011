@@ -44,6 +44,9 @@
 				--text: #eee;
 				--sub: #aaa;
 				--border: #3a3a3a;
+				--green: #3d8c40;
+				--grad: #3d8c40;
+				--active: #3d8c40;
 				--lottery-bg: #3a3020;
 				--lottery-btn-bg: #2a2518;
 				--lottery-btn-text: #d4a017;
@@ -747,7 +750,7 @@
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				z-index: 99999;
+				z-index: 100001;
 				opacity: 1;
 				transition: opacity .2s ease, visibility 0s;
 			}
@@ -2106,6 +2109,416 @@
 				color: #fff;
 				border-color: var(--green);
 			}
+
+			.aiAskChip {
+				margin-left: auto;
+				flex-shrink: 0;
+				position: sticky;
+				right: 0;
+				padding: 6px 16px;
+				border-radius: 999px;
+				border: none;
+				cursor: pointer;
+				user-select: none;
+				white-space: nowrap;
+				font-size: 14px;
+				font-weight: 700;
+				color: #fff;
+				background: var(--green);
+				box-shadow: 0 2px 8px rgba(0, 170, 0, .35);
+				box-shadow: 0 2px 8px color-mix(in srgb, var(--green) 35%, transparent);
+				transition: opacity .2s;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				z-index: 5;
+			}
+			.aiAskChip img.aiAskIcon {
+				width: 20px;
+				height: 20px;
+				display: block;
+				padding: 3px;
+				border-radius: 50%;
+				background: #fff;
+				box-sizing: content-box;
+			}
+			.aiAskChip:hover {
+				opacity: .85;
+			}
+			body.dark .aiAskChip {
+				background: var(--green);
+			}
+			body.dark .aiModal .aiInputRow button,
+			body.dark .aiTag,
+			body.dark .aiCite,
+			body.dark .aiCitePanel .aiCitePanelKind,
+			body.dark .aiCitePanel .aiCitePanelLink {
+				background: var(--green);
+			}
+
+			.aiModal {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, .4);
+				backdrop-filter: blur(8px);
+				-webkit-backdrop-filter: blur(8px);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 99999;
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+				transition: opacity .2s ease, visibility 0s .25s;
+			}
+			.aiModal.show {
+				opacity: 1;
+				visibility: visible;
+				pointer-events: auto;
+				transition: opacity .2s ease;
+			}
+			.aiModal .aiBox {
+				background: var(--card);
+				border-radius: 24px;
+				width: min(760px, 94vw);
+				height: 86vh;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				box-shadow: 0 16px 60px rgba(0, 0, 0, .25);
+				text-align: left;
+			}
+			@media (min-width: 801px) {
+				.aiModal .aiBox {
+					height: 85vh;
+				}
+			}
+			.aiModal .aiHead {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 16px 20px;
+				border-bottom: 1px solid var(--border);
+			}
+			.aiModal .aiHead h2 {
+				margin: 0;
+				font-size: 18px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.aiModal .aiHead h2 img.aiModalIcon {
+				width: 22px;
+				height: 22px;
+				padding: 3px;
+				border-radius: 50%;
+				background: #fff;
+				box-sizing: content-box;
+			}
+			.aiModal .aiHead .aiSub {
+				font-size: 12px;
+				color: var(--sub);
+				margin-top: 2px;
+			}
+			.aiModal .aiHeadBtns {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.aiModal .aiClearBtn {
+				background: transparent;
+				border: 1px solid var(--border);
+				border-radius: 999px;
+				padding: 6px 14px;
+				cursor: pointer;
+				font-size: 13px;
+				color: var(--sub);
+			}
+			.aiModal .aiClearBtn:hover {
+				color: var(--text);
+				border-color: var(--green);
+			}
+			.aiModal .aiCloseBtn {
+				background: var(--bg);
+				border: 1px solid var(--border);
+				border-radius: 999px;
+				padding: 6px 14px;
+				cursor: pointer;
+				font-size: 13px;
+				color: var(--text);
+			}
+			.aiModal .aiChat {
+				flex: 1;
+				overflow-y: auto;
+				padding: 16px 20px;
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				min-height: 200px;
+			}
+			.aiMsg {
+				display: flex;
+				gap: 8px;
+				max-width: 100%;
+				position: relative;
+			}
+			.aiMsg.user {
+				flex-direction: row-reverse;
+			}
+			.aiMsgMain {
+				display: flex;
+				flex-direction: column;
+				max-width: 82%;
+			}
+			.aiMsg.user .aiMsgMain {
+				align-items: flex-end;
+			}
+			.aiMsg.bot .aiMsgMain {
+				align-items: flex-start;
+			}
+			.aiAvatar {
+				width: 34px;
+				height: 34px;
+				border-radius: 50%;
+				object-fit: cover;
+				flex-shrink: 0;
+				align-self: flex-start;
+				margin-top: 2px;
+				border: 1px solid var(--border);
+				background: var(--card);
+				box-sizing: border-box;
+			}
+			.aiAvatarBot {
+				border: 1px solid rgba(0, 0, 0, .06);
+				background: var(--card);
+				padding: 2px;
+			}
+			body.dark .aiAvatar,
+			body.dark .aiAvatarBot {
+				border-color: rgba(255, 255, 255, .18);
+				background: #222;
+			}
+			.aiBubble {
+				padding: 10px 14px;
+				border-radius: 16px;
+				font-size: 14px;
+				line-height: 1.6;
+				white-space: pre-wrap;
+				word-break: break-word;
+				max-width: 100%;
+			}
+			.aiMsgActions {
+				position: absolute;
+				top: 100%;
+				display: flex;
+				gap: 6px;
+				margin-top: 2px;
+				opacity: 0;
+				transition: opacity .15s;
+				z-index: 3;
+			}
+			.aiMsg.bot .aiMsgActions {
+				left: 10px;
+			}
+			.aiMsg.user .aiMsgActions {
+				right: 10px;
+			}
+			.aiMsg:hover .aiMsgActions {
+				opacity: 1;
+			}
+			.aiActionBtn {
+				border: none;
+				background: transparent;
+				color: var(--sub);
+				cursor: pointer;
+				font-size: 13px;
+				line-height: 1;
+				padding: 4px 6px;
+				border-radius: 6px;
+			}
+			.aiActionBtn:hover {
+				background: var(--bg);
+				color: var(--text);
+			}
+			.aiMsg.user .aiBubble {
+				background: rgba(0, 170, 0, .1);
+				color: var(--text);
+				border-bottom-right-radius: 4px;
+			}
+			body.dark .aiMsg.user .aiBubble {
+				background: rgba(0, 170, 0, .28);
+				color: #fff;
+			}
+			.aiMsg.bot .aiBubble {
+				background: var(--bg);
+				color: var(--text);
+				border-bottom-left-radius: 4px;
+			}
+			.aiTag {
+				display: inline-flex;
+				align-items: center;
+				gap: 4px;
+				font-size: 11px;
+				color: #fff;
+				background: var(--green);
+				border-radius: 999px;
+				padding: 2px 8px;
+				margin-bottom: 6px;
+			}
+			@media (max-width: 480px) {
+				.aiAvatar,
+				.aiAvatarBot {
+					width: 28px;
+					height: 28px;
+				}
+				.aiMsgMain {
+					max-width: 78%;
+				}
+			}
+			.aiModal .aiInputRow {
+				display: flex;
+				gap: 8px;
+				padding: 12px 16px;
+				border-top: 1px solid var(--border);
+			}
+			.aiModal .aiInputRow input {
+				flex: 1;
+				height: 42px;
+				border-radius: 20px;
+				border: 1px solid var(--border);
+				background: var(--bg);
+				color: var(--text);
+				padding: 0 16px;
+				box-sizing: border-box;
+				font-size: 14px;
+			}
+			.aiModal .aiInputRow button {
+				flex-shrink: 0;
+				height: 42px;
+				padding: 0 22px;
+				border-radius: 20px;
+				border: none;
+				background: var(--green);
+				color: #fff;
+				font-size: 14px;
+				font-weight: 700;
+				cursor: pointer;
+			}
+			.aiModal .aiInputRow button:disabled {
+				opacity: .5;
+				cursor: not-allowed;
+			}
+			.aiThinking {
+				display: inline-flex;
+				gap: 4px;
+			}
+			.aiThinking i {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--sub);
+				animation: aiBlink 1s infinite;
+			}
+			.aiThinking i:nth-child(2) { animation-delay: .2s; }
+			.aiThinking i:nth-child(3) { animation-delay: .4s; }
+			@keyframes aiBlink {
+				0%, 80%, 100% { opacity: .3; }
+				40% { opacity: 1; }
+			}
+			.aiLogItem {
+				background: var(--bg);
+				border-radius: 12px;
+				padding: 10px 12px;
+			}
+			.aiHint {
+				align-self: center;
+				background: rgba(0, 170, 0, .1);
+				border: 1px solid rgba(0, 170, 0, .3);
+				color: var(--sub);
+				border-radius: 999px;
+				padding: 4px 14px;
+				font-size: 12px;
+				margin-top: 2px;
+			}
+			body.dark .aiHint {
+				background: rgba(0, 170, 0, .15);
+				border-color: rgba(0, 170, 0, .4);
+			}
+			.aiCite {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				min-width: 18px;
+				height: 18px;
+				padding: 0 3px;
+				margin: 0 2px;
+				border-radius: 999px;
+				background: var(--green);
+				color: #fff;
+				font-size: 12px;
+				font-weight: 700;
+				line-height: 1;
+				cursor: pointer;
+				vertical-align: super;
+				user-select: none;
+				box-shadow: 0 1px 4px rgba(0, 170, 0, .4);
+			}
+			.aiCite:hover {
+				opacity: .85;
+			}
+			.aiCitePanel {
+				position: fixed;
+				z-index: 100001;
+				width: min(320px, 88vw);
+				background: var(--card);
+				border: 1px solid var(--border);
+				border-radius: 14px;
+				box-shadow: 0 10px 34px rgba(0, 0, 0, .22);
+				padding: 12px 14px;
+				font-size: 13px;
+				text-align: left;
+				box-sizing: border-box;
+			}
+			.aiCitePanel .aiCitePanelHead {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				margin-bottom: 8px;
+			}
+			.aiCitePanel .aiCitePanelKind {
+				background: var(--green);
+				color: #fff;
+				border-radius: 999px;
+				padding: 2px 8px;
+				font-size: 11px;
+				flex-shrink: 0;
+			}
+			.aiCitePanel .aiCitePanelAuthor {
+				font-weight: 700;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			.aiCitePanel .aiCitePanelBody {
+				color: var(--text);
+				line-height: 1.5;
+				max-height: 120px;
+				overflow-y: auto;
+				word-break: break-word;
+				white-space: pre-wrap;
+				margin-bottom: 10px;
+			}
+			.aiCitePanel .aiCitePanelLink {
+				display: inline-block;
+				color: #fff;
+				background: var(--green);
+				text-decoration: none;
+				border-radius: 999px;
+				padding: 6px 16px;
+				font-size: 13px;
+				font-weight: 700;
+			}
+			body.dark .aiCitePanel .aiCitePanelBody { color: var(--text); }
 
 			#postTimeline {
 				display: none;
@@ -3888,6 +4301,7 @@
 			html.watch #postPage {
 				height: auto !important;
 				min-height: 100vh;
+				overflow-y: visible !important;
 			}
 
 			html.watch #posts,
@@ -3967,6 +4381,7 @@
 			}
 
 			html.watch body {
+				overflow-y: auto;
 				padding-bottom: 0;
 			}
 		</style>
@@ -4071,9 +4486,8 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span>
-							· RSS订阅<br>
-							· 回复层级BUG修复<br>
-							· 移动端UI优化<br>
+							· Jacky AI<br>
+							· 重构访客模式<br>
 						</span>
 					</details>
 				</div>
@@ -4392,6 +4806,37 @@
 		</script>
 		<script>
 			const TRANSLATIONS = {
+				ai_title: { zh: "Jacky AI", en: "Jacky AI", es: "Jacky AI", de: "Jacky AI", "zh-TW": "Jacky AI" },
+				ai_entry: { zh: "Jacky AI", en: "Jacky AI", es: "Jacky AI", de: "Jacky AI", "zh-TW": "Jacky AI" },
+				ai_placeholder: { zh: "", en: "", es: "", de: "", "zh-TW": "" },
+				ai_send: { zh: "发送", en: "Send", es: "Enviar", de: "Senden", "zh-TW": "發送" },
+				ai_cost: { zh: "每次提问消耗", en: "Each question costs", es: "Cada pregunta cuesta", de: "Jede Frage kostet", "zh-TW": "每次提問消耗" },
+				ai_generating: { zh: "AI 正在思考…", en: "AI is thinking…", es: "La IA está pensando…", de: "KI denkt nach…", "zh-TW": "AI 正在思考…" },
+				ai_generated_tag: { zh: "AI 生成", en: "AI generated", es: "Generado por IA", de: "Von KI erstellt", "zh-TW": "AI 生成" },
+				ai_login_required: { zh: "请先登录后再使用 AI 问答", en: "Please log in to use AI Assistant", es: "Inicia sesión para usar el asistente IA", de: "Bitte melde dich an, um den KI-Assistenten zu nutzen", "zh-TW": "請先登入後再使用 AI 問答" },
+				ai_no_coins: { zh: "金币不足，无法提问（每次需 1 金币）", en: "Not enough coins (1 coin per question)", es: "Monedas insuficientes (1 moneda por pregunta)", de: "Nicht genug Münzen (1 Münze pro Frage)", "zh-TW": "金幣不足，無法提問（每次需 1 金幣）" },
+				ai_error: { zh: "AI 服务开小差了，1 金币已退回", en: "AI service error, your coin has been refunded", es: "Error del servicio IA, tu moneda fue devuelta", de: "KI-Fehler, deine Münze wurde erstattet", "zh-TW": "AI 服務開小差了，1 金幣已退回" },
+				ai_refunded: { zh: "AI 生成失败，已退回 1 金币", en: "Generation failed, 1 coin refunded", es: "Error, 1 moneda devuelta", de: "Fehler, 1 Münze erstattet", "zh-TW": "AI 生成失敗，已退回 1 金幣" },
+				ai_queue: { zh: "AI 繁忙，正在排队处理，请稍后重试", en: "AI is busy and queued, please try again later", es: "La IA está ocupada, en cola. Inténtalo de nuevo más tarde", de: "KI ist beschäftigt, in der Warteschlange. Bitte später erneut versuchen", "zh-TW": "AI 繁忙，正在排隊處理，請稍後重試" },
+				ai_queue_refund: { zh: "本次已退回 1 金币，稍后可重试", en: "1 coin refunded, try again later", es: "1 moneda devuelta, inténtalo más tarde", de: "1 Münze erstattet, versuche es später", "zh-TW": "本次已退回 1 金幣，稍後可重試" },
+				ai_logs_title: { zh: "AI 调用记录", en: "AI Logs", es: "Registros de IA", de: "KI-Protokolle", "zh-TW": "AI 調用記錄" },
+				ai_logs_admin: { zh: "AI 调用记录", en: "AI Logs", es: "Registros de IA", de: "KI-Protokolle", "zh-TW": "AI 調用記錄" },
+				ai_logs_empty: { zh: "暂无调用记录", en: "No logs yet", es: "Sin registros", de: "Keine Protokolle", "zh-TW": "暫無調用記錄" },
+				ai_logs_close: { zh: "关闭", en: "Close", es: "Cerrar", de: "Schließen", "zh-TW": "關閉" },
+				ai_clear: { zh: "清空历史", en: "Clear history", es: "Borrar historial", de: "Verlauf löschen", "zh-TW": "清空歷史" },
+				ai_copy: { zh: "复制", en: "Copy", es: "Copiar", de: "Kopieren", "zh-TW": "複製" },
+				ai_delete: { zh: "删除", en: "Delete", es: "Eliminar", de: "Löschen", "zh-TW": "刪除" },
+				ai_copied: { zh: "已复制", en: "Copied", es: "Copiado", de: "Kopiert", "zh-TW": "已複製" },
+				ai_clear_confirm: { zh: "确定要清空所有 AI 对话历史吗？", en: "Clear all AI chat history?", es: "¿Borrar todo el historial de IA?", de: "Gesamten KI-Verlauf löschen?", "zh-TW": "確定要清空所有 AI 對話歷史嗎？" },
+				ai_me: { zh: "我", en: "Me", es: "Yo", de: "Ich", "zh-TW": "我" },
+				ai_remaining: { zh: "今日 AI 问答还剩余 {0} 次", en: "You have {0} AI questions left today", es: "Te quedan {0} preguntas de IA hoy", de: "Noch {0} KI-Fragen heute", "zh-TW": "今日 AI 問答還剩餘 {0} 次" },
+				ai_used_up: { zh: "今日 AI 问答次数已用完，明天再来吧", en: "Daily AI questions used up, come back tomorrow", es: "Se agotaron las preguntas de IA de hoy, vuelve mañana", de: "Heutige KI-Fragen aufgebraucht, komm morgen wieder", "zh-TW": "今日 AI 問答次數已用完，明天再來吧" },
+				ai_cite_open: { zh: "查看原帖", en: "View post", es: "Ver publicación", de: "Beitrag ansehen", "zh-TW": "查看原帖" },
+				ai_cite_open_user: { zh: "查看用户", en: "View user", es: "Ver usuario", de: "Benutzer ansehen", "zh-TW": "查看用戶" },
+				ai_cite_post: { zh: "帖子", en: "Post", es: "Publicación", de: "Beitrag", "zh-TW": "帖子" },
+				ai_cite_comment: { zh: "评论", en: "Comment", es: "Comentario", de: "Kommentar", "zh-TW": "評論" },
+				ai_cite_user: { zh: "用户", en: "User", es: "Usuario", de: "Benutzer", "zh-TW": "用戶" },
+				ai_welcome: { zh: "你好，我是 Jacky AI！可以问我关于论坛和帖子/评论内容的问题，也可以随便聊！", en: "Hi, I'm Jacky AI! Ask me about the forum and posts/comments, or just chat!", es: "¡Hola! Soy Jacky AI. Pregúntame sobre el foro y las publicaciones, o simplemente charla.", de: "Hallo, ich bin Jacky AI! Frag mich zu Forum und Beiträgen/Kommentaren oder plauder einfach.", "zh-TW": "你好，我是 Jacky AI！可以問我有關論壇和帖子/評論內容的問題，也可以隨便聊！" },
 				login_title: {
 					zh: "Jacky 论坛",
 					en: "Jacky Forum",
@@ -8119,6 +8564,11 @@
 						};
 						tagBar.appendChild(chip);
 					}
+					const aiChip = document.createElement("span");
+					aiChip.className = "aiAskChip";
+					aiChip.innerHTML = '<img class="aiAskIcon" src="icon/jackyai.svg" alt="AI" onerror="this.style.display=\'none\'">' + t("ai_entry");
+					aiChip.onclick = openAIModal;
+					tagBar.appendChild(aiChip);
 					$("searchBtn").onclick = () => {
 						applyQuery(search.value);
 						syncUrlFromQuery();
@@ -9106,6 +9556,7 @@
 								<button class="settingsLinkBtn" id="setAboutBtn">${t("profile_about")}</button>
 								<button class="settingsLinkBtn" id="setSponsorBtn">${t("profile_sponsor")}</button>
 							</div>
+							${isAdmin(user) ? `<button class="settingsLinkBtn" id="setAILogsBtn" style="margin-top:6px;">${t("ai_logs_admin")}</button>` : ""}
 							<button class="settingsLinkBtn" id="setDownloadBtn" style="margin-top:6px;">${t("profile_download")}</button>
 							<a class="settingsLinkBtn" id="setRssBtn" href="rss.xml" target="_blank" rel="noopener" style="margin-top:6px;text-decoration:none;box-sizing:border-box;">${t("settings_rss")}</a>
 						</div>
@@ -9189,7 +9640,13 @@
 					$("setSponsorBtn").onclick = () => {
 						modal(`<h2>${t("sponsor_title")}</h2>${t("sponsor_content")}`);
 					};
-					$("setDownloadBtn").onclick = () => {
+					const aiLogsBtn = box.querySelector("#setAILogsBtn");
+					if (aiLogsBtn) {
+						aiLogsBtn.onclick = () => {
+							$("modal").classList.add("hidden");
+							openAILogs();
+						};
+					}					$("setDownloadBtn").onclick = () => {
 						box.style.width = "800px";
 						modal(`<h3>${t("download_title")}</h3>${t("download_content")}`);
 					};
@@ -9415,7 +9872,7 @@
 					document.querySelector(".modalBox").style.width = "360px";
 					modal(
 						`<h3>${type === "followers" ? t("followers") : t("following")}</h3>
-						<div style="max-height:320px;overflow:auto;text-align:left;"><p style="text-align:center;color:var(--sub);">Loading...</p></div>`
+						<div id="followListBox" style="max-height:320px;overflow:auto;text-align:left;"><p style="text-align:center;color:var(--sub);">Loading...</p></div>`
 					);
 					let data;
 					try {
@@ -9441,7 +9898,7 @@
 							</div>`;
 						}).join("") :
 						`<div style="color:var(--sub);padding:8px 0;">${t("vote_none")}</div>`;
-					const listDiv = document.querySelector(".modalBox")?.querySelector("div div");
+					const listDiv = document.getElementById("followListBox");
 					if (listDiv) {
 						listDiv.innerHTML = content;
 						setTimeout(() => {
@@ -10201,6 +10658,456 @@
 					msg.hideTimeout = setTimeout(() => {
 						msg.style.opacity = 0;
 					}, 3000);
+				}
+
+				let aiHistory = [];
+				let aiTurnSources = [];
+
+				function aiSaveHistory() {
+					try {
+						localStorage.setItem("jackyAiHistory", JSON.stringify(aiHistory));
+						localStorage.setItem("jackyAiTurnSources", JSON.stringify(aiTurnSources));
+					} catch {}
+				}
+				function aiLoadHistory() {
+					try {
+						const h = JSON.parse(localStorage.getItem("jackyAiHistory") || "[]");
+						const s = JSON.parse(localStorage.getItem("jackyAiTurnSources") || "[]");
+						aiHistory = Array.isArray(h) ? h : [];
+						aiTurnSources = Array.isArray(s) ? s : [];
+					} catch {
+						aiHistory = [];
+						aiTurnSources = [];
+					}
+				}
+
+				let aiModalEl = null;
+
+				function openAIModal() {
+					if (!currentUser) {
+						showCoinMsg(t("ai_login_required"));
+						return;
+					}
+					if (!aiModalEl) {
+						aiModalEl = document.createElement("div");
+						aiModalEl.className = "aiModal";
+						aiModalEl.id = "aiModal";
+						aiModalEl.innerHTML = `
+						<div class="aiBox">
+							<div class="aiHead">
+								<div>
+									<h2><img class="aiModalIcon" src="icon/jackyai.svg" alt="AI" onerror="this.style.display='none'">${t("ai_title")}</h2>
+									<div class="aiSub">${t("ai_cost")} <b style="color:var(--green);">1</b> ${t("profile_coins")}</div>
+								</div>
+								<div class="aiHeadBtns">
+									<button class="aiClearBtn" id="aiClearBtn">${t("ai_clear")}</button>
+									<button class="aiCloseBtn" id="aiCloseBtn">${t("ai_logs_close")}</button>
+								</div>
+							</div>
+							<div class="aiChat" id="aiChat"></div>
+							<div class="aiInputRow">
+								<input id="aiInput" maxlength="500">
+								<button id="aiSendBtn">${t("ai_send")}</button>
+							</div>
+						</div>`;
+						document.body.appendChild(aiModalEl);
+
+					const chat = aiModalEl.querySelector("#aiChat");
+					const input = aiModalEl.querySelector("#aiInput");
+					const sendBtn = aiModalEl.querySelector("#aiSendBtn");
+
+					function addMsg(role, plainText, tag, opts) {
+						opts = opts || {};
+						const row = document.createElement("div");
+						row.className = "aiMsg " + role;
+						if (opts.welcome) row.dataset.welcome = "1";
+						if (typeof plainText === "string" && plainText) row.dataset.text = plainText;
+						const tagHtml = tag ? `<div class="aiTag">${tag}</div>` : "";
+						const avatarHtml = role === "user"
+							? `<img class="aiAvatar aiAvatarUser" src="${escapeAttr(getAvatar(currentUser))}" alt="" onerror="this.onerror=null;this.src='head.svg'">`
+							: `<img class="aiAvatar aiAvatarBot" src="icon/jackyai.svg" alt="AI" onerror="this.style.visibility='hidden'">`;
+						row.innerHTML =
+							`${avatarHtml}<div class="aiMsgMain">
+								<div class="aiBubble">${tagHtml}${escapeHtml(plainText)}</div>
+								<div class="aiMsgActions">
+									<button class="aiActionBtn aiCopyBtn" title="${t("ai_copy")}">⧉</button>
+									<button class="aiActionBtn aiDelBtn" title="${t("ai_delete")}">✕</button>
+								</div>
+							</div>`;
+						chat.appendChild(row);
+						chat.scrollTop = chat.scrollHeight;
+						return row.querySelector(".aiBubble");
+					}
+
+					function createBotRow(plainText, bubbleHtml, sourcesMap) {
+						const row = document.createElement("div");
+						row.className = "aiMsg bot";
+						if (typeof plainText === "string" && plainText) row.dataset.text = plainText;
+						if (sourcesMap) {
+							try { row.dataset.sources = JSON.stringify(sourcesMap); } catch {}
+						}
+						row.innerHTML =
+							`<img class="aiAvatar aiAvatarBot" src="icon/jackyai.svg" alt="AI" onerror="this.style.visibility='hidden'">
+							<div class="aiMsgMain">
+								<div class="aiBubble">${bubbleHtml}</div>
+								<div class="aiMsgActions">
+									<button class="aiActionBtn aiCopyBtn" title="${t("ai_copy")}">⧉</button>
+									<button class="aiActionBtn aiDelBtn" title="${t("ai_delete")}">✕</button>
+								</div>
+							</div>`;
+						chat.appendChild(row);
+						chat.scrollTop = chat.scrollHeight;
+						return row;
+					}
+
+					function addThinking() {
+						return createBotRow("", '<span class="aiThinking"><i></i><i></i><i></i></span>', null);
+					}
+
+					function aiRebuildHistory() {
+						aiHistory = [];
+						aiTurnSources = [];
+						chat.querySelectorAll(".aiMsg").forEach(row => {
+							if (row.dataset.welcome) return;
+							const text = row.dataset.text || "";
+							if (row.classList.contains("bot")) {
+								aiHistory.push({ role: "assistant", content: text });
+								let m = {};
+								try { m = JSON.parse(row.dataset.sources || "{}"); } catch {}
+								aiTurnSources.push(m);
+							} else {
+								aiHistory.push({ role: "user", content: text });
+								aiTurnSources.push(null);
+							}
+						});
+						aiSaveHistory();
+					}
+
+					function addHint(text) {
+						const hint = document.createElement("div");
+						hint.className = "aiHint";
+						hint.textContent = text;
+						chat.appendChild(hint);
+						chat.scrollTop = chat.scrollHeight;
+					}
+
+					let currentSources = {};
+					function renderAnswer(text, map) {
+						const src = map || currentSources;
+						const esc = escapeHtml(text);
+						return esc.replace(/\[n?(\d{1,3})\]/g, (m, n) => {
+							return src[n]
+								? `<sup class="aiCite" data-cite="${n}" title="${t("ai_cite_open")}">&#8599;</sup>`
+								: m;
+						}).replace(/\n/g, "<br>");
+					}
+					function openCitation(el, idx, map) {
+						const src = map || currentSources;
+						const srcItem = src[idx];
+						if (!srcItem) return;
+						const citeEl = (el && el.closest && el.closest(".aiCite")) || document.querySelector(`.aiCite[data-cite="${idx}"]`);
+						let left = 0, top = 0;
+						if (citeEl) {
+							const r = citeEl.getBoundingClientRect();
+							const pw = Math.min(320, window.innerWidth * 0.88);
+							left = Math.max(8, Math.min(r.left, window.innerWidth - pw - 8));
+							top = r.bottom + 8;
+							if (top + 200 > window.innerHeight) top = Math.max(8, r.top - 180);
+						} else {
+							left = 16; top = 60;
+						}
+						document.querySelectorAll(".aiCitePanel").forEach(p => p.remove());
+						const kind = srcItem.kind === "post" ? t("ai_cite_post")
+							: srcItem.kind === "comment" ? t("ai_cite_comment")
+							: t("ai_cite_user");
+						const author = escapeHtml(srcItem.author || "匿名");
+						const snippet = escapeHtml(srcItem.snippet || "");
+						let link = "";
+						if (srcItem.kind === "user") {
+							link = `<a class="aiCitePanelLink" href="?uid=${srcItem.userId}" target="_blank">${t("ai_cite_open_user")}</a>`;
+						} else {
+							link = `<a class="aiCitePanelLink" href="?pid=${srcItem.postId}" target="_blank">${t("ai_cite_open")}</a>`;
+						}
+						const panel = document.createElement("div");
+						panel.className = "aiCitePanel";
+						panel.style.left = left + "px";
+						panel.style.top = top + "px";
+						panel.innerHTML = `
+							<div class="aiCitePanelHead">
+								<span class="aiCitePanelKind">${kind}</span>
+								<span class="aiCitePanelAuthor">${author}</span>
+							</div>
+							<div class="aiCitePanelBody">${snippet}</div>
+							${link}`;
+						document.body.appendChild(panel);
+						setTimeout(() => {
+							const close = (e) => {
+								if (!panel.contains(e.target)) {
+									panel.remove();
+									document.removeEventListener("click", close);
+									document.removeEventListener("scroll", close, true);
+								}
+							};
+							document.addEventListener("click", close);
+							document.addEventListener("scroll", close, true);
+						}, 0);
+					}
+					chat.addEventListener("click", (e) => {
+						const cite = e.target.closest(".aiCite");
+						if (cite) {
+							e.preventDefault();
+							let map = currentSources;
+							const row = cite.closest(".aiMsg");
+							if (row && row.dataset.sources) {
+								try { map = JSON.parse(row.dataset.sources); } catch {}
+							}
+							openCitation(cite, cite.dataset.cite, map);
+							return;
+						}
+						const copyBtn = e.target.closest(".aiCopyBtn");
+						if (copyBtn) {
+							const row = copyBtn.closest(".aiMsg");
+							const txt = row ? (row.dataset.text || "") : "";
+							if (txt) {
+								const done = () => showCoinMsg(t("ai_copied"));
+								if (navigator.clipboard && navigator.clipboard.writeText) {
+									navigator.clipboard.writeText(txt).then(done).catch(() => {});
+								} else {
+									const ta = document.createElement("textarea");
+									ta.value = txt;
+									document.body.appendChild(ta);
+									ta.select();
+									try { document.execCommand("copy"); } catch {}
+									document.body.removeChild(ta);
+									done();
+								}
+							}
+							return;
+						}
+						const delBtn = e.target.closest(".aiDelBtn");
+						if (delBtn) {
+							const row = delBtn.closest(".aiMsg");
+							if (row) {
+								row.remove();
+								aiRebuildHistory();
+							}
+						}
+					});
+
+					aiLoadHistory();
+					if (aiHistory.length) {
+						for (let i = 0; i < aiHistory.length; i++) {
+							const item = aiHistory[i];
+							if (item.role === "user") {
+								addMsg("user", item.content, null);
+							} else if (item.role === "assistant") {
+								const map = aiTurnSources[i] || {};
+								createBotRow(item.content, renderAnswer(item.content, map), map);
+							}
+						}
+					} else {
+						addMsg("bot", t("ai_welcome"), null, { welcome: true });
+					}
+
+					async function ask() {
+						const q = input.value.trim();
+						if (!q || sendBtn.disabled) return;
+						if ((currentUser?.coins || 0) < 1) {
+							showCoinMsg(t("ai_no_coins"));
+							return;
+						}
+						input.value = "";
+						sendBtn.disabled = true;
+						addMsg("user", q, null);
+						const thinking = addThinking();
+
+						let fullAnswer = "";
+						let errored = false;
+						try {
+							const history = aiHistory.slice(-5);
+							const token = localStorage.getItem("token");
+							const res = await fetch(API_BASE + "/api/ai/ask", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+									...(token ? { Authorization: "Bearer " + token } : {})
+								},
+								body: JSON.stringify({ question: q, history })
+							});
+							const ctype = res.headers.get("content-type") || "";
+							if (!res.ok || !ctype.includes("event-stream")) {
+								const text = await res.text();
+								let errObj = null;
+								try { errObj = JSON.parse(text); } catch {}
+								const msg = (errObj && errObj.error) || text;
+								const e = new Error(msg);
+								e.code = errObj ? errObj.code : null;
+								throw e;
+							}
+							const reader = res.body.getReader();
+							const decoder = new TextDecoder();
+							let buffer = "";
+							while (true) {
+								const { done, value } = await reader.read();
+								if (done) break;
+								buffer += decoder.decode(value, { stream: true });
+								const parts = buffer.split("\n\n");
+								buffer = parts.pop() || "";
+								for (const part of parts) {
+									for (const line of part.split("\n")) {
+										if (!line.startsWith("data:")) continue;
+										const payload = line.slice(5).trim();
+										let ev;
+										try { ev = JSON.parse(payload); } catch { continue; }
+										if (ev.type === "sources" && Array.isArray(ev.sources)) {
+											currentSources = {};
+											ev.sources.forEach(s => { currentSources[s.index] = s; });
+											try { thinking.dataset.sources = JSON.stringify(currentSources); } catch {}
+										} else if (ev.type === "delta") {
+											fullAnswer += ev.content;
+											thinking.querySelector(".aiBubble").innerHTML = renderAnswer(fullAnswer);
+											chat.scrollTop = chat.scrollHeight;
+										} else if (ev.type === "done") {
+											if (currentUser && typeof ev.coins === "number") currentUser.coins = ev.coins;
+											showCoinMsg(t("coin_sub", 1));
+											if (typeof ev.remaining === "number" && ev.remaining < 5) {
+												addHint(ev.remaining === 0 ? t("ai_used_up") : t("ai_remaining", ev.remaining));
+											}
+										} else if (ev.type === "error") {
+											errored = true;
+											showCoinMsg(t("ai_error"));
+										}
+									}
+								}
+							}
+							if (!fullAnswer) {
+								thinking.querySelector(".aiBubble").innerHTML = t("ai_error");
+							} else {
+								thinking.dataset.text = fullAnswer;
+							}
+							if (fullAnswer && !errored) {
+								aiHistory.push({ role: "user", content: q });
+								aiHistory.push({ role: "assistant", content: fullAnswer });
+								aiTurnSources.push(null);
+								aiTurnSources.push(currentSources);
+								if (aiHistory.length > 20) {
+									aiHistory = aiHistory.slice(-20);
+									aiTurnSources = aiTurnSources.slice(-20);
+								}
+								aiSaveHistory();
+							}
+						} catch (e) {
+							if (e && e.code === "concurrency") {
+								thinking.querySelector(".aiBubble").innerHTML = t("ai_queue");
+								showCoinMsg(t("ai_queue_refund"));
+							} else {
+								thinking.querySelector(".aiBubble").innerHTML = t("ai_error");
+								showCoinMsg(t("ai_error"));
+							}
+						} finally {
+							sendBtn.disabled = false;
+							input.focus();
+						}
+					}
+
+					sendBtn.onclick = ask;
+					input.onkeydown = e => {
+						if (e.key === "Enter") ask();
+					};
+					aiModalEl.querySelector("#aiCloseBtn").onclick = closeAIModal;
+					aiModalEl.querySelector("#aiClearBtn").onclick = () => {
+						const box = document.querySelector(".modalBox");
+						const origW = box.style.width;
+						box.style.width = "320px";
+						modal(
+							'<div style="margin:0 0 16px;text-align:center;font-size:15px;color:var(--text);line-height:1.5;">' + t("ai_clear_confirm") + '</div>' +
+							'<div style="text-align:center">' +
+							'<button id="aiClearConfirm" style="background:#e74c3c;color:#fff;padding:10px 40px;border-radius:20px;border:none;font-size:16px;cursor:pointer">' +
+							t("confirm_btn") + '</button>' +
+							'</div>'
+						);
+						const prevCloseHandler = $("closeModal").onclick;
+						const restoreCloseHandler = () => { $("closeModal").onclick = prevCloseHandler; };
+						const closeModalHandler = () => {
+							$("modal").classList.add("hidden");
+							box.style.width = origW;
+							restoreCloseHandler();
+						};
+						$("aiClearConfirm").onclick = () => {
+							$("modal").classList.add("hidden");
+							box.style.width = origW;
+							restoreCloseHandler();
+							aiHistory = [];
+							aiTurnSources = [];
+							aiSaveHistory();
+							chat.innerHTML = "";
+							addMsg("bot", t("ai_welcome"), null, { welcome: true });
+						};
+						$("closeModal").onclick = closeModalHandler;
+						$("modal").onclick = e => { if (e.target === $("modal")) closeModalHandler(); };
+					};
+					aiModalEl.onclick = e => {
+						if (e.target === aiModalEl) closeAIModal();
+					};
+					}
+					aiModalEl.classList.add("show");
+					aiModalEl.querySelector("#aiInput").focus();
+				}
+
+				function closeAIModal() {
+					if (!aiModalEl) return;
+					aiModalEl.classList.remove("show");
+					document.querySelectorAll(".aiCitePanel").forEach(p => p.remove());
+				}
+
+				async function openAILogs() {
+					if (!currentUser || !isAdmin(currentUser)) return;
+					const wrap = document.createElement("div");
+					wrap.className = "aiModal";
+					wrap.id = "aiLogsModal";
+					wrap.innerHTML = `
+						<div class="aiBox" style="max-width:720px;">
+							<div class="aiHead">
+								<h2>${t("ai_logs_title")}</h2>
+								<button class="aiCloseBtn" id="aiLogsCloseBtn">${t("ai_logs_close")}</button>
+							</div>
+							<div class="aiChat" id="aiLogsList" style="max-height:60vh;"></div>
+						</div>`;
+					document.body.appendChild(wrap);
+					wrap.classList.add("show");
+					const list = wrap.querySelector("#aiLogsList");
+					list.innerHTML = t("ai_generating");
+					try {
+						const data = await apiGet("/api/ai/logs");
+						const logs = data.logs || [];
+						if (!logs.length) {
+							list.innerHTML = '<div style="color:var(--sub);text-align:center;padding:20px;">' + t("ai_logs_empty") + '</div>';
+						} else {
+							list.innerHTML = logs.map(l => {
+								const name = l.users?.name || ("#" + l.user_id);
+								const time = l.created_at ? new Date(l.created_at).toLocaleString() : "";
+								return `<div class="aiLogItem">
+									<div style="display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--sub);">
+										<b style="color:var(--text);">${escapeHtml(name)}</b><span>${time}</span>
+									</div>
+									<div style="margin-top:4px;font-size:14px;color:var(--text);"><b>Q:</b> ${escapeHtml(l.question)}</div>
+									<div style="margin-top:2px;font-size:13px;color:var(--sub);">${escapeHtml((l.answer||"").slice(0,300))}</div>
+								</div>`;
+							}).join("");
+						}
+					} catch (e) {
+						list.innerHTML = '<div style="color:var(--sub);text-align:center;padding:20px;">' + t("ai_error") + '</div>';
+					}
+					wrap.querySelector("#aiLogsCloseBtn").onclick = () => wrap.remove();
+					wrap.onclick = e => {
+						if (e.target === wrap) wrap.remove();
+					};
+				}
+
+				function escapeHtml(str) {
+					return String(str ?? "").replace(/[&<>"']/g, c => ({
+						"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+					}[c]));
 				}
 				const autoId = localStorage.getItem("loginUser");
 
