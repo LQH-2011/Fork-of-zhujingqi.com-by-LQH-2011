@@ -2223,28 +2223,28 @@
 			.aiModal .aiHeadBtns {
 				display: flex;
 				align-items: center;
-				gap: 8px;
+				gap: 6px;
 			}
-			.aiModal .aiClearBtn {
+			.aiModal .aiTosBtn,
+			.aiModal .aiClearBtn,
+			.aiModal .aiCloseBtn {
 				background: transparent;
 				border: 1px solid var(--border);
 				border-radius: 999px;
-				padding: 6px 14px;
+				padding: 3px 9px;
 				cursor: pointer;
-				font-size: 13px;
+				font-size: 11px;
+				line-height: 1.4;
 				color: var(--sub);
+				transition: .2s;
 			}
+			.aiModal .aiTosBtn:hover,
 			.aiModal .aiClearBtn:hover {
 				color: var(--text);
 				border-color: var(--green);
 			}
 			.aiModal .aiCloseBtn {
 				background: var(--bg);
-				border: 1px solid var(--border);
-				border-radius: 999px;
-				padding: 6px 14px;
-				cursor: pointer;
-				font-size: 13px;
 				color: var(--text);
 			}
 			.aiModal .aiChat {
@@ -2394,15 +2394,32 @@
 			}
 			.aiModal .aiInputRow button {
 				flex-shrink: 0;
+				width: 42px;
 				height: 42px;
-				padding: 0 22px;
-				border-radius: 20px;
+				padding: 0;
+				border-radius: 50%;
 				border: none;
 				background: var(--green);
 				color: #fff;
 				font-size: 14px;
 				font-weight: 700;
 				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.aiModal .aiInputRow button .aiSendIcon {
+				width: 20px;
+				height: 20px;
+				display: block;
+				background-color: currentColor;
+				-webkit-mask: url(icon/arrow.svg) no-repeat center/contain;
+				mask: url(icon/arrow.svg) no-repeat center/contain;
+				-webkit-mask-size: contain;
+				mask-size: contain;
+			}
+			body.dark .aiModal .aiInputRow button .aiSendIcon {
+				background-color: #fff;
 			}
 			.aiModal .aiInputRow button:disabled {
 				opacity: .5;
@@ -2463,6 +2480,19 @@
 				user-select: none;
 				box-shadow: 0 1px 4px rgba(0, 170, 0, .4);
 			}
+			.aiCite .aiCiteIcon {
+				width: 11px;
+				height: 11px;
+				display: block;
+				background-color: currentColor;
+				-webkit-mask: url(icon/arrow.svg) no-repeat center/contain;
+				mask: url(icon/arrow.svg) no-repeat center/contain;
+				-webkit-mask-size: contain;
+				mask-size: contain;
+			}
+			body.dark .aiCite .aiCiteIcon {
+				background-color: #fff;
+			}
 			.aiCite:hover {
 				opacity: .85;
 			}
@@ -2509,14 +2539,29 @@
 				margin-bottom: 10px;
 			}
 			.aiCitePanel .aiCitePanelLink {
-				display: inline-block;
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
 				color: #fff;
 				background: var(--green);
 				text-decoration: none;
 				border-radius: 999px;
-				padding: 6px 16px;
+				padding: 6px 14px;
 				font-size: 13px;
 				font-weight: 700;
+			}
+			.aiCitePanel .aiCitePanelLink .aiCiteLinkIcon {
+				width: 12px;
+				height: 12px;
+				display: block;
+				background-color: currentColor;
+				-webkit-mask: url(icon/arrow.svg) no-repeat center/contain;
+				mask: url(icon/arrow.svg) no-repeat center/contain;
+				-webkit-mask-size: contain;
+				mask-size: contain;
+			}
+			body.dark .aiCitePanel .aiCitePanelLink .aiCiteLinkIcon {
+				background-color: #fff;
 			}
 			body.dark .aiCitePanel .aiCitePanelBody { color: var(--text); }
 
@@ -4486,6 +4531,8 @@
 					<details>
 						<summary><b id="noticeUpdates">近期更新</b></summary>
 						<span>
+							· AI用户协议<br>
+							· 更好的JWT<br>
 							· Jacky AI<br>
 							· 重构访客模式<br>
 						</span>
@@ -4810,11 +4857,13 @@
 				ai_entry: { zh: "Jacky AI", en: "Jacky AI", es: "Jacky AI", de: "Jacky AI", "zh-TW": "Jacky AI" },
 				ai_placeholder: { zh: "", en: "", es: "", de: "", "zh-TW": "" },
 				ai_send: { zh: "发送", en: "Send", es: "Enviar", de: "Senden", "zh-TW": "發送" },
-				ai_cost: { zh: "每次提问消耗", en: "Each question costs", es: "Cada pregunta cuesta", de: "Jede Frage kostet", "zh-TW": "每次提問消耗" },
+				ai_cost: { zh: "每天前 10 次免费，之后每次消耗", en: "First 10 free daily, then costs", es: "Primeras 10 gratis al día, luego cuesta", de: "Erste 10 täglich gratis, danach kostet", "zh-TW": "每天前 10 次免費，之後每次消耗" },
 				ai_generating: { zh: "AI 正在思考…", en: "AI is thinking…", es: "La IA está pensando…", de: "KI denkt nach…", "zh-TW": "AI 正在思考…" },
 				ai_generated_tag: { zh: "AI 生成", en: "AI generated", es: "Generado por IA", de: "Von KI erstellt", "zh-TW": "AI 生成" },
 				ai_login_required: { zh: "请先登录后再使用 AI 问答", en: "Please log in to use AI Assistant", es: "Inicia sesión para usar el asistente IA", de: "Bitte melde dich an, um den KI-Assistenten zu nutzen", "zh-TW": "請先登入後再使用 AI 問答" },
-				ai_no_coins: { zh: "金币不足，无法提问（每次需 1 金币）", en: "Not enough coins (1 coin per question)", es: "Monedas insuficientes (1 moneda por pregunta)", de: "Nicht genug Münzen (1 Münze pro Frage)", "zh-TW": "金幣不足，無法提問（每次需 1 金幣）" },
+				ai_no_coins: { zh: "今日 10 次免费额度已用完，金币不足，无法提问（每次需 1 金币）", en: "Free quota used up, not enough coins (1 coin per question)", es: "Cuota gratis agotada, monedas insuficientes (1 moneda por pregunta)", de: "Gratis-Kontingent aufgebraucht, nicht genug Münzen (1 Münze pro Frage)", "zh-TW": "今日 10 次免費額度已用完，金幣不足，無法提問（每次需 1 金幣）" },
+				ai_free_used: { zh: "本次提问免费（每天前 10 次不扣金币）", en: "Free question (first 10 daily are free)", es: "Pregunta gratis (las primeras 10 del día)", de: "Kostenlose Frage (erste 10 täglich)", "zh-TW": "本次提問免費（每天前 10 次不扣金幣）" },
+				ai_free_left: { zh: "今天还剩余 {0} 次免费提问", en: "{0} free questions left today", es: "Quedan {0} preguntas gratis hoy", de: "Noch {0} kostenlose Fragen heute", "zh-TW": "今天還剩餘 {0} 次免費提問" },
 				ai_error: { zh: "AI 服务开小差了，1 金币已退回", en: "AI service error, your coin has been refunded", es: "Error del servicio IA, tu moneda fue devuelta", de: "KI-Fehler, deine Münze wurde erstattet", "zh-TW": "AI 服務開小差了，1 金幣已退回" },
 				ai_refunded: { zh: "AI 生成失败，已退回 1 金币", en: "Generation failed, 1 coin refunded", es: "Error, 1 moneda devuelta", de: "Fehler, 1 Münze erstattet", "zh-TW": "AI 生成失敗，已退回 1 金幣" },
 				ai_queue: { zh: "AI 繁忙，正在排队处理，请稍后重试", en: "AI is busy and queued, please try again later", es: "La IA está ocupada, en cola. Inténtalo de nuevo más tarde", de: "KI ist beschäftigt, in der Warteschlange. Bitte später erneut versuchen", "zh-TW": "AI 繁忙，正在排隊處理，請稍後重試" },
@@ -4836,7 +4885,10 @@
 				ai_cite_post: { zh: "帖子", en: "Post", es: "Publicación", de: "Beitrag", "zh-TW": "帖子" },
 				ai_cite_comment: { zh: "评论", en: "Comment", es: "Comentario", de: "Kommentar", "zh-TW": "評論" },
 				ai_cite_user: { zh: "用户", en: "User", es: "Usuario", de: "Benutzer", "zh-TW": "用戶" },
-				ai_welcome: { zh: "你好，我是 Jacky AI！可以问我关于论坛和帖子/评论内容的问题，也可以随便聊！", en: "Hi, I'm Jacky AI! Ask me about the forum and posts/comments, or just chat!", es: "¡Hola! Soy Jacky AI. Pregúntame sobre el foro y las publicaciones, o simplemente charla.", de: "Hallo, ich bin Jacky AI! Frag mich zu Forum und Beiträgen/Kommentaren oder plauder einfach.", "zh-TW": "你好，我是 Jacky AI！可以問我有關論壇和帖子/評論內容的問題，也可以隨便聊！" },
+				ai_welcome: { zh: "你好，我是 Jacky AI！可以问我关于论坛和帖子/评论内容的问题，也可以随便聊！每天前 10 次提问免费哦！", en: "Hi, I'm Jacky AI! Ask me about the forum and posts/comments, or just chat! The first 10 questions each day are free!", es: "¡Hola! Soy Jacky AI. Pregúntame sobre el foro y las publicaciones, o simplemente charla. ¡Las primeras 10 preguntas del día son gratis!", de: "Hallo, ich bin Jacky AI! Frag mich zu Forum und Beiträgen/Kommentaren oder plauder einfach. Die ersten 10 Fragen pro Tag sind kostenlos!", "zh-TW": "你好，我是 Jacky AI！可以問我有關論壇和帖子/評論內容的問題，也可以隨便聊！每天前 10 次提問免費喔！" },
+				ai_tos_btn: { zh: "协议", en: "Terms", es: "Términos", de: "Bedingungen", "zh-TW": "協議" },
+				ai_tos_title: { zh: "Jacky AI 使用协议", en: "Jacky AI Terms of Use", es: "Términos de uso de Jacky AI", de: "Nutzungsbedingungen für Jacky AI", "zh-TW": "Jacky AI 使用協議" },
+				ai_tos_text: { zh: "欢迎使用 Jacky AI（下称“本服务”）。使用本服务即视为你已阅读并同意以下全部条款：\n\n一、费用与次数\n1. 每个账号每天前 10 次提问免费，不消耗金币；\n2. 第 11 次起，每次提问消耗 1 金币；\n3. 每个账号每天提问上限 30 次，每分钟最多 10 次；\n4. 提问未成功生成（含排队/服务异常）不扣金币，若已扣除则自动退回；\n5. 免费次数与每日上限每天重置，重置时间为每天 UTC 零点（北京时间早上 8 点）。\n\n二、内容与引用\n1. 本服务基于大语言模型生成回答，回答可能存在偏差或错误，仅供参考；\n2. 回答可能引用论坛帖子、评论和用户信息，引用来源以带编号角标标注，可点击查看原内容；\n3. 回答内容不代表论坛运营方观点。\n\n三、对话记录\n1. 你可以随时点击“清空历史”删除本地对话记录。\n\n四、使用规范\n1. 禁止滥用本服务，包括但不限于恶意刷量、攻击他人、发布违法违规内容；\n2. 违反规定可能导致 AI 提问权限被限制、金币被冻结或封禁账号。\n\n五、其他\n1. 论坛运营方有权根据实际情况调整本协议条款，调整后将在本页面公布；\n2. 若你对本服务有任何疑问，欢迎在论坛发帖或联系管理员。", en: "Welcome to Jacky AI (the \"Service\"). By using the Service you agree to these terms:\n\n1. Fees & Quota\n1. Each account gets 10 free questions per day, no coins deducted;\n2. From the 11th question onward, each question costs 1 coin;\n3. Max 30 questions per account per day, and 10 per minute;\n4. If a question fails to generate (queued/service error), no coin is deducted; if already deducted, it is auto-refunded;\n5. Free questions and daily limits reset every day at 00:00 UTC (08:00 Beijing time).\n\n2. Content & Citations\n1. Answers are generated by an LLM and may be inaccurate — for reference only;\n2. Answers may cite forum posts, comments and users, marked with numbered superscripts that link to the original content;\n3. Answers do not represent the views of the forum operators.\n\n3. Conversation History\n1. You can delete your local chat history anytime via \"Clear history\".\n\n4. Code of Conduct\n1. No abuse of the Service: spamming, attacking others, or posting illegal/inappropriate content;\n2. Violations may restrict AI access, freeze your coins, or ban your account.\n\n5. Miscellaneous\n1. Operators may update these terms at any time; changes will be posted on this page;\n2. Questions? Post in the forum or contact an admin.", es: "Bienvenido a Jacky AI (el \"Servicio\"). Al usarlo aceptas estos términos:\n\n1. Tarifas y cuota\n1. Cada cuenta tiene 10 preguntas gratis al día, sin descontar monedas;\n2. Desde la pregunta 11, cada pregunta cuesta 1 moneda;\n3. Máx. 30 preguntas al día por cuenta y 10 por minuto;\n4. Si una pregunta falla (cola/error), no se descuenta; si ya se descontó, se reembolsa;\n5. Las preguntas gratis y los límites diarios se reinician cada día a las 00:00 UTC (08:00 hora de Pekín).\n\n2. Contenido y citas\n1. Las respuestas las genera una IA y pueden ser inexactas — solo de referencia;\n2. Pueden citar publicaciones, comentarios y usuarios con superíndices numerados enlazables;\n3. No representan la opinión de los operadores.\n\n3. Historial\n1. Puedes borrar tu historial de chat local en \"Borrar historial\".\n\n4. Normas de uso\n1. No abuses del Servicio: spam, ataques o contenido ilegal;\n2. Las infracciones pueden limitar el acceso a la IA, congelar tus monedas o prohibir tu cuenta.\n\n5. Varios\n1. Los operadores pueden actualizar estos términos; se publicarán aquí;\n2. ¿Dudas? Publica en el foro o contacta a un administrador.", de: "Willkommen bei Jacky AI (dem \"Dienst\"). Mit der Nutzung akzeptierst du diese Bedingungen:\n\n1. Gebühren & Kontingent\n1. Jedes Konto erhält 10 kostenlose Fragen pro Tag, ohne Münzabzug;\n2. Ab der 11. Frage kostet jede Frage 1 Münze;\n3. Max. 30 Fragen pro Konto pro Tag und 10 pro Minute;\n4. Schlägt eine Frage fehl (Warteschlange/Fehler), wird keine Münze abgezogen; sonst automatische Erstattung;\n5. Kostenlose Fragen und Tageskontingente werden täglich um 00:00 UTC (08:00 Pekinger Zeit) zurückgesetzt.\n\n2. Inhalt & Zitate\n1. Antworten werden von einem LLM erzeugt und können ungenau sein — nur zur Referenz;\n2. Antworten können Forumsbeiträge, Kommentare und Benutzer mit nummerierten Hochstellungen zitieren;\n3. Sie geben nicht die Meinung der Betreiber wieder.\n\n3. Verlauf\n1. Du kannst deinen lokalen Chatverlauf jederzeit unter \"Verlauf löschen\" entfernen.\n\n4. Nutzungsregeln\n1. Kein Missbrauch des Dienstes: Spam, Angriffe oder illegale Inhalte;\n2. Verstöße können den KI-Zugang einschränken, Münzen einfrieren oder dein Konto sperren.\n\n5. Sonstiges\n1. Die Betreiber können diese Bedingungen jederzeit aktualisieren; Änderungen werden hier veröffentlicht;\n2. Fragen? Poste im Forum oder kontaktiere einen Admin.", "zh-TW": "歡迎使用 Jacky AI（下稱「本服務」）。使用本服務即視為你已閱讀並同意以下全部條款：\n\n一、費用與次數\n1. 每個帳號每天前 10 次提問免費，不消耗金幣；\n2. 第 11 次起，每次提問消耗 1 金幣；\n3. 每個帳號每天提問上限 30 次，每分鐘最多 10 次；\n4. 提問未成功生成（含排隊/服務異常）不扣金幣，若已扣除則自動退回；\n5. 免費次數與每日上限每天重置，重置時間為每天 UTC 零點（北京時間早上 8 點）。\n\n二、內容與引用\n1. 本服務基於大語言模型生成回答，回答可能存在偏差或錯誤，僅供參考；\n2. 回答可能引用論壇帖子、評論和使用者資訊，引用來源以帶編號角標標注，可點擊查看原內容；\n3. 回答內容不代表論壇營運方觀點。\n\n三、對話記錄\n1. 你可以隨時點擊「清空歷史」刪除本地對話記錄。\n\n四、使用規範\n1. 禁止濫用本服務，包括但不限於惡意刷量、攻擊他人、發布違法違規內容；\n2. 違反規定可能導致 AI 提問權限被限制、金幣被凍結或封鎖帳號。\n\n五、其他\n1. 論壇營運方有權根據實際情況調整本協議條款，調整後將在本頁面公布；\n2. 若你對本服務有任何疑問，歡迎在論壇發帖或聯絡管理員。" },
 				login_title: {
 					zh: "Jacky 论坛",
 					en: "Jacky Forum",
@@ -10682,6 +10734,7 @@
 				}
 
 				let aiModalEl = null;
+				let openAiTos = null;
 
 				function openAIModal() {
 					if (!currentUser) {
@@ -10697,9 +10750,9 @@
 							<div class="aiHead">
 								<div>
 									<h2><img class="aiModalIcon" src="icon/jackyai.svg" alt="AI" onerror="this.style.display='none'">${t("ai_title")}</h2>
-									<div class="aiSub">${t("ai_cost")} <b style="color:var(--green);">1</b> ${t("profile_coins")}</div>
 								</div>
 								<div class="aiHeadBtns">
+									<button class="aiTosBtn" id="aiTosBtn">${t("ai_tos_btn")}</button>
 									<button class="aiClearBtn" id="aiClearBtn">${t("ai_clear")}</button>
 									<button class="aiCloseBtn" id="aiCloseBtn">${t("ai_logs_close")}</button>
 								</div>
@@ -10707,7 +10760,7 @@
 							<div class="aiChat" id="aiChat"></div>
 							<div class="aiInputRow">
 								<input id="aiInput" maxlength="500">
-								<button id="aiSendBtn">${t("ai_send")}</button>
+								<button id="aiSendBtn" aria-label="${t("ai_send")}" title="${t("ai_send")}"><span class="aiSendIcon"></span></button>
 							</div>
 						</div>`;
 						document.body.appendChild(aiModalEl);
@@ -10797,7 +10850,7 @@
 						const esc = escapeHtml(text);
 						return esc.replace(/\[n?(\d{1,3})\]/g, (m, n) => {
 							return src[n]
-								? `<sup class="aiCite" data-cite="${n}" title="${t("ai_cite_open")}">&#8599;</sup>`
+								? `<sup class="aiCite" data-cite="${n}" title="${t("ai_cite_open")}"><span class="aiCiteIcon"></span></sup>`
 								: m;
 						}).replace(/\n/g, "<br>");
 					}
@@ -10824,9 +10877,9 @@
 						const snippet = escapeHtml(srcItem.snippet || "");
 						let link = "";
 						if (srcItem.kind === "user") {
-							link = `<a class="aiCitePanelLink" href="?uid=${srcItem.userId}" target="_blank">${t("ai_cite_open_user")}</a>`;
+							link = `<a class="aiCitePanelLink" href="?uid=${srcItem.userId}" target="_blank"><span class="aiCiteLinkIcon"></span>${t("ai_cite_open_user")}</a>`;
 						} else {
-							link = `<a class="aiCitePanelLink" href="?pid=${srcItem.postId}" target="_blank">${t("ai_cite_open")}</a>`;
+							link = `<a class="aiCitePanelLink" href="?pid=${srcItem.postId}" target="_blank"><span class="aiCiteLinkIcon"></span>${t("ai_cite_open")}</a>`;
 						}
 						const panel = document.createElement("div");
 						panel.className = "aiCitePanel";
@@ -10912,10 +10965,6 @@
 					async function ask() {
 						const q = input.value.trim();
 						if (!q || sendBtn.disabled) return;
-						if ((currentUser?.coins || 0) < 1) {
-							showCoinMsg(t("ai_no_coins"));
-							return;
-						}
 						input.value = "";
 						sendBtn.disabled = true;
 						addMsg("user", q, null);
@@ -10969,7 +11018,11 @@
 											chat.scrollTop = chat.scrollHeight;
 										} else if (ev.type === "done") {
 											if (currentUser && typeof ev.coins === "number") currentUser.coins = ev.coins;
-											showCoinMsg(t("coin_sub", 1));
+											if (ev.free) {
+												showCoinMsg(t("ai_free_used"));
+											} else {
+												showCoinMsg(t("coin_sub", 1));
+											}
 											if (typeof ev.remaining === "number" && ev.remaining < 5) {
 												addHint(ev.remaining === 0 ? t("ai_used_up") : t("ai_remaining", ev.remaining));
 											}
@@ -11015,6 +11068,14 @@
 						if (e.key === "Enter") ask();
 					};
 					aiModalEl.querySelector("#aiCloseBtn").onclick = closeAIModal;
+					openAiTos = () => {
+						document.querySelector(".modalBox").style.width = "360px";
+						modal(
+							'<div style="margin:0 0 14px;text-align:center;font-size:16px;font-weight:700;color:var(--text);">' + t("ai_tos_title") + '</div>' +
+							'<div style="margin:0;text-align:left;font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;max-height:60vh;overflow-y:auto;">' + escapeHtml(t("ai_tos_text")) + '</div>'
+						);
+					};
+					aiModalEl.querySelector("#aiTosBtn").onclick = openAiTos;
 					aiModalEl.querySelector("#aiClearBtn").onclick = () => {
 						const box = document.querySelector(".modalBox");
 						const origW = box.style.width;
@@ -11052,6 +11113,10 @@
 					}
 					aiModalEl.classList.add("show");
 					aiModalEl.querySelector("#aiInput").focus();
+					if (openAiTos && !localStorage.getItem("aiTosShown")) {
+						localStorage.setItem("aiTosShown", "1");
+						setTimeout(openAiTos, 300);
+					}
 				}
 
 				function closeAIModal() {
@@ -11576,6 +11641,19 @@
 						if (autoId && localStorage.getItem("token")) {
 							let data;
 							try {
+								const refreshRes = await fetch(API_BASE + "/api/auth/refresh", {
+									method: "POST",
+									headers: {
+										"Content-Type": "application/json",
+										"Authorization": "Bearer " + localStorage.getItem("token")
+									}
+								});
+								if (refreshRes.ok) {
+									const refreshed = await refreshRes.json().catch(() => null);
+									if (refreshed && refreshed.token) localStorage.setItem("token", refreshed.token);
+								} else {
+									throw new Error("REFRESH_FAILED");
+								}
 								data = await apiGet("/api/users/" + autoId);
 							} catch {
 								data = null;
