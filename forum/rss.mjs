@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 // Same endpoints the forum SPA uses (see API_BASE in forum/index.html).
-const API_BASE = "https://hxlhrrllhvvazyhiuhvb.supabase.co/functions/v1";
+const API_BASE = "https://jqtljtnchkhzcxykfnoo.supabase.co/functions/v1";
 const API_POSTS = `${API_BASE}/api/posts`;
 const API_COMMENTS_BATCH = `${API_BASE}/api/comments/batch`;
 
