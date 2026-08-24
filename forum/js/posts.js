@@ -281,18 +281,6 @@ async function getFollowedIds() {
 }
 const notice = $("notice");
 const toggleBtn = $("toggleNoticeBtn");
-if (toggleBtn) {
-	toggleBtn.onclick = () => {
-		notice.classList.toggle("collapsed");
-		if (notice.classList.contains("collapsed")) {
-			toggleBtn.innerHTML = "<b>></b>";
-			toggleBtn.style.right = "8px";
-		} else {
-			toggleBtn.innerHTML = "<b><</b>";
-			toggleBtn.style.right = "8px";
-		}
-	};
-}
 const mobileSideBtn = $("mobileSideBtn");
 const sidePanels = $("sidePanels");
 const sideBackdrop = $("sideBackdrop");
@@ -325,18 +313,18 @@ if (sideBackdrop) {
 }
 window.addEventListener("resize", syncMobilePanels);
 syncMobilePanels();
-$("toggleNoticeBtn").onclick = () => {
-	$("notice").classList.toggle("open");
-};
-$("toggleNoticeBtn").onclick = () => {
-	notice.classList.toggle("collapsed");
-	notice.classList.toggle("open");
-	if (notice.classList.contains("collapsed")) {
-		toggleBtn.innerHTML = "<b>></b>";
-	} else {
-		toggleBtn.innerHTML = "<b><</b>";
-	}
-};
+if (toggleBtn) {
+	toggleBtn.onclick = () => {
+		notice.classList.toggle("collapsed");
+		notice.classList.toggle("open");
+		if (notice.classList.contains("collapsed")) {
+			toggleBtn.innerHTML = "<b>></b>";
+		} else {
+			toggleBtn.innerHTML = "<b><</b>";
+		}
+		toggleBtn.style.right = "8px";
+	};
+}
 async function loadPosts(page = 1, container = $("posts")) {
 	if (guestMode) page = 1;
 	const token = ++currentLoadToken;

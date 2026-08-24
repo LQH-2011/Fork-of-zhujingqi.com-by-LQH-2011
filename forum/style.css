@@ -615,6 +615,12 @@ body.dark #profileCard {
 	flex: 0 0 auto;
 }
 
+.voteNum {
+	font-size: 14px;
+	line-height: 1;
+	vertical-align: middle;
+}
+
 .like.liked {
 	color: #f66;
 	font-weight: 700;
@@ -900,6 +906,12 @@ body.dark .post.custom-bg::before {
 	transform: scale(1.05);
 }
 
+.postTags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 6px 0;
+}
 .postTag {
 	padding: 4px 12px;
 	border-radius: 20px;
@@ -1014,6 +1026,12 @@ body.dark .post.custom-bg::before {
 
 .comment+.comment {
 	margin-top: 3px;
+}
+
+.commentContent {
+	flex: 1 1 auto;
+	min-width: 0;
+	word-break: break-word;
 }
 
 .comment b {

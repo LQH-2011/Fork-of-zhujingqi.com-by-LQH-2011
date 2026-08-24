@@ -217,7 +217,7 @@ $("randomPostBtn").onclick = async () => {
 		const randomPost = await apiGet("/api/posts/random");
 		if (randomPost && randomPost.id) {
 			history.replaceState(null, "", "?pid=" + randomPost.id);
-			openSinglePost(randomPost.id);
+			openSinglePost(randomPost.id).catch(() => { modal(t("post_not_found")); show("main"); });
 		}
 	} catch {
 		modal(t("post_no_posts"));

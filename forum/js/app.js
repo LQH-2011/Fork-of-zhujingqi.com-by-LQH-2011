@@ -44,7 +44,7 @@ refreshUILanguage(true);
 				const initialQ = getUrlParam("q");
 				const initialD = getUrlParam("d");
 				if (initialPid) {
-					openSinglePost(Number(initialPid));
+					openSinglePost(Number(initialPid)).catch(() => { modal(t("post_not_found")); show("main"); });
 				} else if (initialUid) {
 					viewUser(Number(initialUid));
 				} else {
@@ -87,7 +87,7 @@ refreshUILanguage(true);
 		loadPosts(1);
 		if (guestPid) {
 			const pid = Number(guestPid);
-			if (!isNaN(pid)) openSinglePost(pid);
+			if (!isNaN(pid)) openSinglePost(pid).catch(() => { modal(t("post_not_found")); show("main"); });
 		} else if (guestUid) {
 			const userId = Number(guestUid);
 			if (!isNaN(userId)) viewUser(userId);

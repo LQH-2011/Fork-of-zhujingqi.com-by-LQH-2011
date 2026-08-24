@@ -34,7 +34,7 @@ async function loadAnnouncements() {
 				const pid = Number(el.dataset.pid);
 				if (pid) {
 					history.replaceState(null, "", "?pid=" + pid);
-					openSinglePost(pid);
+					openSinglePost(pid).catch(() => { modal(t("post_not_found")); show("main"); });
 				}
 			};
 		});
@@ -44,6 +44,7 @@ async function loadAnnouncements() {
 }
 
 document.getElementById("fortuneBtn").onclick = function() {
+	if (!currentUser) return;
 	const username = currentUser.name;
 	const f = getDailyFortune(username);
 	document.getElementById("fortuneLevel").innerText = f.level;

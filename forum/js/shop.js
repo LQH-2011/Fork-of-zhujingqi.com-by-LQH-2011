@@ -143,7 +143,7 @@ async function openShop() {
 		shopDiv.querySelectorAll("[data-remove]").forEach(btn => {
 			btn.onclick = async () => {
 				const itemId = btn.dataset.remove;
-				roleArr = [...roleArr.filter(r => r !== itemId), itemId];
+				roleArr = roleArr.filter(r => r !== itemId);
 				try {
 					await apiPut("/api/users/" + currentUser.id, {
 						role: roleArr
