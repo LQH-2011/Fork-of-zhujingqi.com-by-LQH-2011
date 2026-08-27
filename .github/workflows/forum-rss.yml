@@ -1,0 +1,48 @@
+# Regenerates forum/rss.xml from the live Supabase forum API every day at
+# 16:00 UTC and commits the refreshed feed. Can also be triggered manually
+# via the "Run workflow" button (Actions → Update forum RSS).
+#
+# The generator (forum/rss.mjs) is zero-dependency Node and only rewrites the
+# file when it runs; this workflow skips committing when nothing changed.
+name: Update forum RSS
+
+on:
+  schedule:
+    - cron: "0 16 * * *" # daily at 16:00 UTC
+  workflow_dispatch: {} # manual trigger
+
+concurrency:
+  group: forum-rss
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-rss:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate forum/rss.xml
+        run: |
+          node forum/rss.mjs
+          test -f forum/rss.xml
+
+      - name: Commit refreshed feed if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add forum/rss.xml
+          if git diff --cached --quiet; then
+            echo "No changes — feed already up to date."
+          else
+            git commit -m "chore(forum): refresh rss.xml (automated)"
+            git push origin "HEAD:${GITHUB_REF_NAME:-main}"
+          fi

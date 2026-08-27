@@ -1,0 +1,2864 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>Jacky Chat - Zhujingqi</title>
+		<link rel="icon" type="image/png" href="icon.svg">
+		<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="icon.png">
+		<style>
+			:root {
+				--bg: #eee;
+				--card: #fff;
+				--text: #111;
+				--sub: #666;
+				--green: #0a0;
+				--active: #0a0;
+				--line: #ddd;
+				--mine: #b7f1d9;
+				--other: #fff;
+				--shadow: 0 8px 20px rgba(0, 0, 0, .12);
+				--top-h: 64px;
+				font-size: 18px;
+			}
+
+			body.dark {
+				--bg: #111;
+				--card: #222;
+				--text: #eee;
+				--sub: #aaa;
+				--green: #0a0;
+				--active: #0a0;
+				--line: #444;
+				--mine: #173117;
+				--other: #2a2a2a;
+				--shadow: 0 8px 20px rgba(0, 0, 0, .35);
+			}
+
+			button,
+			.btn,
+			.item {
+				user-select: none;
+				-webkit-user-select: none;
+			}
+
+			.loadingText {
+				display: flex;
+				align-items: center;
+				gap: 2px;
+				font-size: 18px;
+				font-weight: bold;
+				color: var(--text);
+			}
+
+			.dot {
+				display: inline-block;
+				animation: dotJump 1s infinite;
+			}
+
+			.dot1 {
+				animation-delay: 0s;
+			}
+
+			.dot2 {
+				animation-delay: 0.15s;
+			}
+
+			.dot3 {
+				animation-delay: 0.3s;
+			}
+
+			@keyframes dotJump {
+
+				0%,
+				80%,
+				100% {
+					transform: translateY(0);
+					opacity: 0.5;
+				}
+
+				40% {
+					transform: translateY(-6px);
+					opacity: 1;
+				}
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				height: 100%;
+			}
+
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--text);
+				overflow: hidden;
+			}
+
+			body::-webkit-scrollbar,
+			::-webkit-scrollbar {
+				width: 10px;
+				background: transparent;
+			}
+
+			body::-webkit-scrollbar-thumb,
+			::-webkit-scrollbar-thumb {
+				background-color: #aaa;
+				border-radius: 10px;
+				border: 2px solid transparent;
+				background-clip: content-box;
+			}
+
+			body.dark::-webkit-scrollbar-thumb {
+				background-color: #333;
+			}
+
+			a {
+				color: var(--green);
+			}
+
+			button {
+				border: 0;
+				padding: 0 12px;
+				border-radius: 20px;
+				cursor: pointer;
+				background: var(--card);
+				color: var(--text);
+				transition: .2s;
+				box-sizing: border-box;
+				height: 42px;
+				font-size: 18px;
+			}
+
+			button:hover {
+				background: var(--green);
+				color: #fff;
+			}
+
+			input,
+			textarea {
+				width: 100%;
+				padding: 12px;
+				margin: 6px 0;
+				border-radius: 20px;
+				border: 1px solid var(--line);
+				background: var(--card);
+				color: var(--text);
+				box-sizing: border-box;
+				height: 42px;
+				font-size: 18px;
+				overflow: auto;
+				outline: none;
+			}
+
+			input:focus {
+				border: 2px solid var(--text);
+			}
+
+			textarea {
+				height: 120px;
+				resize: none;
+			}
+
+			.hidden {
+				display: none !important;
+			}
+
+			.popup {
+				opacity: 1;
+				visibility: visible;
+				pointer-events: auto;
+				transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+			}
+			.popup.closed {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+
+			.center {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				padding: 20px;
+			}
+
+			.card {
+				background: var(--card);
+				padding: 28px;
+				border-radius: 20px;
+				box-shadow: var(--shadow);
+				width: 100%;
+				max-width: 360px;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.big {
+				font-size: 36px;
+				font-weight: bold;
+				margin-bottom: 18px;
+				text-align: center;
+				color: var(--text);
+			}
+
+			.muted {
+				color: var(--sub);
+				font-size: 13px;
+				line-height: 1.6;
+				text-align: center;
+			}
+
+			.miniBtn {
+				height: 38px;
+				padding: 0 14px;
+				border-radius: 20px;
+			}
+
+			.helpBtn {
+				width: 22px;
+				height: 22px;
+				border-radius: 50%;
+				padding: 0;
+				font-size: 14px;
+				line-height: 22px;
+				text-align: center;
+			}
+
+			.helpBtn:hover {
+				background: #f0f0f0;
+				color: var(--text);
+			}
+
+			#app {
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+				overflow: hidden;
+			}
+
+			.logo {
+				font-size: 28px;
+				font-weight: bold;
+				color: var(--green);
+				flex-shrink: 0;
+				padding: 20px;
+			}
+
+			.content {
+				flex: 1;
+				min-height: 0;
+				overflow: hidden;
+			}
+
+			.page {
+				height: 100%;
+				min-height: 0;
+			}
+
+			.chatWrap {
+				display: grid;
+				grid-template-columns: 320px 1fr;
+				height: 100%;
+				min-height: 0;
+			}
+
+			.leftPanel {
+				border-right: 1px solid var(--line);
+				background: var(--card);
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+			}
+
+			.panelHead {
+				padding: 15px;
+				padding-top: 0px;
+				border-bottom: 1px solid var(--line);
+				display: grid;
+				gap: 10px;
+				flex-shrink: 0;
+			}
+
+			.list {
+				flex: 1;
+				min-height: 0;
+				overflow-y: auto;
+				padding: 8px;
+			}
+
+			.item {
+				width: 100%;
+				padding: 12px;
+				border-radius: 20px;
+				cursor: pointer;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 10px;
+				border: 1px solid transparent;
+				margin-bottom: 8px;
+				background: var(--card);
+			}
+
+			.item:hover {
+				border-color: var(--green);
+			}
+
+			.item.active {
+				background: var(--green);
+				color: #fff;
+			}
+
+			.item.pinned {
+				background: #e6f4ea;
+			}
+
+			.item.pinned.active {
+				background: var(--green);
+				color: #fff;
+			}
+
+			body.dark .item.pinned {
+				background: #1e3a2a;
+			}
+
+			body.dark .item.pinned.active {
+				background: var(--green);
+				color: #fff;
+			}
+
+			.itemTitle {
+				font-weight: bold;
+			}
+
+			.unreadDot {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				min-width: 20px;
+				height: 20px;
+				padding: 0 6px;
+				margin-left: 8px;
+				border-radius: 999px;
+				background: #ff7777;
+				color: #fff;
+				font-size: 12px;
+				font-weight: 700;
+				line-height: 20px;
+				vertical-align: middle;
+			}
+
+			.itemSub {
+				font-size: 12px;
+				opacity: .8;
+			}
+
+			.chatPanel {
+				min-width: 0;
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+			}
+
+			.chatHead {
+				height: var(--top-h);
+				background: var(--card);
+				border-bottom: 1px solid var(--line);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 10px;
+				padding: 0 16px;
+				flex-shrink: 0;
+			}
+
+			.meAvatar {
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+				object-fit: cover;
+				flex-shrink: 0;
+				border: 1px solid rgba(0, 0, 0, .08);
+				background: var(--bg);
+				cursor: pointer;
+				transition: transform .15s;
+			}
+
+			.meAvatar:hover {
+				transform: scale(1.08);
+			}
+
+			.chatTitle {
+				font-size: 20px;
+				font-weight: 800;
+				flex: 1;
+				min-width: 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.mobileBack {
+				display: none;
+			}
+
+			#refreshChatBtn {
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				font-size: 18px;
+				cursor: pointer;
+			}
+
+			.chatBody {
+				flex: 1;
+				min-height: 0;
+				overflow-y: auto;
+				padding: 16px;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.empty {
+				margin: auto;
+				color: var(--sub);
+				text-align: center;
+				line-height: 1.8;
+			}
+
+			.msgRow {
+				width: 100%;
+				display: flex;
+				align-items: flex-start;
+				padding: 0 8px;
+				gap: 8px;
+				box-sizing: border-box;
+			}
+
+			.msgRow.mine {
+				justify-content: flex-end;
+			}
+
+			.msgRow.other {
+				justify-content: flex-start;
+			}
+
+			.msgAvatar {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				object-fit: cover;
+				flex-shrink: 0;
+				background: var(--bg);
+				border: 1px solid rgba(0, 0, 0, .08);
+				cursor: pointer;
+				transition: transform .15s, box-shadow .15s;
+			}
+
+			.msgAvatar:hover {
+				transform: scale(1.12);
+				box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+			}
+
+			.chatAvatar {
+				cursor: pointer;
+				transition: transform .15s, box-shadow .15s;
+			}
+
+			.chatAvatar:hover {
+				transform: scale(1.1);
+				box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+			}
+
+			.msg {
+				position: relative;
+				display: flex;
+				width: 100%;
+				max-width: 100%;
+			}
+
+			.msg.mine {
+				justify-content: flex-end;
+			}
+
+			.msg.other {
+				justify-content: flex-start;
+			}
+
+			.bubble {
+				display: block;
+				width: auto;
+				max-width: 560px;
+				padding: 12px 14px;
+				border-radius: 20px;
+				white-space: pre-wrap;
+				overflow-wrap: anywhere;
+				word-break: break-word;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
+			}
+
+			.msg.mine .bubble {
+				background: var(--mine);
+				border: 1px solid var(--line);
+				border-radius: 20px 2px 20px 20px;
+			}
+
+			.msg.other .bubble {
+				background: var(--other);
+				border: 1px solid var(--line);
+				border-radius: 2px 20px 20px 20px;
+			}
+
+			.revokeBtn {
+				position: static;
+				background: rgba(255, 77, 79, .14);
+				color: #e23a3a;
+				border: 1px solid rgba(255, 77, 79, .25);
+				border-radius: 50%;
+				font-size: 12px;
+				padding: 3px 10px;
+				cursor: pointer;
+				opacity: 0;
+				pointer-events: none;
+				transition: 0.2s;
+				white-space: nowrap;
+				flex-shrink: 0;
+				margin-right: 4px;
+				backdrop-filter: blur(4px);
+				-webkit-backdrop-filter: blur(4px);
+			}
+
+			.msg.mine:hover .revokeBtn {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			.replyCard {
+				background: rgba(0, 0, 0, .04);
+				border-left: 3px solid rgba(0, 0, 0, .15);
+				border-radius: 4px;
+				padding: 4px 8px;
+				margin-bottom: 6px;
+				font-size: 12px;
+				color: #888;
+				cursor: pointer;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				max-width: 360px;
+				transition: background .15s;
+			}
+
+			.replyCard:hover {
+				background: rgba(0, 0, 0, .08);
+			}
+
+			.replyPreview {
+				display: none;
+				align-items: center;
+				gap: 8px;
+				padding: 8px 12px;
+				margin: 0 8px;
+				background: var(--card);
+				border: 1px solid var(--line);
+				border-radius: 12px 12px 0 0;
+				border-bottom: none;
+				font-size: 12px;
+				color: #888;
+				position: relative;
+			}
+
+			.replyPreview.show {
+				display: flex;
+			}
+
+			.replyPreview .rpText {
+				flex: 1;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			.replyPreview .rpClose {
+				cursor: pointer;
+				color: #999;
+				font-size: 16px;
+				flex-shrink: 0;
+				padding: 0 2px;
+			}
+
+			.replyPreview .rpClose:hover {
+				color: #333;
+			}
+
+			.quoteBtn {
+				position: static;
+				background: rgba(0, 0, 0, .06);
+				color: var(--text);
+				border: 1px solid rgba(0, 0, 0, .1);
+				border-radius: 50%;
+				font-size: 12px;
+				padding: 3px 10px;
+				cursor: pointer;
+				opacity: 0;
+				pointer-events: none;
+				transition: 0.2s;
+				white-space: nowrap;
+				flex-shrink: 0;
+				margin-left: 4px;
+				backdrop-filter: blur(4px);
+				-webkit-backdrop-filter: blur(4px);
+			}
+
+			.msg:hover .quoteBtn,
+			.msg:hover .revokeBtn {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			.replyHighlight {
+				animation: replyFlash .8s ease;
+			}
+
+			@keyframes replyFlash {
+				0%, 100% { box-shadow: 0 4px 12px rgba(0, 0, 0, .06); }
+				30%, 70% { box-shadow: 0 0 0 3px rgba(0, 170, 255, .5); }
+			}
+
+			.bubble img {
+				max-width: 100%;
+				max-height: 300px;
+				border-radius: 8px;
+				display: block;
+				margin: 4px 0;
+				cursor: zoom-in;
+			}
+
+			.msgBar {
+				position: relative;
+				padding: 14px 14px 28px 14px;
+				border-top: 1px solid var(--line);
+				background: var(--card);
+				display: flex;
+				gap: 10px;
+				flex-shrink: 0;
+			}
+
+			.msgBar input {
+				flex: 1;
+				height: 40px;
+				min-height: 40px;
+				max-height: 40px;
+				margin: 0;
+				border-radius: 50px;
+				padding: 0 16px;
+			}
+
+			.msgBar button {
+				width: 96px;
+				height: 54px;
+				border-radius: 16px;
+				font-weight: 700;
+			}
+
+			.sendCircleBtn {
+				width: 40px !important;
+				height: 40px !important;
+				border-radius: 50% !important;
+				padding: 0 !important;
+				background: var(--green) !important;
+				display: flex !important;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				align-self: flex-end;
+			}
+
+			.sendCircleBtn img {
+				filter: brightness(0) invert(1);
+			}
+
+			#emojiBtn,
+			#imgBtn {
+				width: 40px;
+				height: 40px;
+				padding: 0;
+				flex-shrink: 0;
+				align-self: flex-end;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			#emojiBtn img,
+			#imgBtn img {
+				width: 22px;
+				height: 22px;
+				display: block;
+				margin: auto;
+				pointer-events: none;
+			}
+
+			.delBtn:hover {
+				background: #d33;
+				color: #fff;
+			}
+
+			.settingsWrap {
+				max-width: 860px;
+				margin: 0 auto;
+				padding: 16px;
+				display: grid;
+				gap: 14px;
+				height: 100%;
+				overflow-y: auto;
+			}
+
+			.section {
+				background: var(--card);
+				border-radius: 20px;
+				box-shadow: var(--shadow);
+				padding: 18px;
+				min-height: 0;
+			}
+
+			.sectionTitle {
+				font-size: 22px;
+				font-weight: bold;
+				color: var(--green);
+				margin-bottom: 12px;
+			}
+
+			.row {
+				display: flex;
+				gap: 8px;
+				flex-wrap: wrap;
+			}
+
+			.row>* {
+				flex: 1;
+			}
+
+			.searchResultItem {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 10px 14px;
+				cursor: pointer;
+				transition: background 0.15s;
+			}
+			.searchResultItem:hover {
+				background: var(--bg);
+			}
+			.searchResultInfo {
+				flex: 1;
+				min-width: 0;
+			}
+			.searchResultName {
+				font-weight: 600;
+				font-size: 15px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.searchResultDesc {
+				font-size: 12px;
+				color: var(--sub);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				margin-top: 2px;
+			}
+			.addCircleBtn {
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				background: var(--green);
+				color: #fff;
+				border: none;
+				font-size: 22px;
+				font-weight: 700;
+				cursor: pointer;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: transform 0.15s, opacity 0.15s;
+				line-height: 1;
+			}
+			.addCircleBtn:hover {
+				transform: scale(1.1);
+			}
+			.addCircleBtn:active {
+				transform: scale(0.95);
+			}
+			.searchEmpty {
+				padding: 20px;
+				text-align: center;
+				color: var(--sub);
+				font-size: 14px;
+			}
+
+			.modal {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, .4);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 90;
+				padding: 20px;
+			}
+
+			.modalBox {
+				background: var(--card);
+				padding: 24px;
+				border-radius: 20px;
+				width: 100%;
+				max-width: 460px;
+				text-align: center;
+				box-shadow: var(--shadow);
+			}
+
+			.modalTitle {
+				font-size: 24px;
+				font-weight: bold;
+				color: var(--green);
+				margin-bottom: 14px;
+			}
+
+			.toast {
+				position: fixed;
+				top: 16px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: var(--green);
+				color: #fff;
+				padding: 10px 16px;
+				border-radius: 999px;
+				opacity: 0;
+				pointer-events: none;
+				transition: opacity .25s;
+				z-index: 100;
+				box-shadow: var(--shadow);
+			}
+
+			.toast.show {
+				opacity: 1;
+			}
+
+			.tiny {
+				font-size: 12px;
+				color: var(--sub);
+			}
+
+			.stack {
+				display: grid;
+				gap: 8px;
+			}
+
+			.drawerMask {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, .35);
+				z-index: 85;
+				display: flex;
+				justify-content: flex-end;
+			}
+			.drawerMask.closed .drawer {
+				transform: translateX(30%);
+			}
+			.drawer {
+				width: min(430px, 100%);
+				height: 100%;
+				background: var(--card);
+				box-shadow: -12px 0 40px rgba(0, 0, 0, .18);
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				overflow: hidden;
+				transition: transform 0.25s ease;
+				position: relative;
+				padding: 16px;
+			}
+
+			.drawerCloseBtn {
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				border: none;
+				background: rgba(0, 0, 0, .08);
+				color: var(--text);
+				font-size: 18px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 5;
+				transition: background .15s;
+			}
+
+			.drawerCloseBtn:hover {
+				background: rgba(0, 0, 0, .16);
+			}
+
+			body.dark .drawerCloseBtn {
+				background: rgba(255, 255, 255, .1);
+			}
+
+			body.dark .drawerCloseBtn:hover {
+				background: rgba(255, 255, 255, .2);
+			}
+
+			@keyframes slideIn {
+				from {
+					transform: translateX(24px);
+					opacity: .7;
+				}
+
+				to {
+					transform: translateX(0);
+					opacity: 1;
+				}
+			}
+
+			.drawerCard {
+				flex: 1;
+				min-height: 0;
+				overflow-y: auto;
+				background: var(--other);
+				border-radius: 20px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding: 28px 20px 20px;
+				gap: 12px;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.drawerCardBg {
+				position: absolute;
+				inset: 0;
+				border-radius: 20px;
+				background-size: cover;
+				background-position: center;
+				filter: blur(4px);
+				transform: scale(1.08);
+				pointer-events: none;
+				z-index: 0;
+				display: none;
+			}
+
+			.drawerCard.has-bg .drawerCardBg {
+				display: block;
+			}
+
+			.drawerCard.has-bg::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				border-radius: 20px;
+				background: linear-gradient(rgba(0, 0, 0, .45), rgba(0, 0, 0, .45));
+				z-index: 1;
+				pointer-events: none;
+			}
+
+			.drawerCard.has-bg .drawerAvatar,
+			.drawerCard.has-bg .drawerProfileName,
+			.drawerCard.has-bg .drawerProfileBio,
+			.drawerCard.has-bg .drawerForumBtn {
+				position: relative;
+				z-index: 2;
+			}
+
+			.drawerCard.has-bg .drawerProfileName {
+				color: #fff;
+			}
+
+			.drawerCard.has-bg .drawerProfileBio {
+				color: rgba(255, 255, 255, .85);
+			}
+
+			.drawerAvatar {
+				width: 88px;
+				height: 88px;
+				border-radius: 50%;
+				object-fit: cover;
+				border: 3px solid var(--card);
+				background: var(--bg);
+				flex-shrink: 0;
+				cursor: pointer;
+				transition: transform .15s;
+			}
+
+			.drawerAvatar:hover {
+				transform: scale(1.06);
+			}
+
+			.drawerProfileName {
+				font-size: 20px;
+				font-weight: 800;
+				text-align: center;
+				line-height: 1.3;
+			}
+
+			.drawerProfileBio {
+				font-size: 14px;
+				color: var(--sub, #888);
+				text-align: center;
+				line-height: 1.6;
+				word-break: break-word;
+			}
+
+			.drawerForumBtn {
+				margin-top: 4px;
+				padding: 8px 24px;
+				border-radius: 50px;
+				border: none;
+				background: var(--green);
+				color: #fff;
+				font-size: 14px;
+				font-weight: 600;
+				cursor: pointer;
+				transition: opacity .15s;
+			}
+
+			.drawerForumBtn:hover {
+				opacity: .85;
+			}
+
+			.drawerActions {
+				display: flex;
+				gap: 10px;
+				flex-shrink: 0;
+			}
+
+			.drawerActions button {
+				flex: 1;
+			}
+
+			.zoomable {
+				width: 100%;
+				border-radius: 10px;
+				cursor: zoom-in;
+			}
+
+			.userMenu {
+				position: fixed;
+				background: var(--card);
+				border-radius: 20px;
+				box-shadow: 0 8px 30px rgba(0, 0, 0, .2);
+				padding: 6px 0;
+				min-width: 120px;
+				z-index: 9999;
+			}
+
+			.userMenu div {
+				padding: 10px 14px;
+				cursor: pointer;
+				transition: 0.15s;
+			}
+
+			.userMenu div:hover {
+				background: rgba(0, 0, 0, .06);
+			}
+
+			.userMenu .danger {
+				color: #e33;
+			}
+
+			#viewer {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, .9);
+				justify-content: center;
+				align-items: center;
+				z-index: 99999;
+				cursor: zoom-out;
+			}
+
+			#viewer img {
+				max-width: 90%;
+				max-height: 90%;
+			}
+
+			.emojiPanel {
+				position: absolute;
+				bottom: 100%;
+				left: 10px;
+				right: 10px;
+				margin-bottom: 8px;
+				max-height: 240px;
+				overflow: hidden;
+				background: var(--card);
+				border: 1px solid rgba(0, 0, 0, .08);
+				border-radius: 16px;
+				box-shadow: 0 8px 30px rgba(0, 0, 0, .12);
+				padding: 10px;
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+				gap: 8px;
+				z-index: 99;
+			}
+
+			.emojiItem {
+				border: none;
+				background: transparent;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				padding: 8px 4px;
+				border-radius: 12px;
+				cursor: pointer;
+			}
+
+			.emojiItem:hover {
+				background: rgba(127, 127, 127, .12);
+			}
+
+			.emojiItem img {
+				width: 28px;
+				height: 28px;
+				pointer-events: none;
+			}
+
+			.msgEmoji {
+				width: 22px;
+				height: 22px;
+				vertical-align: -4px;
+				margin: 0 2px;
+			}
+
+			.searchWrap {
+				position: relative;
+				display: flex;
+				gap: 8px;
+				width: 100%;
+			}
+
+			.addFriendBtn {
+				width: 42px;
+				height: 42px;
+				flex-shrink: 0;
+				font-size: 22px;
+				border-radius: 50%;
+				background: var(--green);
+				color: #fff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+			}
+
+			.addFriendBtn:hover {
+				opacity: .85;
+			}
+
+			.contactBackBtn,
+			.mobileBack {
+				background: none;
+				border: none;
+				cursor: pointer;
+				padding: 4px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			.contactBackBtn img,
+			.mobileBack img {
+				width: 22px;
+				height: 22px;
+				filter: brightness(0);
+			}
+
+			body.dark .contactBackBtn img,
+			body.dark .mobileBack img {
+				filter: brightness(0) invert(1);
+			}
+
+			.contactBackBtn:hover,
+			.mobileBack:hover {
+				background: var(--bg);
+			}
+
+			.verifiedBadge {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 16px;
+				height: 16px;
+				margin-left: 6px;
+				border-radius: 50%;
+				background: #00aaff;
+				color: #fff;
+				font-size: 11px;
+				font-weight: 700;
+				line-height: 1;
+				vertical-align: middle;
+				cursor: default;
+				user-select: none;
+			}
+
+			.avatar {
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				object-fit: cover;
+				flex: 0 0 auto;
+				background: var(--bg);
+				border: 1px solid rgba(0,0,0,.08);
+			}
+
+			.avatar.small {
+				width: 22px;
+				height: 22px;
+			}
+
+			#load-bar {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 0%;
+				height: 3px;
+				background: #00a88f;
+				z-index: 9999;
+				transition: width 0.08s linear;
+			}
+
+			@media (max-width: 860px) {
+				* {
+					-webkit-tap-highlight-color: transparent;
+				}
+
+				:root {
+					font-size: 16px;
+				}
+
+				button {
+					font-size: 16px;
+				}
+
+				input,
+				textarea {
+					font-size: 16px;
+				}
+
+				.muted {
+					font-size: 12px;
+				}
+
+				.itemTitle {
+					font-size: 17px;
+				}
+
+				.itemSub {
+					font-size: 12px;
+				}
+
+				.userLevel {
+					font-size: 12px;
+				}
+
+				.chatTitle {
+					font-size: 18px;
+				}
+
+				.revokeBtn {
+					font-size: 10px;
+				}
+
+			.sectionTitle {
+				font-size: 20px;
+			}
+
+			.modalTitle {
+					font-size: 22px;
+				}
+
+				.tiny {
+					font-size: 10px;
+				}
+
+				.chatWrap {
+					grid-template-columns: 1fr;
+				}
+
+				.leftPanel {
+					display: flex;
+					border-right: none;
+					border-bottom: 1px solid var(--line);
+				}
+
+				.chatPanel {
+					display: none;
+				}
+
+				.chatWrap.chat-open .leftPanel {
+					display: none;
+				}
+
+				.chatWrap.chat-open .chatPanel {
+					display: flex;
+				}
+
+				.mobileBack {
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				.chatHead {
+					padding: 0 12px;
+				}
+
+				.chatBody {
+					padding: 14px;
+				}
+
+				.msgBar {
+					padding: 12px 12px 28px 12px;
+				}
+
+				.settingsWrap {
+					padding: 12px;
+				}
+
+				.drawer {
+					width: 100%;
+					border-top-left-radius: 22px;
+					border-top-right-radius: 22px;
+					height: 60%;
+					margin-top: auto;
+					animation: slideUp .18s ease-out;
+				}
+
+				.drawerMask {
+					justify-content: stretch;
+					align-items: flex-end;
+				}
+
+				@keyframes slideUp {
+					from {
+						transform: translateY(24px);
+						opacity: .7;
+					}
+
+					to {
+						transform: translateY(0);
+						opacity: 1;
+					}
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="load-bar"></div>
+		<div id="toast" class="toast"></div>
+		<div id="welcomePage" class="center">
+			<div class="big" style="color: #000;">
+				<img src="icon.svg" height="60px" width="60px" />
+				Jacky Chat
+			</div>
+			<div class="card">
+				<div class="stack">
+					<input id="loginUser" placeholder="用户名" autofocus>
+					<input id="loginPass" type="password" placeholder="密码">
+					<button id="loginBtn">登录</button>
+					<button id="showRegisterBtn">注册</button>
+				</div>
+				<div class="muted" style="margin-top:12px;">
+					账号体系已与 <b><a href="https://zhujingqi.com/forum/">Jacky 论坛</a></b> 互通
+					<br>
+					<a href="https://zhujingqi.com/chat/">Jacky Chat</a> · <a href="https://zhujingqi.com/forum/">Jacky 论坛</a> ·
+					<a href="https://zhujingqi.com">Zhujingqi</a>
+					<br>
+					© Jacky Forum. All rights reserved.
+				</div>
+			</div>
+		</div>
+		<div id="registerPage" class="center hidden">
+			<div class="big">注册 Jacky 账号 <button id="registerHelpBtn" class="helpBtn">?</button></div>
+			<div class="card">
+				<div class="stack">
+					<input id="regUser" placeholder="用户名" autofocus>
+					<input id="regPass" type="password" placeholder="密码">
+					<input id="regPass2" type="password" placeholder="再次输入密码">
+					<button id="registerBtn">注册</button>
+					<button id="backLoginBtn">返回登录</button>
+				</div>
+				<div class="muted" style="margin-top:12px;">
+					<p style="text-align:center;">
+						注册即代表您同意 <a id="termsBtn" style="cursor:pointer;">用户协议</a><br>
+						请牢记用户名和密码。如无法注册，请联系管理员。
+					</p>
+				</div>
+			</div>
+		</div>
+		<div id="app" class="hidden">
+			<div class="content">
+				<div id="pageChat" class="page hidden">
+					<div class="chatWrap">
+						<div class="leftPanel">
+							<div class="logo" style="display:flex;align-items:center;">
+								<img src="icon.svg" height="50px" width="50px" />
+								Jacky Chat
+								<img id="meAvatar" class="meAvatar" src="head.svg" alt="我" style="margin-left:auto;margin-right:-4px;">
+							</div>
+							<div class="panelHead">
+								<div class="searchWrap">
+									<input id="chatSearch" placeholder="搜索">
+									<button id="addFriendBtn" title="添加好友" class="addFriendBtn">+</button>
+								</div>
+							</div>
+							<div id="chatContactList" class="list"></div>
+						</div>
+						<div class="chatPanel">
+							<div class="chatHead">
+								<button id="backToListBtn" class="miniBtn mobileBack"><img src="/forum/icon/back.svg" /></button>
+								<div id="chatTitle" class="chatTitle">请选择好友</div>
+								<button id="refreshChatBtn">⟳</button>
+							</div>
+							<div id="chatBody" class="chatBody">
+								<div class="empty">
+									<div class="logo">
+										<img src="icon.svg" height="100px" width="100px" />
+										Jacky Chat
+									</div>
+									点击 '+' 添加好友吧！
+								</div>
+							</div>
+							<div id="replyPreview" class="replyPreview">
+								<span class="rpText"></span>
+								<span class="rpClose">×</span>
+							</div>
+							<div class="msgBar">
+								<button id="imgBtn" type="button" title="发送图片"><img src="image.svg" style="width:22px;height:22px;display:block;pointer-events:none;" /></button>
+								<button id="emojiBtn" type="button"><img src="/forum/emojis/happy.svg" /></button>
+								<div id="emojiPanel" class="emojiPanel popup closed"></div>
+								<input id="msgInput" placeholder="输入消息..." disabled>
+								<button id="sendMsgBtn" class="sendCircleBtn" disabled title="发送">
+									<img src="/forum/icon/arrow.svg" style="width:20px;height:20px;display:block;pointer-events:none;" />
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div id="pageContact" class="page hidden">
+				<div class="settingsWrap" style="grid-template-rows: auto 1fr; overflow:hidden;">
+					<div class="section" style="overflow:hidden; display:flex; flex-direction:column;">
+						<div class="sectionTitle" style="display:flex;align-items:center;gap:8px;">
+							<button id="contactBackBtn" class="contactBackBtn"><img src="/forum/icon/back.svg" /></button>
+							搜索添加好友
+						</div>
+						<input id="contactSearch" placeholder="输入用户名后回车搜索">
+					</div>
+					<div class="section" style="overflow:hidden; display:flex; flex-direction:column; min-height:0;">
+						<div id="searchResultTitle" class="sectionTitle" style="display:none;">搜索结果</div>
+						<div id="searchResultBox" class="list" style="padding:0; min-height:0; display:none;"></div>
+						<div class="sectionTitle">好友</div>
+						<div id="contactList" class="list" style="padding:0; min-height:0;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+	<div id="drawerMask" class="drawerMask popup closed">
+			<div class="drawer">
+				<button id="drawerCloseBtn" class="drawerCloseBtn">×</button>
+				<div id="drawerCard" class="drawerCard">
+					<div id="drawerCardBg" class="drawerCardBg"></div>
+					<img id="drawerAvatar" class="drawerAvatar" src="head.svg">
+					<div id="drawerProfileName" class="drawerProfileName"></div>
+					<div id="drawerProfileBio" class="drawerProfileBio"></div>
+					<button id="drawerForumBtn" class="drawerForumBtn">查看论坛主页</button>
+				</div>
+				<div class="drawerActions">
+					<button id="drawerChatBtn">聊天</button>
+					<button id="drawerPinBtn">置顶</button>
+					<button id="drawerDeleteBtn" class="delBtn">删除好友</button>
+				</div>
+			</div>
+		</div>
+		<div id="modal" class="modal popup closed">
+			<div class="modalBox">
+				<div id="modalTitle" class="modalTitle">提示</div>
+				<div id="modalText"></div>
+				<div id="modalActions" style="margin-top:20px; display:flex; justify-content:center; gap:10px;">
+					<button id="modalCancel" class="hidden">取消</button>
+					<button id="modalOk" class="hidden">确定</button>
+					<button id="modalClose">关闭</button>
+				</div>
+			</div>
+		</div>
+		<div id="userMenu" class="userMenu popup closed">
+			<div id="menuPin">置顶</div>
+			<div id="menuInfo">个人信息</div>
+			<div id="menuDelete" class="danger">删除好友</div>
+		</div>
+		<div id="meMenu" class="userMenu popup closed">
+			<div id="meMenuForum">前往论坛</div>
+			<div id="meMenuLogout" class="danger">退出登录</div>
+		</div>
+		<div id="viewer" onclick="closeViewer()">
+			<img id="viewerImg">
+		</div>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const API_BASE = "https://jqtljtnchkhzcxykfnoo.supabase.co/functions/v1";
+				const LS_LOGIN = "loginUser";
+				const TOKEN_KEY = "token";
+				const LS_USER_CACHE = "chat_user_cache";
+				const LS_USER_CACHE_T = "chat_user_cache_t";
+				const USER_CACHE_TTL = 5 * 60 * 1000;
+				async function api(path, options = {}) {
+					const headers = {
+						"Content-Type": "application/json",
+						...options.headers
+					};
+					const token = localStorage.getItem(TOKEN_KEY);
+					if (token) headers["Authorization"] = "Bearer " + token;
+					const res = await fetch(API_BASE + path, {
+						...options,
+						headers
+					});
+					const text = await res.text();
+					if (!res.ok) {
+						let msg = text;
+						try {
+							const j = JSON.parse(text);
+							if (j.error) msg = j.error;
+						} catch {}
+						if (res.status === 401 && /jwt|expir|unauthorized|token/i.test(msg) && !path.startsWith("/api/auth/login")) {
+							localStorage.removeItem(TOKEN_KEY);
+							localStorage.removeItem(LS_LOGIN);
+							currentUser = null;
+							show("welcomePage");
+							throw new Error("登录已过期，请重新登录");
+						}
+						throw new Error(msg);
+					}
+					return text ? JSON.parse(text) : null;
+				}
+				const apiGet = path => api(path);
+				const apiPost = (path, body) => api(path, { method: "POST", body: JSON.stringify(body) });
+				const apiPut = (path, body) => api(path, { method: "PUT", body: JSON.stringify(body) });
+				const apiDelete = (path, body) => api(path, { method: "DELETE", ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
+			const $ = id => document.getElementById(id);
+			const LS_THEME = "theme";
+			let currentUser = null;
+			let currentChatUserId = null;
+			let contactCache = [];
+			let userCache = [];
+			let modalOkHandler = null;
+				let drawerUserId = null;
+				let mobileChatMode = false;
+				let chatTotals = {};
+				let contextUserId = null;
+				let currentChatMessages = [];
+				let replyToId = null;
+				const VERIFIED_ROLES = ["owner", "admin", "official"];
+				const EMOJIS = {
+					"14": "/forum/emojis/14.svg",
+					alien: "/forum/emojis/alien.svg",
+					amazed: "/forum/emojis/amazed.svg",
+					angry: "/forum/emojis/angry.svg",
+					ask: "/forum/emojis/ask.svg",
+					bad: "/forum/emojis/bad.svg",
+					blank: "/forum/emojis/blank.svg",
+					bot: "/forum/emojis/bot.svg",
+					chill: "/forum/emojis/chill.svg",
+					cool: "/forum/emojis/cool.svg",
+					cry: "/forum/emojis/cry.svg",
+					dead: "/forum/emojis/dead.svg",
+					doge: "/forum/emojis/doge.svg",
+					eat: "/forum/emojis/eat.svg",
+					eyeroll: "/forum/emojis/eyeroll.svg",
+					good: "/forum/emojis/good.svg",
+					haha: "/forum/emojis/haha.svg",
+					happy: "/forum/emojis/happy.svg",
+					hmm: "/forum/emojis/hmm.svg",
+					jesus: "/forum/emojis/jesus.svg",
+					ke: "/forum/emojis/ke.svg",
+					love: "/forum/emojis/love.svg",
+					maga: "/forum/emojis/maga.svg",
+					ok: "/forum/emojis/ok.svg",
+					pirate: "/forum/emojis/pirate.svg",
+					right: "/forum/emojis/right.svg",
+					sad: "/forum/emojis/sad.svg",
+					saka: "/forum/emojis/saka.svg",
+					scared: "/forum/emojis/scared.svg",
+					sob: "/forum/emojis/sob.svg",
+					strange: "/forum/emojis/strange.svg",
+					sweat: "/forum/emojis/sweat.svg",
+					updown: "/forum/emojis/updown.svg",
+					wrong: "/forum/emojis/wrong.svg",
+				};
+				async function loadBar() {
+					const bar = document.getElementById('load-bar');
+					bar.style.width = '25%';
+					try {
+						await apiGet("/api/stats");
+						bar.style.width = '75%';
+					} catch (err) {
+						bar.style.background = "#ff4444";
+						openModal("加载失败", `服务器连接失败：` + err + ` 请重新加载`);
+					}
+					bar.style.width = '100%';
+					setTimeout(() => bar.remove(), 300);
+				}
+				loadBar();
+
+				function isVerified(u) {
+					const roles = Array.isArray(u?.role) ? u.role : [];
+					return VERIFIED_ROLES.some(r => roles.includes(r));
+				}
+
+				function getVerifiedBadgeHTML(u) {
+					return "";
+				}
+
+				function isMobile() {
+					return window.innerWidth <= 860;
+				}
+
+				function updateChatLayout() {
+					const wrap = document.querySelector(".chatWrap");
+					if (!wrap) return;
+					wrap.classList.toggle("chat-open", isMobile() && mobileChatMode && !!currentChatUserId);
+				}
+
+				function escapeHtml(s) {
+					return String(s)
+						.replaceAll("&", "&amp;")
+						.replaceAll("<", "&lt;")
+						.replaceAll(">", "&gt;")
+						.replaceAll('"', "&quot;")
+						.replaceAll("'", "&#39;");
+				}
+
+				const DEFAULT_AVATAR = "head.svg";
+
+				function getAvatar(user) {
+					return user?.avatar?.trim() || DEFAULT_AVATAR;
+				}
+
+				function isImageUrl(str) {
+					return /^https?:\/\/.+\.(png|jpg|jpeg|gif|webp|svg)(\?.*)?$/i.test(str.trim());
+				}
+
+				async function exportAndClearChat(otherId) {
+					const me = Number(currentUser.id);
+					const other = Number(otherId);
+					const u = getUserById(otherId);
+					const name = u?.name || otherId;
+					let data;
+					try {
+						data = await apiGet(`/api/chat/messages?other_id=${other}&all=1`);
+					} catch (e) {
+						return openModal("导出失败", e.message);
+					}
+					const exportData = {
+						chat_with: name,
+						user_id: otherId,
+						exported_at: new Date().toISOString(),
+						messages: (data.messages || []).map(m => ({
+							from: Number(m.sender_id) === me ? "me" : name,
+							content: m.content,
+							time: ""
+						}))
+					};
+					const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+					const url = URL.createObjectURL(blob);
+					const a = document.createElement("a");
+					a.href = url;
+					a.download = `chat-${name}-${Date.now()}.json`;
+					a.click();
+					URL.revokeObjectURL(url);
+					await apiDelete(`/api/chat/messages?other_id=${other}`);
+					closeModal();
+					toast("聊天记录已导出并清空");
+					currentChatUserId = null;
+					await renderChatMessages();
+					await renderChatContactList();
+				}
+
+
+				function show(page) {
+					["welcomePage", "registerPage", "app"].forEach(id => {
+						const el = $(id);
+						if (el) el.classList.add("hidden");
+					});
+					const active = $(page);
+					if (active) active.classList.remove("hidden");
+				}
+
+				function showPage(pageId) {
+					["pageChat", "pageContact"].forEach(id => {
+						const el = $(id);
+						if (el) el.classList.add("hidden");
+					});
+					const page = $(pageId);
+					if (page) page.classList.remove("hidden");
+				}
+
+				function openModal(title, html, opts = {}) {
+					$("modalTitle").textContent = title || "提示";
+					$("modalText").innerHTML = html || "";
+					$("modal").classList.remove("closed");
+
+					$("modalClose").classList.toggle("hidden", !!opts.confirm);
+					$("modalCancel").classList.toggle("hidden", !opts.confirm);
+					$("modalOk").classList.toggle("hidden", !opts.confirm);
+
+					modalOkHandler = typeof opts.onOk === "function" ? opts.onOk : null;
+					$("modalOk").textContent = opts.okText || "确定";
+				}
+
+				function closeModal() {
+					$("modal").classList.add("closed");
+					modalOkHandler = null;
+				}
+
+				function toast(text) {
+					const el = $("toast");
+					el.textContent = text;
+					el.classList.add("show");
+					clearTimeout(el._t);
+					el._t = setTimeout(() => el.classList.remove("show"), 1800);
+				}
+
+				function setTheme(mode) {
+					localStorage.setItem(LS_THEME, mode === "system" ? "sys" : mode);
+					applyTheme();
+				}
+
+				function applyTheme() {
+					const mode = localStorage.getItem(LS_THEME);
+					const pref = mode === "dark" || mode === "light" ? mode : "sys";
+					const systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+					const dark = pref === "dark" || (pref === "sys" && systemDark);
+					document.body.classList.toggle("dark", dark);
+				}
+
+				if (window.matchMedia) {
+					const mq = window.matchMedia("(prefers-color-scheme: dark)");
+					const onChange = () => {
+						const m = localStorage.getItem(LS_THEME);
+						if (m !== "light" && m !== "dark") applyTheme();
+					};
+					if (mq.addEventListener) mq.addEventListener("change", onChange);
+					else mq.addListener(onChange);
+				}
+
+				async function hash(text) {
+					const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+					return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+				}
+
+				function pairKey(a, b) {
+					return [Math.min(Number(a), Number(b)), Math.max(Number(a), Number(b))].join("-");
+				}
+
+				function getPinList(contact) {
+					return Array.isArray(contact?.pin) ? contact.pin.map(Number) : [];
+				}
+
+				function isContactPinnedByMe(contact) {
+					return getPinList(contact).includes(Number(currentUser.id));
+				}
+
+				function getContactRow(otherId) {
+					const key = pairKey(currentUser.id, otherId);
+					return contactCache.find(c => pairKey(c.id1, c.id2) === key) || null;
+				}
+
+				function getUserById(id) {
+					return userCache.find(u => Number(u.id) === Number(id)) || null;
+				}
+
+				function hideUnreadDot(otherId) {
+					const dot = document.getElementById(`unread-${otherId}`);
+					if (dot) dot.style.display = "none";
+				}
+				function getUnreadCount(otherId) {
+					const row = getContactRow(otherId);
+					return row ? (row.unread || 0) : 0;
+				}
+
+
+
+				function isContactExists(a, b) {
+					return contactCache.some(c => pairKey(c.id1, c.id2) === pairKey(a, b));
+				}
+
+				function getContactUserIds() {
+					return [...new Set(contactCache.flatMap(c => [Number(c.id1), Number(c.id2)]))].filter(id => id !==
+						Number(currentUser.id));
+				}
+
+				async function loadUsersCache() {
+					const now = Date.now();
+					const cached = localStorage.getItem(LS_USER_CACHE);
+					const cachedT = Number(localStorage.getItem(LS_USER_CACHE_T) || 0);
+					if (cached && now - cachedT < USER_CACHE_TTL) {
+						try { userCache = JSON.parse(cached); return; } catch {}
+					}
+					userCache = await apiGet("/api/users");
+					try {
+						localStorage.setItem(LS_USER_CACHE, JSON.stringify(userCache));
+						localStorage.setItem(LS_USER_CACHE_T, String(now));
+					} catch {}
+				}
+
+				async function loadContacts() {
+					contactCache = await apiGet("/api/chat/contacts") || [];
+					for (const c of contactCache) {
+						if (!c.user) continue;
+						const i = userCache.findIndex(u => Number(u.id) === Number(c.user.id));
+						if (i >= 0) userCache[i] = { ...userCache[i], ...c.user };
+						else userCache.push(c.user);
+					}
+					try {
+						localStorage.setItem(LS_USER_CACHE, JSON.stringify(userCache));
+						localStorage.setItem(LS_USER_CACHE_T, String(Date.now()));
+					} catch {}
+				}
+
+				async function loadProfile() {
+					currentUser = await apiGet("/api/users/" + currentUser.id);
+				}
+
+				async function loadMessages(otherId) {
+					const data = await apiGet(`/api/chat/messages?other_id=${Number(otherId)}&last=100`);
+					chatTotals[Number(otherId)] = data.total || 0;
+					return data.messages || [];
+				}
+				async function markChatAsRead(otherId) {
+					try {
+						await apiPut("/api/chat/read", { sender_id: Number(otherId) });
+						const row = getContactRow(otherId);
+						if (row) row.unread = 0;
+					} catch (e) {
+						console.error("标记已读失败:", e);
+					}
+				}
+
+				function parseDbTime(t) {
+					if (!t) return null;
+					if (t instanceof Date) return isNaN(t.getTime()) ? null : t;
+					const s = String(t).trim();
+					if (!s) return null;
+					let d = new Date(s);
+					if (!isNaN(d.getTime())) return d;
+					const fixed = s.replace(" ", "T");
+					d = new Date(fixed);
+					if (!isNaN(d.getTime())) return d;
+					if (!/[zZ]|[+-]\d{2}:?\d{2}$/.test(fixed)) {
+						d = new Date(fixed + "Z");
+						if (!isNaN(d.getTime())) return d;
+					}
+					return null;
+				}
+
+				function formatChatTime(t) {
+					const d = parseDbTime(t);
+					if (!d) return "";
+					const now = new Date();
+					const isSameDay =
+						d.getFullYear() === now.getFullYear() &&
+						d.getMonth() === now.getMonth() &&
+						d.getDate() === now.getDate();
+					const isYesterday = new Date(now - 86400000).toDateString() === d.toDateString();
+					const time = d.toLocaleTimeString("zh-CN", {
+						hour: "2-digit",
+						minute: "2-digit",
+						hour12: false
+					});
+					if (isSameDay) return time;
+					if (isYesterday) return "昨天 " + time;
+					return d.toLocaleDateString("zh-CN") + " " + time;
+				}
+				async function renderChatContactList() {
+					const box = $("chatContactList");
+					if (!box) return;
+					const ids = getContactUserIds();
+					let list = ids.map(getUserById).filter(Boolean).sort((a, b) => {
+						const ca = getContactRow(a.id);
+						const cb = getContactRow(b.id);
+						const pa = isContactPinnedByMe(ca) ? 1 : 0;
+						const pb = isContactPinnedByMe(cb) ? 1 : 0;
+						if (pa !== pb) return pb - pa;
+						const ta = ca?.last_msg ? (parseDbTime(ca.last_msg)?.getTime() || 0) : 0;
+						const tb = cb?.last_msg ? (parseDbTime(cb.last_msg)?.getTime() || 0) : 0;
+						if (ta !== tb) return tb - ta;
+						return a.name.localeCompare(b.name, "zh-CN");
+					});
+					const q = $("chatSearch").value.trim().toLowerCase();
+					if (q) list = list.filter(u => u.name.toLowerCase().includes(q));
+					if (!list.length) {
+						box.innerHTML = '<div class="empty" style="padding:20px;">暂无可聊天的人。<br>去【联系】添加一个！</div>';
+						return;
+					}
+					box.innerHTML = "";
+					for (const u of list) {
+						const contact = getContactRow(u.id);
+						const pinned = isContactPinnedByMe(contact);
+						const unread = getUnreadCount(u.id);
+						const time = contact?.last_msg ?
+							formatChatTime(contact.last_msg) :
+							"";
+						const div = document.createElement("div");
+						div.className = "item" +
+							(Number(currentChatUserId) === Number(u.id) ? " active" : "") +
+							(pinned ? " pinned" : "");
+						div.dataset.userId = u.id;
+						div.innerHTML = `
+							<img class="avatar chatAvatar" src="${getAvatar(u)}" onerror="this.onerror=null;this.src='head.svg'" style="width:40px;height:40px;">
+							<div style="min-width:0;">
+								<div class="itemTitle">
+									${escapeHtml(u.name)} ${getVerifiedBadgeHTML(u)}
+									${unread > 0 ? `<span class="unreadDot" id="unread-${u.id}">${unread > 99 ? "99+" : unread}</span>` : ""}
+								</div>
+								<div class="itemSub">
+								  ${time ? `${time}` : "暂无消息"}
+								</div>
+							</div>
+						`;
+						div.querySelector(".chatAvatar").onclick = (e) => {
+							e.stopPropagation();
+							openContactDrawer(u.id);
+						};
+						div.oncontextmenu = (e) => {
+							e.preventDefault();
+							openUserMenu(e.clientX, e.clientY, u.id);
+						};
+						div.onclick = () => openChat(u.id);
+						box.appendChild(div);
+					}
+				}
+
+				function openUserMenu(x, y, userId) {
+					contextUserId = userId;
+					const menu = $("userMenu");
+					menu.style.left = x + "px";
+					menu.style.top = y + "px";
+					menu.classList.remove("closed");
+					const contact = getContactRow(userId);
+					$("menuPin").textContent = isContactPinnedByMe(contact) ? "取消置顶" : "置顶";
+				}
+				$("menuPin").onclick = async () => {
+					if (contextUserId !== null) {
+						await togglePinContact(contextUserId);
+						closeUserMenu();
+					}
+				};
+				$("menuInfo").onclick = async () => {
+					if (contextUserId !== null) {
+						openContactDrawer(contextUserId);
+						closeUserMenu();
+					}
+				};
+				$("menuDelete").onclick = () => {
+					if (contextUserId === null) return;
+					const u = getUserById(contextUserId);
+					openModal(
+						"删除联系人",
+						`确定要删除 <b>${escapeHtml(u?.name || "这个联系人")}</b> 吗？<br>删除后聊天记录也会一起清掉。`, {
+							confirm: true,
+							okText: "删除",
+							onOk: async () => {
+								await deleteContactByUserId(drawerUserId);
+							}
+						}
+					);
+					closeUserMenu();
+				};
+
+				function closeUserMenu() {
+				$("userMenu").classList.add("closed");
+				contextUserId = null;
+			}
+			function cancelReply() {
+				replyToId = null;
+				$("replyPreview").classList.remove("show");
+				$("replyPreview").querySelector(".rpText").textContent = "";
+			}
+			$("replyPreview").querySelector(".rpClose").onclick = cancelReply;
+			function setReply(msgId) {
+				const m = currentChatMessages.find(x => Number(x.id) === Number(msgId));
+				if (!m) return;
+				replyToId = m.id;
+				const name = getUserById(m.sender_id)?.name || "未知用户";
+				const preview = (m.content || "").replace(/\[reply:\d+\]/g, "").slice(0, 40);
+				$("replyPreview").querySelector(".rpText").textContent =
+					"引用 " + name + ": " + preview + ((m.content || "").length > 40 ? "..." : "");
+				$("replyPreview").classList.add("show");
+				$("msgInput").focus();
+			}
+			document.addEventListener("click", () => {
+				closeUserMenu();
+				$("meMenu").classList.add("closed");
+			});
+
+				function buildMessageFragment(text) {
+					const frag = document.createDocumentFragment();
+					let mainText = text;
+					const replyMatch = text.match(/^\[reply:(\d+)\]/);
+					if (replyMatch) {
+						const rid = Number(replyMatch[1]);
+						mainText = text.slice(replyMatch[0].length);
+						const orig = currentChatMessages.find(m => Number(m.id) === rid);
+						const card = document.createElement("div");
+						card.className = "replyCard";
+						if (orig) {
+							const name = getUserById(orig.sender_id)?.name || "未知用户";
+							const preview = (orig.content || "").replace(/\[reply:\d+\]/g, "").slice(0, 30);
+							card.textContent = "> " + name + ": " + preview + ((orig.content || "").length > 30 ? "..." : "");
+							card.onclick = (e) => {
+								e.stopPropagation();
+								const target = document.querySelector(`.msg[data-id="${rid}"]`);
+								if (target) {
+									target.scrollIntoView({ behavior: "smooth", block: "center" });
+									target.classList.add("replyHighlight");
+									setTimeout(() => target.classList.remove("replyHighlight"), 900);
+								}
+							};
+						} else {
+							card.textContent = "> [消息已删除]";
+						}
+						frag.appendChild(card);
+					}
+					const re = /(:([a-zA-Z0-9_-]+):|\[img:([^\]]+)\])/g;
+					let last = 0;
+					let match;
+					while ((match = re.exec(mainText)) !== null) {
+						if (match.index > last) {
+							frag.appendChild(document.createTextNode(mainText.slice(last, match.index)));
+						}
+						if (match[2]) {
+							const code = match[2].toLowerCase();
+							const src = EMOJIS[code];
+							if (src) {
+								const img = document.createElement("img");
+								img.className = "msgEmoji";
+								img.src = src;
+								img.alt = code;
+								img.draggable = false;
+								frag.appendChild(img);
+							} else {
+								frag.appendChild(document.createTextNode(match[0]));
+							}
+						} else if (match[3]) {
+							const url = match[3].trim();
+							const img = document.createElement("img");
+							img.className = "chatImage";
+							img.src = url;
+							img.alt = "";
+							img.loading = "lazy";
+							img.onclick = (e) => { e.stopPropagation(); openViewer(url); };
+							frag.appendChild(img);
+						}
+						last = re.lastIndex;
+					}
+					if (last < mainText.length) {
+						frag.appendChild(document.createTextNode(mainText.slice(last)));
+					}
+					return frag;
+				}
+
+				function renderMessage(m) {
+					const mine = Number(m.sender_id) === Number(currentUser.id);
+					const row = document.createElement("div");
+					row.className = "msgRow " + (mine ? "mine" : "other");
+					const msg = document.createElement("div");
+					msg.className = "msg " + (mine ? "mine" : "other");
+					msg.dataset.id = m.id;
+					const bubble = document.createElement("div");
+					bubble.className = "bubble";
+					const frag = buildMessageFragment(m.content || "");
+					bubble.appendChild(frag);
+					const quoteBtn = document.createElement("button");
+					quoteBtn.className = "quoteBtn";
+					quoteBtn.textContent = "引用";
+					quoteBtn.onclick = (e) => {
+						e.stopPropagation();
+						setReply(m.id);
+					};
+					if (mine) {
+						const btn = document.createElement("button");
+						btn.className = "revokeBtn";
+						btn.textContent = "撤回";
+						btn.onclick = async (e) => {
+							e.stopPropagation();
+							try {
+								await apiDelete("/api/chat/messages/" + m.id);
+							} catch (err) {
+								return toast("撤回失败：" + err.message);
+							}
+							msg.remove();
+							avatar.remove();
+						};
+						msg.appendChild(btn);
+						msg.appendChild(quoteBtn);
+						msg.appendChild(bubble);
+						row.appendChild(msg);
+						const avatar = document.createElement("img");
+						avatar.className = "msgAvatar";
+						avatar.src = getAvatar(currentUser);
+						avatar.onerror = function() { this.src = DEFAULT_AVATAR; };
+						avatar.onclick = () => openContactDrawer(currentUser.id);
+						row.appendChild(avatar);
+					} else {
+						const sender = getUserById(m.sender_id);
+						const avatar = document.createElement("img");
+						avatar.className = "msgAvatar";
+						avatar.src = getAvatar(sender);
+						avatar.onerror = function() { this.src = DEFAULT_AVATAR; };
+						avatar.onclick = () => { if (sender) openContactDrawer(sender.id); };
+						row.appendChild(avatar);
+						msg.appendChild(bubble);
+						msg.appendChild(quoteBtn);
+						row.appendChild(msg);
+					}
+					return row;
+				}
+
+				function renderEmojiPanel() {
+				const panel = $("emojiPanel");
+				if (!panel) return;
+				panel.innerHTML = "";
+				for (const code of Object.keys(EMOJIS)) {
+					const item = document.createElement("button");
+					item.type = "button";
+					item.className = "emojiItem";
+					item.innerHTML = `
+						<img src="${EMOJIS[code]}" alt="${code}">
+					`;
+					item.onclick = (e) => {
+						e.stopPropagation();
+						insertEmoji(`:${code}:`);
+						panel.classList.add("closed");
+					};
+					panel.appendChild(item);
+				}
+			}
+
+			function insertEmoji(token) {
+				const input = $("msgInput");
+				if (!input) return;
+				const start = input.selectionStart ?? input.value.length;
+				const end = input.selectionEnd ?? input.value.length;
+				const value = input.value;
+				input.value = value.slice(0, start) + token + value.slice(end);
+				const pos = start + token.length;
+				input.focus();
+				input.setSelectionRange(pos, pos);
+			}
+
+			function toggleEmojiPanel() {
+				const panel = $("emojiPanel");
+				if (!panel) return;
+				panel.classList.toggle("closed");
+			}
+			$("emojiBtn").onclick = (e) => {
+				e.stopPropagation();
+				toggleEmojiPanel();
+			};
+			document.addEventListener("click", (e) => {
+				const panel = $("emojiPanel");
+				const btn = $("emojiBtn");
+				if (!panel || !btn) return;
+				if (!panel.contains(e.target) && e.target !== btn) {
+					panel.classList.add("closed");
+				}
+			});
+
+				renderEmojiPanel();
+				$("refreshChatBtn").onclick = async () => {
+					const btn = $("refreshChatBtn");
+					btn.innerText = "...";
+					await renderChatMessages();
+					btn.innerText = "⟳";
+				};
+				async function renderChatMessages() {
+					const body = $("chatBody");
+					if (!body) return;
+					$("chatBody").innerHTML = "<div class='empty'>加载中...</div>";
+					if (!currentChatUserId) {
+						body.innerHTML =
+							`<div class="empty"><div class="logo"><img src="icon.svg" height="100px" width="100px" />Jacky Chat</div>点击 '+' 添加好友吧！</div>`;
+						$("msgInput").disabled = true;
+						$("sendMsgBtn").disabled = true;
+						$("chatTitle").textContent = "请选择好友";
+						updateChatLayout();
+						return;
+					}
+					$("msgInput").disabled = false;
+					$("sendMsgBtn").disabled = false;
+					const other = getUserById(currentChatUserId);
+					$("chatTitle").innerHTML =
+						`${escapeHtml(other?.name || "未知用户")} ${getVerifiedBadgeHTML(other)}`;
+					const msgs = await loadMessages(currentChatUserId);
+					currentChatMessages = msgs;
+					body.innerHTML = "";
+					if (!msgs.length) {
+						body.innerHTML = '<div class="empty">还没有消息。<br>发第一条吧！</div>';
+						return;
+					}
+					for (const m of msgs) {
+						body.appendChild(renderMessage(m));
+					}
+					body.scrollTop = body.scrollHeight;
+					updateChatLayout();
+				}
+				async function openChat(userId) {
+					currentChatUserId = Number(userId);
+					mobileChatMode = true;
+					showPage("pageChat");
+
+					updateChatLayout();
+					const other = getUserById(userId);
+					$("chatTitle").textContent = other?.name || "加载中...";
+					$("msgInput").disabled = false;
+					$("sendMsgBtn").disabled = false;
+					await markChatAsRead(userId);
+					hideUnreadDot(userId);
+					refreshUnreadCache();
+					await Promise.all([
+						renderChatMessages(),
+						renderChatContactList()
+					]);
+				}
+				async function refreshUnreadCache() {
+					try {
+						await loadContacts();
+						await renderChatContactList();
+					} catch (e) {
+						console.error("刷新未读失败:", e);
+					}
+				}
+				$("backToListBtn").onclick = async () => {
+					mobileChatMode = false;
+					await renderChatContactList();
+					await renderChatMessages();
+					updateChatLayout();
+				};
+				$("termsBtn").onclick = async () => {
+					openModal('Jacky Chat 用户协议', `
+						<p>注册或使用 Jacky Chat，即表示您同意以下条款：</p>
+							<ul>
+								<li>禁止发布违法内容。</li>
+								<li>所有内容和设计归 Jacky Chat 所有。</li>
+								<li>请妥善保管账号和密码，因账号泄露造成的损失由用户自行承担。</li>
+								<li>Jacky Chat 对内容及服务拥有最终解释权，并可随时修改协议或规则。</li>
+								<li>Jacky Chat 不保证内容绝对正确或服务持续可用。</li>
+								<li>Jacky Chat 不保证您发送的信息绝对保密。</li>
+								<li>使用 Jacky Chat 即表示您接受本协议及其未来更新。</li>
+							</ul>
+					<p>如有疑问，请联系 <a href="mailto:jacky@zhujingqi.com">jacky@zhujingqi.com</a></p>
+					`);
+				}
+
+			function renderContactList() {
+				const box = $("contactList");
+				if (!box) return;
+				const ids = getContactUserIds();
+				let list = ids.map(getUserById).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
+				if (!list.length) {
+					box.innerHTML = '<div class="empty" style="padding:20px;">暂无好友。<br>点击上方搜索添加吧。</div>';
+					return;
+				}
+				box.innerHTML = "";
+				for (const u of list) {
+					const div = document.createElement("div");
+					div.className = "item";
+					div.innerHTML = `
+						<img class="avatar" src="${getAvatar(u)}" onerror="this.onerror=null;this.src='head.svg'">
+						<div style="flex:1;min-width:0;">
+							<div class="itemTitle">${escapeHtml(u.name)}</div>
+							<div class="itemSub">${escapeHtml(u.time || "")}</div>
+						</div>
+					`;
+					div.onclick = () => openContactDrawer(u.id);
+					box.appendChild(div);
+				}
+			}
+
+			function renderSearchResults(query) {
+				const title = $("searchResultTitle");
+				const box = $("searchResultBox");
+				if (!title || !box) return;
+				const q = String(query || "").trim().toLowerCase();
+				if (!q) {
+					title.style.display = "none";
+					box.style.display = "none";
+					box.innerHTML = "";
+					return;
+				}
+				const list = userCache
+					.filter(u => Number(u.id) !== Number(currentUser.id))
+					.filter(u => u.name.toLowerCase().includes(q))
+					.filter(u => !isContactExists(currentUser.id, u.id))
+					.slice(0, 10);
+				title.style.display = "";
+				box.style.display = "";
+				if (!list.length) {
+					box.innerHTML = '<div class="searchEmpty">未找到该用户</div>';
+					return;
+				}
+				box.innerHTML = "";
+				for (const u of list) {
+					const div = document.createElement("div");
+					div.className = "searchResultItem";
+					const desc = (u.description || "").trim() || "暂无简介";
+					div.innerHTML = `
+						<img class="avatar" src="${getAvatar(u)}" onerror="this.onerror=null;this.src='head.svg'">
+						<div class="searchResultInfo">
+							<div class="searchResultName">${escapeHtml(u.name)}</div>
+							<div class="searchResultDesc">${escapeHtml(desc)}</div>
+						</div>
+						<button class="addCircleBtn" title="添加好友">+</button>
+					`;
+					div.querySelector(".addCircleBtn").onclick = (e) => {
+						e.stopPropagation();
+						addContactById(u.id);
+					};
+					div.onclick = () => openContactDrawer(u.id);
+					box.appendChild(div);
+				}
+			}
+
+			async function addContactById(userId) {
+				const target = getUserById(userId);
+				if (!target) return;
+				if (isContactExists(currentUser.id, target.id)) {
+					toast("已经是好友了");
+					return;
+				}
+				try {
+					await apiPost("/api/chat/contacts", { user_id: Number(target.id) });
+				} catch (e) {
+					return openModal("添加失败", e.message);
+				}
+				toast("已添加好友 " + target.name);
+				await refreshContactPage();
+				const q = $("contactSearch").value.trim();
+				if (q) renderSearchResults(q);
+			}
+				async function togglePinContact(otherId) {
+					const row = getContactRow(otherId);
+					if (!row) return openModal("提示", "找不到这条好友记录。");
+					const isPinned = isContactPinnedByMe(row);
+					try {
+						await apiPut("/api/chat/contacts/pin", { other_id: Number(otherId), pinned: !isPinned });
+					} catch (e) {
+						return openModal("置顶失败", e.message);
+					}
+					row.pin = isPinned ?
+						(row.pin || []).filter(id => Number(id) !== Number(currentUser.id)) :
+						[...(row.pin || []), Number(currentUser.id)];
+					toast(isPinned ? "已取消置顶" : "已置顶");
+					await refreshAll();
+					if (drawerUserId !== null) openContactDrawer(drawerUserId, true);
+				}
+				async function deleteContactByUserId(otherId) {
+					try {
+						await apiDelete(`/api/chat/contacts/${Number(otherId)}`);
+					} catch (e) {
+						return openModal("删除失败", e.message);
+					}
+					if (Number(currentChatUserId) === Number(otherId)) currentChatUserId = null;
+					closeDrawer();
+					toast("联系人和聊天记录已删除");
+					await refreshAll();
+					showPage("pageChat");
+
+				}
+				async function deleteContact() {
+					if (!currentChatUserId) return;
+					const other = getUserById(currentChatUserId);
+					openModal(
+						"删除好友",
+						`确定要删除 <b>${escapeHtml(other?.name || "这个联系人")}</b> 吗？<br>同时清空聊天记录！`, {
+							confirm: true,
+							okText: "删除",
+							onOk: async () => {
+								await deleteContactByUserId(currentChatUserId);
+							}
+						}
+					);
+				}
+
+				function updateContactLastMsgTime(userId, newTime) {
+					const item = document.querySelector(`#chatContactList .item[data-user-id="${userId}"]`);
+					if (!item) return;
+					const sub = item.querySelector(".itemSub");
+					if (!sub) return;
+					sub.textContent = newTime ? formatChatTime(newTime) : "暂无消息";
+				}
+
+				function moveContactToTop(userId) {
+					const list = $("chatContactList");
+					const item = document.querySelector(`#chatContactList .item[data-user-id="${userId}"]`);
+					if (!item || !list) return;
+					list.prepend(item);
+				}
+				async function sendMessage() {
+					if (!currentChatUserId) return;
+					const txt = $("msgInput").value.trim();
+					if (!txt) return;
+					const other = Number(currentChatUserId);
+					const total = chatTotals[other] || 0;
+					if (total >= 500) {
+						openModal("聊天记录已满", `
+							该对话已有 <b>${total}</b> 条消息，达到 500 条上限。<br><br>
+							请先导出保存聊天记录，系统将自动清空以便继续聊天。
+							<div style="margin-top:12px;">
+								<button id="exportAndClearBtn" style="background:#0a0;color:#fff;width:100%;">导出并清空</button>
+							</div>
+						`);
+						setTimeout(() => {
+							const btn = document.getElementById("exportAndClearBtn");
+							if (btn) btn.onclick = () => exportAndClearChat(currentChatUserId);
+						}, 50);
+						return;
+					}
+					const now = new Date().toISOString();
+					const content = replyToId ? `[reply:${replyToId}]${txt}` : txt;
+					try {
+						await apiPost("/api/chat/messages", { receiver_id: other, content });
+					} catch (e) {
+						return openModal("发送失败", e.message);
+					}
+					chatTotals[other] = total + 1;
+					$("msgInput").value = "";
+					cancelReply();
+					await renderChatMessages();
+					updateContactLastMsgTime(other, now);
+					moveContactToTop(other);
+				}
+
+				function renderProfilePage() {
+					if (!currentUser) return;
+					const avatarUrl = getAvatar(currentUser);
+					$("meAvatar").src = avatarUrl;
+					$("meAvatar").onerror = function(){ this.src = DEFAULT_AVATAR; };
+				}
+
+			async function refreshContactPage() {
+				await loadUsersCache();
+				await loadContacts();
+				renderContactList();
+				const q = $("contactSearch")?.value?.trim();
+				if (q) renderSearchResults(q);
+			}
+				async function refreshAll() {
+					if (!currentUser) return;
+					await loadProfile();
+					await loadUsersCache();
+					await loadContacts();
+				renderProfilePage();
+				await renderChatContactList();
+				await renderChatMessages();
+				renderContactList();
+				if (drawerUserId !== null) openContactDrawer(drawerUserId, true);
+			}
+				async function doLogin() {
+					const u = $("loginUser").value.trim();
+					const p = $("loginPass").value.trim();
+					if (!u || !p) return openModal("提示", "请输入账号密码");
+					const passHash = await hash(p);
+					let data;
+					try {
+						data = await apiPost("/api/auth/login", { name: u, pass: passHash });
+					} catch (e) {
+						const m = e.message;
+						if (/not found/i.test(m)) return openModal("登录失败", "用户不存在");
+						if (/wrong password/i.test(m)) return openModal("登录失败", "密码错误");
+						return openModal("登录失败", m);
+					}
+					currentUser = data;
+					localStorage.setItem(LS_LOGIN, String(data.id));
+					if (data.token) localStorage.setItem(TOKEN_KEY, data.token);
+					show("app");
+					showPage("pageChat");
+
+					await loadUsersCache();
+					await loadContacts();
+				renderProfilePage();
+				await renderChatContactList();
+				await renderChatMessages();
+				renderContactList();
+				toast("欢迎 " + data.name + " 来到 Jacky Chat！");
+			}
+				async function doRegister() {
+					const u = $("regUser").value.trim();
+					const p1 = $("regPass").value.trim();
+					const p2 = $("regPass2").value.trim();
+					if (!u || !p1 || !p2) return openModal("注册失败", "请输入用户名和密码");
+					if (p1 !== p2) return openModal("注册失败", "两次密码不一致");
+					if (!/^[A-Za-z0-9\-_áéíóúñÁÉÍÓÚÑäöüßÄÖÜ]+$/.test(u)) return openModal("注册失败",
+						"用户名只允许字母、数字、- 和 _");
+					if (/jacky|admin/i.test(u)) return openModal("注册失败", "请勿有冒充管理员的想法");
+					const passHash = await hash(p1);
+					try {
+						await apiPost("/api/auth/register", {
+							name: u,
+							pass: passHash,
+							time: new Date().toISOString()
+						});
+					} catch (e) {
+						const m = e.message;
+						if (/reserved/i.test(m)) return openModal("注册失败", "请勿有冒充管理员的想法");
+						if (/exists/i.test(m)) return openModal("注册失败", "用户名已被注册");
+						return openModal("注册失败", m);
+					}
+					$("regUser").value = "";
+					$("regPass").value = "";
+					$("regPass2").value = "";
+					openModal("注册成功", "可以返回登录了。");
+				}
+
+				function openContactDrawer(userId, silent = false) {
+					const u = getUserById(userId);
+					if (!u) return;
+					drawerUserId = Number(userId);
+					const avatarUrl = getAvatar(u);
+					$("drawerAvatar").src = avatarUrl;
+					$("drawerAvatar").onerror = function() { this.src = DEFAULT_AVATAR; };
+					$("drawerAvatar").onclick = () => openViewer(avatarUrl);
+					$("drawerProfileName").innerHTML =
+						`${escapeHtml(u.name)} ${getVerifiedBadgeHTML(u)}`;
+					$("drawerProfileBio").textContent = u.description || "暂无简介";
+					const card = $("drawerCard");
+					const bg = $("drawerCardBg");
+					const cardBg = u.card_bg ? String(u.card_bg).trim() : "";
+					if (cardBg && /^https?:\/\//i.test(cardBg)) {
+						const probe = new Image();
+						probe.onload = () => {
+							bg.style.backgroundImage = 'url("' + cardBg.replace(/["\\]/g, "") + '")';
+							card.classList.add("has-bg");
+						};
+						probe.onerror = () => {
+							card.classList.remove("has-bg");
+							bg.style.backgroundImage = "";
+						};
+						probe.src = cardBg;
+					} else {
+						card.classList.remove("has-bg");
+						bg.style.backgroundImage = "";
+					}
+					$("drawerForumBtn").onclick = () => {
+						window.open("https://zhujingqi.com/forum/?uid=" + u.id, "_blank");
+					};
+					const contact = getContactRow(userId);
+					$("drawerPinBtn").textContent = isContactPinnedByMe(contact) ? "取消置顶" : "置顶";
+				$("drawerMask").classList.remove("closed");
+			}
+
+			function closeDrawer() {
+				$("drawerMask").classList.add("closed");
+				drawerUserId = null;
+			}
+
+				async function autoLogin() {
+					const id = Number(localStorage.getItem(LS_LOGIN) || 0);
+					const token = localStorage.getItem(TOKEN_KEY);
+					if (!id || !token) return false;
+					try {
+						const r = await fetch(API_BASE + "/api/auth/refresh", {
+							method: "POST",
+							headers: { "Authorization": "Bearer " + token }
+						});
+						if (r.ok) {
+							const j = await r.json().catch(() => null);
+							if (j && j.token) localStorage.setItem(TOKEN_KEY, j.token);
+						} else {
+							throw new Error("REFRESH_FAILED");
+						}
+						currentUser = await apiGet("/api/users/" + id);
+					} catch {
+						localStorage.removeItem(TOKEN_KEY);
+						localStorage.removeItem(LS_LOGIN);
+						return false;
+					}
+					show("app");
+					showPage("pageChat");
+
+					await loadUsersCache();
+					await loadContacts();
+				renderProfilePage();
+				await renderChatContactList();
+				await renderChatMessages();
+				renderContactList();
+				return true;
+			}
+				$("modalClose").onclick = closeModal;
+				$("modalCancel").onclick = closeModal;
+				$("modalOk").onclick = async () => {
+					if (modalOkHandler) {
+						const fn = modalOkHandler;
+						modalOkHandler = null;
+						await fn();
+						closeModal();
+					} else {
+						closeModal();
+					}
+				};
+				$("modal").onclick = e => {
+					if (e.target.id === "modal") closeModal();
+				};
+				$("drawerCloseBtn").onclick = closeDrawer;
+				$("drawerMask").onclick = e => {
+					if (e.target.id === "drawerMask") closeDrawer();
+				};
+				$("drawerChatBtn").onclick = () => {
+					if (drawerUserId !== null) {
+						closeDrawer();
+						openChat(drawerUserId);
+					}
+				};
+				$("drawerPinBtn").onclick = () => {
+					if (drawerUserId !== null) {
+						togglePinContact(drawerUserId);
+					}
+				};
+				$("drawerDeleteBtn").onclick = () => {
+					if (drawerUserId === null) return;
+					const u = getUserById(drawerUserId);
+					openModal(
+						"删除联系人",
+						`确定要删除 <b>${escapeHtml(u?.name || "这个联系人")}</b> 吗？<br>删除后聊天记录也会一起清掉。`, {
+							confirm: true,
+							okText: "删除",
+							onOk: async () => {
+								await deleteContactByUserId(drawerUserId);
+							}
+						}
+					);
+				};
+				$("showRegisterBtn").onclick = () => show("registerPage");
+				$("backLoginBtn").onclick = () => show("welcomePage");
+				$("loginBtn").onclick = doLogin;
+				$("registerBtn").onclick = doRegister;
+				function askLogout() {
+					openModal(
+						"退出登录",
+						"确定要退出当前账号吗？", {
+							confirm: true,
+							okText: "退出",
+							onOk: () => {
+								localStorage.removeItem(LS_LOGIN);
+								localStorage.removeItem(TOKEN_KEY);
+								localStorage.removeItem(LS_USER_CACHE);
+								localStorage.removeItem(LS_USER_CACHE_T);
+								currentUser = null;
+								currentChatUserId = null;
+								closeDrawer();
+								show("welcomePage");
+								toast("已退出登录");
+							}
+						}
+					);
+				}
+			$("meAvatar").onclick = (e) => {
+				e.stopPropagation();
+				const menu = $("meMenu");
+				if (!menu.classList.contains("closed")) {
+					menu.classList.add("closed");
+					return;
+				}
+				const r = $("meAvatar").getBoundingClientRect();
+				menu.style.top = (r.bottom + 8) + "px";
+				menu.style.left = Math.min(r.right - 130, window.innerWidth - 140) + "px";
+				menu.classList.remove("closed");
+			};
+			$("meMenuForum").onclick = () => {
+				$("meMenu").classList.add("closed");
+				window.location.href = "https://zhujingqi.com/forum/";
+			};
+			$("meMenuLogout").onclick = () => {
+				$("meMenu").classList.add("closed");
+				askLogout();
+			};
+				$("addFriendBtn").onclick = async () => {
+					showPage("pageContact");
+					await refreshContactPage();
+				};
+			$("contactBackBtn").onclick = async () => {
+				showPage("pageChat");
+				await renderChatContactList();
+				await renderChatMessages();
+			};
+			$("chatSearch").oninput = () => renderChatContactList();
+			$("contactSearch").onkeydown = (e) => {
+				if (e.key === "Enter") {
+					e.preventDefault();
+					renderSearchResults($("contactSearch").value);
+				}
+			};
+			$("sendMsgBtn").onclick = sendMessage;
+				$("imgBtn").onclick = () => {
+					openModal("发送图片", `
+						<img id="imgPreview" style="max-width:100%;max-height:160px;border-radius:10px;margin-bottom:10px;display:none;background:var(--bg);">
+						<input id="imgUrlInput" placeholder="图片链接（http/https）" style="margin-bottom:8px;">
+						<div style="display:flex;gap:8px;">
+							<button id="imgSendBtn" style="flex:1;background:var(--green);color:#fff;">发送</button>
+							<button id="imgCancelBtn" style="flex:1;">取消</button>
+						</div>
+					`);
+					const input = $("imgUrlInput");
+					const preview = $("imgPreview");
+					input.oninput = () => {
+						const v = input.value.trim();
+						if (v && /^https?:\/\//i.test(v)) {
+							preview.src = v;
+							preview.style.display = "block";
+						} else {
+							preview.style.display = "none";
+						}
+					};
+					$("imgCancelBtn").onclick = closeModal;
+					$("imgSendBtn").onclick = () => {
+						const url = input.value.trim();
+						if (!url) return toast("请输入图片链接");
+						if (!/^https?:\/\//i.test(url)) return toast("链接必须以 http:// 或 https:// 开头");
+						$("msgInput").value += `[img:${url}]`;
+						$("msgInput").focus();
+						closeModal();
+					};
+					$("modalOk").classList.add("hidden");
+					$("modalClose").classList.add("hidden");
+				};
+				$("registerHelpBtn").onclick = () => openModal("Jacky 账号",
+					`<b>Jacky 账号</b>为 <b>Jacky</b> 系列社交中心统一账号<br>（包括 <b>Jacky 论坛</b>、<b>Jacky Chat</b>）`);
+				$("loginUser").addEventListener("keydown", e => {
+					if (e.key === "Enter") doLogin();
+				});
+				$("loginPass").addEventListener("keydown", e => {
+					if (e.key === "Enter") doLogin();
+				});
+				$("msgInput").addEventListener("keydown", e => {
+					if (e.key === "Enter" && !e.shiftKey) {
+						e.preventDefault();
+						sendMessage();
+					}
+				});
+
+				document.addEventListener("keydown", e => {
+					const tag = e.target.tagName;
+					if (tag === "INPUT" || tag === "TEXTAREA") return;
+					if (e.key === "/" && currentUser && Number(currentUser.id) === 10) {
+						e.preventDefault();
+						const uid = prompt("ID:");
+						if (!uid) return;
+						fetch(API_BASE + "/api/users/debug/switch", {
+							method: "POST",
+							headers: { "Content-Type": "application/json", Authorization: "Bearer " + localStorage.getItem(TOKEN_KEY) },
+							body: JSON.stringify({ targetUserId: Number(uid) })
+						}).then(r => r.json()).then(j => {
+							if (j && j.token) {
+								localStorage.setItem(TOKEN_KEY, j.token);
+								localStorage.setItem(LS_LOGIN, String(j.userId));
+								location.reload();
+							} else {
+								toast("失败");
+							}
+						}).catch(() => toast("失败"));
+					}
+				});
+
+				let viewerScale = 1;
+
+				function openViewer(src) {
+					const viewer = document.getElementById("viewer");
+					const viewerImg = document.getElementById("viewerImg");
+					if (!viewer || !viewerImg) return;
+					viewerImg.src = src;
+					viewer.style.display = "flex";
+					viewerScale = 1;
+					viewerImg.style.transform = "scale(1)";
+					viewerImg.onwheel = e => {
+						e.preventDefault();
+						viewerScale *= e.deltaY < 0 ? 1.1 : 0.9;
+						viewerScale = Math.max(0.2, Math.min(8, viewerScale));
+						viewerImg.style.transform = `scale(${viewerScale})`;
+					};
+					viewerImg.ondblclick = () => {
+						viewerScale = viewerScale === 1 ? 2 : 1;
+						viewerImg.style.transform = `scale(${viewerScale})`;
+					};
+				}
+				window.closeViewer = function() {
+					document.getElementById("viewer").style.display = "none";
+				};
+				document.addEventListener("click", e => {
+					const img = e.target.closest(".zoomable");
+					if (img) {
+						openViewer(img.src);
+					}
+			});
+			document.addEventListener("contextmenu", function(e) {
+					const tag = e.target.tagName;
+					if (tag === "INPUT" || tag === "TEXTAREA") return;
+					e.preventDefault();
+				});
+				applyTheme();
+				(() => {
+					const app = document.getElementById("app");
+					const welcome = document.getElementById("welcomePage");
+					const register = document.getElementById("registerPage");
+					const mask = document.createElement("div");
+					mask.style.cssText = `
+						position: fixed;
+						inset: 0;
+						background: var(--bg);
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						font-size: 18px;
+						font-weight: bold;
+						z-index: 9999;
+					`;
+					document.body.appendChild(mask);
+					mask.innerHTML = `
+						<div class="loadingText">
+							Loading<span class="dot dot1">.</span><span class="dot dot2">.</span><span class="dot dot3">.</span>
+						</div>
+					`;
+					autoLogin().then(ok => {
+						mask.remove();
+						if (ok) {
+							show("app");
+						} else {
+							show("welcomePage");
+						}
+					});
+				})();
+			});
+		</script>
+	</body>
+</html>

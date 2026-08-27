@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+		<title>Jacky 论坛 - Zhujingqi</title>
+		<link rel="icon" type="image/png" href="icon.svg">
+		<link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="assets/img/icon.png">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<script>
+			(function () {
+				try {
+					var t = localStorage.getItem("theme") || "sys";
+					if (t === "dark" || (t === "sys" && window.matchMedia && matchMedia(
+							"(prefers-color-scheme: dark)").matches)) {
+						document.body.classList.add("dark");
+					}
+				} catch (e) {}
+			})();
+		</script>
+		<div class="bottom hidden" id="nav">
+			<button id="homeBtn" title="首页"><span class="navIcon" data-icon="home"></span></button>
+			<button id="editorBtn" title="发布"><span class="navIcon" data-icon="editor"></span></button>
+			<button id="showUsersBtn" title="排行"><span class="navIcon" data-icon="rank"></span></button>
+			<button id="discoverBtn" title="探索"><span class="navIcon" data-icon="discover"></span></button>
+			<button id="profileBtn" title="我的"><span class="navIcon" data-icon="user"></span></button>
+		</div>
+		<div id="welcomePage" class="center">
+			<div class="big">
+				<img src="icon.svg" />
+				<span id="welcomeTitle">Jacky 论坛</span>
+			</div>
+			<div class="card">
+				<select id="langSelect" class="langSelect" style="width:100%;margin-bottom:8px;"></select>
+				<input id="loginUser" placeholder="用户名" autofocus>
+				<input id="loginPass" type="password" placeholder="密码">
+				<button id="loginBtn">登录</button>
+				<button id="guestBtn"
+					style="background:transparent;color:var(--sub);font-size:14px;height:auto;padding:6px 0;margin-top:2px;">访客模式</button>
+				<div style="text-align:center;margin-top:2px">
+					<span style="color:var(--green);cursor:pointer" id="goRegister">没有账号？点击注册</span>
+				</div>
+				<span style="text-align:center; color:#aaa; font-size: 12px;" id="loginFooter">
+					<br>
+					<span id="accountShared">账号体系已与 <b><a href="https://zhujingqi.com/chat/">Jacky Chat</a></b>
+						互通</span>
+					<br>
+					<a href="#"><span id="footerForumName">Jacky 论坛</span></a> · <a href="#">Jacky Chat</a> ·
+					<a href="https://zhujingqi.com">Zhujingqi</a>
+					<br>
+					© Jacky Forum. All rights reserved.
+				</span>
+			</div>
+		</div>
+		<div id="registerPage" class="center hidden">
+			<div class="big" id="regTitle">注册 Jacky 账号</div>
+			<div class="card">
+				<select id="langSelectReg" class="langSelect" style="width:100%;margin-bottom:8px;"></select>
+				<input id="regUser" placeholder="用户名">
+				<input id="regPass" type="password" placeholder="密码">
+				<input id="regPass2" type="password" placeholder="再次输入密码">
+				<div id="captchaRow" style="display:flex;align-items:center;gap:8px;margin:8px 0;">
+					<button id="captchaBtn" type="button" style="flex:1;">点击完成人机验证</button>
+					<span id="captchaStatus" style="font-size:18px;"></span>
+				</div>
+				<button id="registerBtn" disabled style="opacity:.5;cursor:not-allowed;">注册</button>
+				<h6 style="text-align:center;">
+					<span id="regAgreePrefix">注册即代表您同意</span> <a id="termsBtn" style="cursor:pointer;">用户协议</a><br>
+					<span id="regRemember">请牢记用户名和密码。如无法注册，请联系管理员。</span>
+				</h6>
+				<div style="text-align:center;margin-top:10px">
+					<span style="color:var(--green);cursor:pointer" id="backLogin">已有帐号？返回登录</span>
+				</div>
+			</div>
+		</div>
+		<div id="main" class="hidden">
+			<div id="logoRow">
+				<div id="logo">
+					<img src="icon.svg" />
+					<span id="mainLogoText">Jacky 论坛</span>
+				</div>
+				<button id="searchBall" type="button" title="搜索">
+					<img src="icon/search.svg" alt="搜索" onerror="this.style.display='none'">
+				</button>
+				<button id="layoutBtn" type="button">信息流</button>
+				<button id="onlineMini" type="button">在线 0</button>
+				<button id="notifBtn" type="button"><span id="notifLabel">通知</span><span id="notifBadge" hidden>0</span></button>
+				<button id="loginTopBtn" type="button"
+					style="display:none;background:var(--green);color:#fff;font-weight:700;height:36px;padding:0 18px;border-radius:999px;flex-shrink:0;">登录</button>
+			</div>
+			<div id="postFilterBar" class="postFilterBar">
+				<div id="postTagBar" class="postTagBar"></div>
+			</div>
+			<div id="sidePanels">
+			<div id="notice">
+				<button id="toggleNoticeBtn" class="helpBtn"
+					style="position:absolute; right:8px; top:8px; font-size:16px; width:24px; height:24px; line-height:20px;">
+					<b>&lt;</b>
+				</button>
+				<h3 id="noticeTitle">公告</h3>
+				<div class="noticeItem" id="noticeWelcome">🎉欢迎来到 <b>Jacky 论坛</b> :)</div>
+				<br>
+				<div id="announceBar"></div>
+				<br>
+				<div class="noticeItem" id="statsBox">
+					<strong id="statsTitle">全站统计</strong><br>
+					用户数：<span id="totalUsers">加载中...</span><br>
+					帖子数：<span id="totalPosts">加载中...</span>
+				</div>
+				<br>
+				<div class="noticeItem" style="font-size: 14px;" id="shareNotice">
+					分享 Jacky 论坛，<br>让好友加入！<br>
+					<a onclick="navigator.clipboard.writeText(location.href).then(()=>this.innerText='已复制')"
+						style="cursor:pointer;" id="copyLinkBtn">
+						点击复制链接
+					</a>
+				</div>
+			</div>
+			<div id="fortuneBox">
+				<span id="fortuneTitle">今日运势</span>
+				<button id="fortuneBtn">获取运势</button>
+				<div id="fortuneResult" style="display:none;">
+					<div id="fortuneLevel"></div>
+					<div class="fortuneList">
+						<b id="fortuneGoodLabel">宜：</b><span id="fortuneGood"></span>
+					</div>
+					<div class="fortuneList">
+						<b id="fortuneBadLabel">忌：</b><span id="fortuneBad"></span>
+					</div>
+				</div>
+			</div>
+			</div>
+			<div id="sideBackdrop"></div>
+			<div id="mobileSideBtn">☰</div>
+			<div id="posts"></div>
+			<div id="postPager" class="pager"></div>
+		</div>
+		<div id="editorPage" class="hidden center">
+			<div id="logoRow">
+				<div id="logo">
+					<img src="icon.svg">
+					<span id="editorLogoText">发布</span>
+				</div>
+			</div>
+			<div class="card" style="width:95%;max-width:600px;">
+				<textarea id="text" data-mention-input="1" placeholder="发布新鲜事（最多5000字符）" style="width:100%;"
+					maxlength="5000"></textarea>
+				<div style="display:flex;gap:6px;margin-top:8px;">
+					<button id="insertImgBtn" type="button">插图</button>
+					<button id="insertMusicBtn" type="button">插入音乐</button>
+					<button id="editorEmojiBtn" class="emojiBtn" type="button" title="表情"><img src="emojis/happy.svg"
+							style="width:22px;height:22px;display:block;pointer-events:none;"></button>
+				</div>
+				<div class="tagBarContainer"
+					style="display:flex;align-items:center;gap:6px;flex-wrap:nowrap;margin-top:8px;">
+					<div class="tagBar" id="tagBar"
+						style="display:flex;gap:6px;flex-shrink:1;overflow-x:auto;flex-wrap:nowrap;"></div>
+					<input id="customTag" placeholder="自定义标签（可不填）"
+						style="height:36px;font-size:14px;flex-shrink:0;width:300px;" maxlength="10">
+				</div>
+				<div class="sensitiveWrap">
+					<div class="sensitiveRow">
+						<input type="checkbox" id="isSensitive" style="width:18px;height:18px;margin:0;">
+						<label id="sensitiveLabel" for="isSensitive"
+							style="cursor:pointer;font-size:14px;color:var(--sub);">
+							此帖子可能包含不适宜的内容
+						</label>
+					</div>
+					<input id="warnText" class="warnText" placeholder="自定义遮罩显示文字（可不填）" maxlength="40">
+				</div>
+				<div class="postBgRow">
+					<button id="bgBuyBtn" type="button">背景</button>
+				</div>
+				<button id="sendBtn">发布</button>
+			</div>
+		</div>
+		<div id="userListPage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
+			<div
+				style="padding:20px;flex:1;overflow-y:auto;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;">
+				<div id="logoRow">
+<div id="logo">
+					<img src="icon.svg">
+					<span id="rankingsLogoText">排行榜</span>
+				</div>
+				</div>
+				<div class="rankToggleWrap">
+					<button id="rankToggleCoins" class="rankToggleBtn active">金币</button>
+					<button id="rankToggleFollowers" class="rankToggleBtn">粉丝</button>
+				</div>
+				<input id="rankSearch" class="rankSearch" placeholder="搜索用户名..." autocomplete="off">
+				<div
+					style="display:flex;font-weight:bold;padding:8px 0;border-bottom:1px solid var(--border);width:100%;max-width:500px;">
+					<div style="flex:1;" id="rankColName">用户名</div>
+					<div style="width:150px;text-align:right;" id="rankColValue">金币数</div>
+				</div>
+				<div id="userItems"></div>
+			</div>
+			<div id="newUsers"></div>
+		</div>
+		<div id="profilePage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
+			<div id="backBtn"><img src="icon/back.svg" style="width:18px;height:auto;vertical-align:middle;"></div>
+			<div id="profileCard">
+				<div id="profileLeft">
+					<img id="profileAvatar" class="avatar big" src="assets/img/head.svg">
+				</div>
+				<div id="profileRight">
+					<div id="profileNameRow">
+						<span id="pname"></span>
+						<button id="logoutBtn">登出</button>
+					</div>
+					<div id="profileMeta"></div>
+					<div id="profileStats"></div>
+				</div>
+			</div>
+			<div id="levelProgress"></div>
+			<div id="profileBio"></div>
+			<div id="profileActions"></div>
+			<div id="userPosts"></div>
+		</div>
+		<div id="discoverPage" class="hidden">
+			<div id="logoRow">
+				<div id="logo">
+					<img src="icon.svg">
+					<span id="discoverLogoText">探索</span>
+				</div>
+			</div>
+			<div class="discoverGrid">
+				<a class="discoverCard" href="/index.html">
+					<div class="discoverIcon"><img src="https://zhujingqi.com/img/zjq.svg" /></div>
+					<h3>Zhujingqi</h3>
+					<p id="discWebsiteDesc">网站首页</p>
+				</a>
+				<a class="discoverCard" href="/hub/">
+					<div class="discoverIcon"><img src="https://zhujingqi.com/img/zjq.svg" /></div>
+					<h3 id="discCommunityTitle">社区</h3>
+					<p id="discCommunityDesc">Zhujingqi 社区</p>
+				</a>
+				<a class="discoverCard" href="/game/">
+					<div class="discoverIcon"><img src="https://zhujingqi.com/img/zjq.svg" /></div>
+					<h3 id="discGameTitle">游戏中心</h3>
+					<p>Zhujingqi Game</p>
+				</a>
+				<a class="discoverCard" href="/tool/">
+					<div class="discoverIcon"><img src="https://zhujingqi.com/img/zjq.svg" /></div>
+					<h3 id="discToolTitle">工具大全</h3>
+					<p>Zhujingqi Tool</p>
+				</a>
+				<a class="discoverCard" href="/chat/">
+					<div class="discoverIcon"><img src="https://zhujingqi.com/chat/icon.svg" /></div>
+					<h3>Jacky Chat</h3>
+					<p id="discChatDesc">在线聊天网页App</p>
+				</a>
+				<a class="discoverCard" href="/pedia/">
+					<div class="discoverIcon"><img src="https://zhujingqi.com/pedia/icon.svg" /></div>
+					<h3>Jackypedia</h3>
+					<p id="discWikiDesc">杰基百科</p>
+				</a>
+				<a class="discoverCard" href="rss.xml" target="_blank" rel="noopener">
+					<div class="discoverIcon"><span class="rssIcon">R</span></div>
+					<h3>RSS</h3>
+					<p id="discRssDesc">订阅 RSS</p>
+				</a>
+			</div>
+		</div>
+		<div id="postPage" class="hidden" style="display:flex;flex-direction:column;height:100vh;">
+			<div id="postBackBtn"><img src="icon/back.svg" style="width:18px;height:auto;vertical-align:middle;"></div>
+			<div id="singlePost"
+				style="width:100%;max-width:800px;overflow-y:auto;overflow-x:hidden;flex:1;padding:20px 0;margin:0 auto;box-sizing:border-box;">
+			</div>
+		</div>
+		<div id="modal" class="modal hidden">
+			<div class="modalBox">
+				<div id="modalText"></div>
+				<div style="margin-top:20px"><button id="closeModal">关闭</button></div>
+			</div>
+		</div>
+		<div id="searchOverlay" class="hidden">
+			<div id="searchSheet">
+				<div class="searchRowInner">
+					<input id="postSearch" class="postSearch" placeholder="搜索帖子内容或标签，或输入 @用户名">
+					<button id="searchBtn" type="button" title="搜索">
+						<img src="icon/search.svg" alt="搜索" onerror="this.style.display='none'">
+					</button>
+				</div>
+				<div id="postTimeline"></div>
+				<button id="randomPostBtn" style="width:100%;font-size:14px;">随机帖子</button>
+			</div>
+		</div>
+		<div id="captchaModal" class="modal hidden">
+			<div class="modalBox" style="width:380px;text-align:center;">
+				<div id="captchaTitle" style="font-weight:bold;margin-bottom:10px;">人机验证 — 拖到闪烁虚线框中</div>
+				<div style="position:relative;display:inline-block;">
+					<canvas id="captchaCanvas" width="320" height="160"
+						style="border-radius:8px;display:block;"></canvas>
+					<div id="captchaTarget"
+						style="position:absolute;top:0;left:0;width:48px;height:160px;border:2px dashed rgba(255,255,255,.8);border-radius:4px;pointer-events:none;box-sizing:border-box;background:rgba(0,200,0,.12);">
+					</div>
+				</div>
+				<div id="captchaTrack"
+					style="position:relative;width:320px;height:36px;margin:10px auto 0;background:var(--bg);border-radius:18px;touch-action:none;user-select:none;">
+					<div id="captchaThumb"
+						style="position:absolute;top:2px;left:0;width:44px;height:32px;background:var(--green);border-radius:16px;cursor:grab;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:2;">
+						→</div>
+				</div>
+				<div id="captchaHint" style="margin-top:8px;font-size:12px;color:var(--sub);">← 拖动滑块完成拼图 →</div>
+				<div style="margin-top:10px"><button id="captchaCloseBtn">关闭</button></div>
+			</div>
+		</div>
+		<div id="coinMsg">
+		</div>
+		<div id="emojiPicker" class="emojiPickerPopup"></div>
+		<div id="mentionBox" class="mentionBox hidden"></div>
+		<div id="viewer" onclick="closeViewer()">
+			<img id="viewerImg">
+		</div>
+		<script src="https://zhujingqi.com/js/egg.js"></script>
+		<script src="js/api.js"></script>
+		<script src="js/i18n.js"></script>
+		<script src="js/core.js"></script>
+		<script src="js/captcha.js"></script>
+		<script src="js/config.js"></script>
+		<script src="js/content.js"></script>
+		<script src="js/search.js"></script>
+		<script src="js/editor.js"></script>
+		<script src="js/auth.js"></script>
+		<script src="js/posts.js"></script>
+		<script src="js/comments.js"></script>
+		<script src="js/users.js"></script>
+		<script src="js/notifications.js"></script>
+		<script src="js/presence.js"></script>
+		<script src="js/shop.js"></script>
+		<script src="js/lottery.js"></script>
+		<script src="js/ai.js"></script>
+		<script src="js/fortune.js"></script>
+		<script src="js/announcements.js"></script>
+		<script src="js/misc.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>
