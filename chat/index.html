@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -412,6 +414,14 @@
 			}
 
 			#refreshChatBtn {
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				font-size: 18px;
+				cursor: pointer;
+			}
+
+			#quickSendBtn {
 				width: 36px;
 				height: 36px;
 				border-radius: 50%;
@@ -1104,20 +1114,35 @@
 			.emojiPanel {
 				position: absolute;
 				bottom: 100%;
-				left: 10px;
-				right: 10px;
+				left: 4px;
+				right: 4px;
 				margin-bottom: 8px;
 				max-height: 240px;
-				overflow: hidden;
+				overflow-y: auto;
+				overflow-x: hidden;
 				background: var(--card);
 				border: 1px solid rgba(0, 0, 0, .08);
 				border-radius: 16px;
 				box-shadow: 0 8px 30px rgba(0, 0, 0, .12);
-				padding: 10px;
+				padding: 6px;
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-				gap: 8px;
+				grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+				gap: 2px;
 				z-index: 99;
+				scrollbar-width: thin;
+			}
+
+			.emojiPanel::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			.emojiPanel::-webkit-scrollbar-thumb {
+				background: #bbb;
+				border-radius: 3px;
+			}
+
+			body.dark .emojiPanel::-webkit-scrollbar-thumb {
+				background: #555;
 			}
 
 			.emojiItem {
@@ -1126,9 +1151,9 @@
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				gap: 4px;
-				padding: 8px 4px;
-				border-radius: 12px;
+				gap: 2px;
+				padding: 5px 2px;
+				border-radius: 10px;
 				cursor: pointer;
 			}
 
@@ -1342,6 +1367,23 @@
 					padding: 12px 12px 28px 12px;
 				}
 
+				.emojiPanel {
+					max-height: 200px;
+					padding: 4px;
+					gap: 1px;
+					grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+				}
+
+				.emojiItem {
+					padding: 3px 1px;
+					gap: 1px;
+				}
+
+				.emojiItem img {
+					width: 24px;
+					height: 24px;
+				}
+
 				.settingsWrap {
 					padding: 12px;
 				}
@@ -1439,7 +1481,8 @@
 							<div class="chatHead">
 								<button id="backToListBtn" class="miniBtn mobileBack"><img src="/forum/icon/back.svg" /></button>
 								<div id="chatTitle" class="chatTitle">请选择好友</div>
-								<button id="refreshChatBtn">⟳</button>
+								<button id="quickSendBtn" title="快速输入">✎</button>
+							<button id="refreshChatBtn">⟳</button>
 							</div>
 							<div id="chatBody" class="chatBody">
 								<div class="empty">
@@ -2203,6 +2246,34 @@
 					await renderChatMessages();
 					btn.innerText = "⟳";
 				};
+				$("quickSendBtn").onclick = () => {
+					if (!currentChatUserId) return toast("请先选择好友");
+					openModal("发送消息", `
+						<textarea id="quickMsgInput" placeholder="输入消息..."
+							style="width:100%;height:100px;border-radius:12px;padding:10px;
+							font-size:16px;resize:none;"></textarea>
+						<div style="display:flex;gap:8px;margin-top:12px;">
+							<button id="quickSendConfirm"
+								style="flex:1;background:var(--green);color:#fff;">发送</button>
+							<button id="quickSendCancel" style="flex:1;">取消</button>
+						</div>
+					`);
+					$("modalOk").classList.add("hidden");
+					$("modalCancel").classList.add("hidden");
+					$("modalClose").classList.add("hidden");
+					setTimeout(() => {
+						const input = $("quickMsgInput");
+						if (input) input.focus();
+						$("quickSendConfirm").onclick = async () => {
+							const txt = input.value.trim();
+							if (!txt) return toast("请输入消息");
+							$("msgInput").value = txt;
+							await sendMessage();
+							closeModal();
+						};
+						$("quickSendCancel").onclick = closeModal;
+					}, 50);
+				};
 				async function renderChatMessages() {
 					const body = $("chatBody");
 					if (!body) return;
@@ -2635,31 +2706,34 @@
 				$("drawerMask").onclick = e => {
 					if (e.target.id === "drawerMask") closeDrawer();
 				};
-				$("drawerChatBtn").onclick = () => {
-					if (drawerUserId !== null) {
-						closeDrawer();
-						openChat(drawerUserId);
-					}
-				};
-				$("drawerPinBtn").onclick = () => {
-					if (drawerUserId !== null) {
-						togglePinContact(drawerUserId);
-					}
-				};
-				$("drawerDeleteBtn").onclick = () => {
-					if (drawerUserId === null) return;
-					const u = getUserById(drawerUserId);
-					openModal(
-						"删除联系人",
-						`确定要删除 <b>${escapeHtml(u?.name || "这个联系人")}</b> 吗？<br>删除后聊天记录也会一起清掉。`, {
-							confirm: true,
-							okText: "删除",
-							onOk: async () => {
-								await deleteContactByUserId(drawerUserId);
-							}
+			$("drawerChatBtn").onclick = () => {
+				if (drawerUserId !== null) {
+					const uid = drawerUserId;
+					closeDrawer();
+					openChat(uid);
+				}
+			};
+			$("drawerPinBtn").onclick = () => {
+				if (drawerUserId !== null) {
+					const uid = drawerUserId;
+					togglePinContact(uid);
+				}
+			};
+			$("drawerDeleteBtn").onclick = () => {
+				if (drawerUserId === null) return;
+				const uid = drawerUserId;
+				const u = getUserById(uid);
+				openModal(
+					"删除联系人",
+					`确定要删除 <b>${escapeHtml(u?.name || "这个联系人")}</b> 吗？<br>删除后聊天记录也会一起清掉。`, {
+						confirm: true,
+						okText: "删除",
+						onOk: async () => {
+							await deleteContactByUserId(uid);
 						}
-					);
-				};
+					}
+				);
+			};
 				$("showRegisterBtn").onclick = () => show("registerPage");
 				$("backLoginBtn").onclick = () => show("welcomePage");
 				$("loginBtn").onclick = doLogin;
