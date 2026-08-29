@@ -1816,7 +1816,7 @@ const TRANSLATIONS = {
 	scope_allow_title: {
 		zh: "允许查看",
 		en: "Allow to see",
-	/es: "Permitir ver",
+		es: "Permitir ver",
 		de: "Erlauben zu sehen",
 		"zh-TW": "允許查看"
 	},
@@ -1893,7 +1893,7 @@ const TRANSLATIONS = {
 	groups_delete_confirm: {
 		zh: "确定删除此分组？",
 		en: "Delete this group?",
-	/es: "¿Eliminar este grupo?",
+		es: "¿Eliminar este grupo?",
 		de: "Diese Gruppe löschen?",
 		"zh-TW": "確定刪除此分組？"
 	},
